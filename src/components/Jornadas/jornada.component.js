@@ -33,6 +33,7 @@ const Jornada = props => {
                         title={item.titulo}
                         subtitle={item.fecha}
                         leftAvatar={{title:item.numero}}
+                        chevron
                     />
                 </TouchableHighlight >}
                 ItemSeparatorComponent={() => <Divider navigation={props.navigation}/>}
