@@ -2,7 +2,7 @@ import React from "react";
 import {  Dimensions } from "react-native";
 import { TabView, SceneMap } from "react-native-tab-view";
 import { TabBar } from "react-native-tab-view";
-import Presentacion from '../Presentacion/presentando.container'
+import Presentacion from '../Presentacion/presentacion.container'
 import Horario from '../horario/horario.container'
 import Listado from '../listado/listado.container'
 import Icon from 'react-native-vector-icons/FontAwesome'

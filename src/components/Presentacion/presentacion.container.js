@@ -1,5 +1,5 @@
 import React from "react";
-import PresentacionComponent from './presentando.component'
+import PresentacionComponent from './presentacion.component'
 
 
 class Presentacion extends React.Component {
@@ -8,7 +8,7 @@ class Presentacion extends React.Component {
         super(props)
         
         this.state = {
-            presentacion:{titulo:'Titulo presentación actual', calificacion:3}
+            presentacion:{titulo:'Titulo presentación', calificacion:3}
         }
     }
 
@@ -16,8 +16,7 @@ class Presentacion extends React.Component {
     render(){
         return(
             <PresentacionComponent
-            presentacion={this.state.presentacion}
-            handleBarCodeScanned={this.handleBarCodeScanned}/>)
+            presentacion={this.state.presentacion}/>)
     }
 }
 

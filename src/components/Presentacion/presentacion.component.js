@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {  Header } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import { withNavigation } from 'react-navigation';
 import {
@@ -6,7 +7,7 @@ import {
   StyleSheet,
   FlatList
 } from "react-native";
-import { Rating, AirbnbRating, withBadge, Icon, Input, Overlay, ListItem, Text, Card} from "react-native-elements";
+import { Rating,Icon, Text, Card} from "react-native-elements";
 
 
 const styles = StyleSheet.create({
@@ -78,7 +79,10 @@ const Presentacion = props => {
 
   return (
     <View style={styles.container}>
-      
+      <Header
+            backgroundColor='#0abde3'
+            centerComponent={{ text: 'Exponiendo', style: { color: '#fff', fontSize:20 } }}
+            />
       <Card
         title={props.presentacion.titulo}
         image={{

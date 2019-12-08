@@ -5,7 +5,7 @@ import HomeScreen from './src/components/Home/home.container'
 import JornaadaScrenn from './src/components/Jornadas/jornada.container'
 import EasyCheckScreen from  './src/components/easyCheck/EasyCheck.container'
 import Calificar from './src/components/calificar/calificar.container'
-
+import Presentación from './src/components/Presentacion/presentacion.container'
 
 const AppNavigator = createStackNavigator({
 
@@ -25,9 +25,15 @@ const AppNavigator = createStackNavigator({
   EasyCheck:{
     screen:EasyCheckScreen,
     navigationOptions:{
-      title:'Easy check'
+      header:null
     }
   },
+  Presentación:{
+    screen:Presentación,
+    navigationOptions:{
+      header:null
+    }
+  }
 
 }, 
 {
