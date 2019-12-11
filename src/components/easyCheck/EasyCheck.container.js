@@ -7,14 +7,11 @@ class EasyCheck extends Component {
             super(props)
         }
 
-        // static navigationOptions  ={
-        //     headerShown:false
-        // }
 
         render(){
             return(
                 <View style={{flex:1}}>
-                    <EsyCheckComponent/>
+                    <EsyCheckComponent jornada ={this.props.navigation.getParam('jornada')}/>
                 </View>
             )
         }

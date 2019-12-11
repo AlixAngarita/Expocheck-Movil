@@ -1,28 +1,32 @@
 import React, {Component} from "react";
 import JornadaComponent from './jornada.component'
-import Api from '../../services/api'
+import firebaseService from '../../services/firebaseService'
 
 
 class Jornada extends  Component {
     constructor(props){
+            
         super(props)
 
         this.state = {
-            jornadas:[]
+            jornadas:[],
+            loading:true
         }
     }
 
     
     componentDidMount(){
-        setTimeout(() => {
-        this.setState({jornadas:Api.getJornadas()})
-       }, 500);
+        this.getJornadas()
     }
 
+    getJornadas(){
+        firebaseService.getDocuments('jornadas')
+        .then(jornadas => this.setState({jornadas, loading:false}))
+    }
     
 
     render(){
-        return (<JornadaComponent jornadas={this.state.jornadas}/>)
+        return (<JornadaComponent loading={this.state.loading} jornadas={this.state.jornadas}/>)
     }
     
 }

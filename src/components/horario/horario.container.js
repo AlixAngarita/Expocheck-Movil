@@ -7,17 +7,16 @@ class HorarioContainer extends React.Component {
         super(props)
 
         this.state = {
-            horario:[{ dia:'21', nombreDia:'Martes',  hora:'10:00 am', titulo:'Presentacion 1'},
-            { dia:'22', nombreDia:'Jueves',  hora:'10:00 am', titulo:'Presentacion 2'},
-            { dia:'23', nombreDia:'Lunes',  hora:'10:00 am', titulo:'Presentacion 3'},
-            { dia:'21', nombreDia:'Martes',  hora:'10:00 am', titulo:'Presentacion 1'},
-            { dia:'22', nombreDia:'Jueves',  hora:'10:00 am', titulo:'Presentacion 2'},
-            { dia:'23', nombreDia:'Lunes',  hora:'10:00 am', titulo:'Presentacion 3'}],
+            horario:[],
             dias:['Lunes','Martes', 'Miercoles', 'Jueves', 'Viernes'],
             horarioFiltrado:[],
             diaSeleccionado:''
         }
         this.filtrar = this.filtrar.bind(this)
+    }
+
+    componentDidMount(){
+        this.setState({horario:this.props.jornada.agenda})
     }
 
     filtrar(dia_filtrado){

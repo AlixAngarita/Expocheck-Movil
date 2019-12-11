@@ -8,6 +8,14 @@ import Listado from '../listado/listado.container'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class TabViewExample extends React.Component {
+
+  constructor(props){
+    super(props)
+  }
+
+  componentDidMount(){
+  }
+
   state = {
     index: 0,
     routes: [
@@ -49,11 +57,17 @@ export default class TabViewExample extends React.Component {
           />
         )}
         navigationState={this.state}
-        renderScene={SceneMap({
-          Presentacion: Presentacion,
-          Horario: Horario,
-          Listado:Listado
-        })}
+        renderScene={ ({route}) => {
+          switch (route.key) {
+            case 'Presentacion':
+              return <Presentacion jornada={this.props.jornada}/>;
+            case 'Listado':
+              return <Listado jornada={this.props.jornada}/>;
+            case 'Horario':
+              return <Horario jornada={this.props.jornada}/>;
+            }
+          }
+        }
         onIndexChange={index => this.setState({ index })}
         initialLayout={{ width: Dimensions.get("window").width }}
       />

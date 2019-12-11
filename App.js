@@ -37,7 +37,7 @@ const AppNavigator = createStackNavigator({
 
 }, 
 {
-  initialRouteName:'EasyCheck',
+  initialRouteName:'Home',
   defaultNavigationOptions:{
     headerStyle:{
       backgroundColor:'#0abde3',

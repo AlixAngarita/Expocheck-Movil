@@ -10,6 +10,7 @@ class Presentacion extends React.Component {
         this.state = {
             presentacion:{titulo:'Titulo presentación', calificacion:3}
         }
+        console.log(this.props.jornada)
     }
 
 

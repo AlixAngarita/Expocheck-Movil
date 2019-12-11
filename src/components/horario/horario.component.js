@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, FlatList, StyleSheet, Picker } from "react-native";
-import { Avatar, Header} from "react-native-elements";
+import { Avatar, Header } from "react-native-elements";
 
 const styles = StyleSheet.create({
   containerAgenda: {
@@ -12,17 +12,17 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingRight: 5,
     borderRadius: 20,
-    paddingLeft:10,
-    paddingTop:5,
+    paddingLeft: 10,
+    paddingTop: 5,
     shadowColor: "#000",
     shadowOffset: {
-        width: 0,
-        height: 2,
+      width: 0,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5,
+    elevation: 5
   }
 });
 
@@ -36,37 +36,62 @@ const renderItem = ({ item }) => (
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={{ marginRight: 10, color: "grey" }}>{item.nombreDia}</Text>
-        <Avatar
-          title={item.dia}
-          rounded
-        />
+        <Avatar title={item.dia} rounded />
       </View>
     </View>
     <Text>{item.titulo}</Text>
   </View>
 );
 
-
 const Horario = props => {
   return (
-    <View style={{ flex: 1}}>
-        <Header
-        backgroundColor='#0abde3'
-        centerComponent={{ text: 'Agenda mayo 2020', style: { color: '#fff', fontSize:20 } }}
-        />
-        <View style={{flexDirection:'column', alignItems:'center'}}>
-            <Picker style={{width:200, borderColor:'#0abde3', borderWidth:5, borderStyle:'solid'}}
-            onValueChange={(itemValue, itemIndex) => props.filtrar(itemValue)}
-            selectedValue={props.diaSeleccionado}>
-                <Picker.Item label={'Toda la semana'} value='all'/>
-                {props.dias.map(dia => (<Picker.Item key={dia} label={dia} value={dia}/>))}
+    <View style={{ flex: 1 }}>
+      <Header
+        backgroundColor="#0abde3"
+        centerComponent={{
+          text: "Agenda mayo 2020",
+          style: { color: "#fff", fontSize: 20 }
+        }}
+      />
+
+      {props.horario.length > 0 ? (
+        <React.Fragment>
+          <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <Picker
+              style={{
+                width: 200,
+                borderColor: "#0abde3",
+                borderWidth: 5,
+                borderStyle: "solid"
+              }}
+              onValueChange={(itemValue, itemIndex) => props.filtrar(itemValue)}
+              selectedValue={props.diaSeleccionado}
+            >
+              <Picker.Item label={"Toda la semana"} value="all" />
+              {props.dias.map(dia => (
+                <Picker.Item key={dia} label={dia} value={dia} />
+              ))}
             </Picker>
-        </View>
-        <FlatList
+          </View>
+          <FlatList
             keyExtractor={keyExtractor}
             data={props.horario}
             renderItem={renderItem}
-        />
+          />
+        </React.Fragment>
+      ) : (
+        <View
+          style={{
+            display: "flex",
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <Text style={{ color: "grey" }}>Sin agenda.</Text>
+        </View>
+      )}
     </View>
   );
 };
