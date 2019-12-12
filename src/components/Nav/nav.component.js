@@ -62,9 +62,10 @@ export default class TabViewExample extends React.Component {
             case 'Presentacion':
               return <Presentacion jornada={this.props.jornada}/>;
             case 'Listado':
-              return <Listado jornada={this.props.jornada}/>;
+              return <Listado presentaciones={this.props.jornada.presentaciones}/>;
             case 'Horario':
-              return <Horario jornada={this.props.jornada}/>;
+              return <Horario agenda={this.props.jornada.agenda} 
+              fecha={this.props.jornada.fechaInicio}/>;
             }
           }
         }

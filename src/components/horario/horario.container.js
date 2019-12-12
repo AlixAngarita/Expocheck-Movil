@@ -16,7 +16,7 @@ class HorarioContainer extends React.Component {
     }
 
     componentDidMount(){
-        this.setState({horario:this.props.jornada.agenda})
+        this.setState({horario:this.props.agenda})
     }
 
     filtrar(dia_filtrado){

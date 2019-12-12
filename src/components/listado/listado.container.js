@@ -6,31 +6,16 @@ class Listado extends React.Component {
         super(props)
 
         this.state = {
-            jornadas:[ {
-                name: 'Amy Farha  ',
-                calification:4
-              },
-              {
-                name: 'Amy Farha',
-                calification:5
-              },
-              {
-                name: 'Amy Farha',
-                calification:5
-              },
-              {
-                name: 'Amy Farha',
-                calification:5
-              },
-              {
-                name: 'Amy Farha',
-                calification:5
-              }]
+            presentaciones:[ ]
         }
     }
 
+    componentDidMount(){
+      this.setState({presentaciones:this.props.presentaciones})
+    }
+
     render(){
-        return(<ListadoComponent listado={this.state.jornadas}/>)
+        return(<ListadoComponent listado={this.state.presentaciones}/>)
     }
 }
 

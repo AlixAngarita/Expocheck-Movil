@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, FlatList, StyleSheet, Picker } from "react-native";
 import { Avatar, Header } from "react-native-elements";
+import moment from 'moment'
 
 const styles = StyleSheet.create({
   containerAgenda: {
@@ -49,7 +50,7 @@ const Horario = props => {
       <Header
         backgroundColor="#0abde3"
         centerComponent={{
-          text: "Agenda mayo 2020",
+          text: "Agenda "+moment(props.fechaInicio).format('MMM Y'),
           style: { color: "#fff", fontSize: 20 }
         }}
       />

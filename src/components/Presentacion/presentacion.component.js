@@ -1,24 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import {  Header } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import { withNavigation } from 'react-navigation';
 import {
   View,
   StyleSheet,
-  FlatList
+  FlatList,
+  Text
 } from "react-native";
-import { Rating,Icon, Text, Card} from "react-native-elements";
+import { Rating,Icon} from "react-native-elements";
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  containerCardIcons: {
-    flexDirection: "row",
+  titleContainer: {
+    flex:1,
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    backgroundColor: "white",
+    elevation: 5,
+    margin:20
   },
+
   commentsContainer: {
     flex: 1
   },
@@ -75,7 +88,6 @@ const renderItem = ({ item }) => (
 );
 
 const Presentacion = props => {
-  const [isVisible, setisVisible] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -83,22 +95,16 @@ const Presentacion = props => {
             backgroundColor='#0abde3'
             centerComponent={{ text: 'Exponiendo', style: { color: '#fff', fontSize:20 } }}
             />
-      <Card
-        title={props.presentacion.titulo}
-        image={{
-          uri:
-            "https://www.inovex.de/blog/wp-content/uploads/2018/03/react-native.png"
-        }}
-      >
-        <View style={styles.containerCardIcons}>
+      
+      <View style={styles.titleContainer}>
+          <Text style={{fontSize:20}}>{props.presentacion.titulo}</Text>
           <Rating
                 imageSize={25}
                 type="custom"
                 readonly
                 startingValue={props.presentacion.calificacion}
               />
-        </View>
-      </Card>
+      </View>
 
       <View style={styles.commentsContainer}>
         <FlatList
