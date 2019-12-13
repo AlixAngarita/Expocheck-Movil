@@ -1,7 +1,14 @@
 import React from "react";
-import { Text, View, FlatList, StyleSheet, Picker } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  Picker,
+  ActivityIndicator
+} from "react-native";
 import { Avatar, Header } from "react-native-elements";
-import moment from 'moment'
+import moment from "moment";
 
 const styles = StyleSheet.create({
   containerAgenda: {
@@ -24,6 +31,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5
+  },
+  loading: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
@@ -50,12 +63,12 @@ const Horario = props => {
       <Header
         backgroundColor="#0abde3"
         centerComponent={{
-          text: "Agenda "+moment(props.fechaInicio).format('MMM Y'),
+          text: "Agenda " + (props.fechaInicio != null ? moment(props.fechaInicio).format("MMM Y"): ''),
           style: { color: "#fff", fontSize: 20 }
         }}
       />
 
-      {props.horario.length > 0 ? (
+      {props.horario.length > 0 && !props.loading ? (
         <React.Fragment>
           <View style={{ flexDirection: "column", alignItems: "center" }}>
             <Picker
@@ -80,7 +93,9 @@ const Horario = props => {
             renderItem={renderItem}
           />
         </React.Fragment>
-      ) : (
+      ) : null}
+
+      {!props.loading && props.horario.length == 0 ? (
         <View
           style={{
             display: "flex",
@@ -91,6 +106,12 @@ const Horario = props => {
           }}
         >
           <Text style={{ color: "grey" }}>Sin agenda.</Text>
+        </View>
+      ) : null}
+
+      {props.loading && props.horario.length == 0 && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
     </View>

@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 const EsyCheck  = props =>{
     return(
         <View style={styles.container}>
-            <Nav jornada ={props.jornada}/>
+            <Nav id ={props.navigation.getParam('id')}/>
         </View>
     )
 }

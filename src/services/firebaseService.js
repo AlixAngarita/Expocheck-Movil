@@ -189,8 +189,31 @@ addAllDocuemnts(deal, data){
              reject(error)
           }
         })
+  }
+
+  
+  static getDocById(deal, id){
+    return new Promise( async (resolve, reject) => {
+      try {
+        let docRef = db.collection(deal)
+        let doc = await docRef.where('_id','==', id).get()
+        
+        if (!doc.empty){
+            doc.forEach(async document => {
+                resolve(document.data())
+            });
+        }else{
+            reject(false)
+        }
+
+      } catch (error) {
+         reject(error)
       }
+    })
+  }
 
   }
+
+  
 
 export default  FirebaseService

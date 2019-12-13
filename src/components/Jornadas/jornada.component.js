@@ -33,10 +33,10 @@ const Jornada = props => {
                 renderItem = {({item}) => 
                 <TouchableHighlight  onPress={() => {
                     { moment(moment().format('YYYY-MM-DD')).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
-                        props.navigation.navigate('EasyCheck',{jornada:item})
+                        props.navigation.navigate('EasyCheck',{id:item._id})
                         :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
                         [
-                          {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{jornada:item})},
+                          {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
                         ])
                     }
                     

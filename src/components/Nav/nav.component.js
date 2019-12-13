@@ -1,6 +1,6 @@
 import React from "react";
 import {  Dimensions } from "react-native";
-import { TabView, SceneMap } from "react-native-tab-view";
+import { TabView } from "react-native-tab-view";
 import { TabBar } from "react-native-tab-view";
 import Presentacion from '../Presentacion/presentacion.container'
 import Horario from '../horario/horario.container'
@@ -13,8 +13,7 @@ export default class TabViewExample extends React.Component {
     super(props)
   }
 
-  componentDidMount(){
-  }
+  
 
   state = {
     index: 0,
@@ -60,12 +59,11 @@ export default class TabViewExample extends React.Component {
         renderScene={ ({route}) => {
           switch (route.key) {
             case 'Presentacion':
-              return <Presentacion jornada={this.props.jornada}/>;
+              return <Presentacion id={this.props.id}/>;
             case 'Listado':
-              return <Listado presentaciones={this.props.jornada.presentaciones}/>;
+              return <Listado id={this.props.id}/>;
             case 'Horario':
-              return <Horario agenda={this.props.jornada.agenda} 
-              fecha={this.props.jornada.fechaInicio}/>;
+              return <Horario id={this.props.id} />;
             }
           }
         }
