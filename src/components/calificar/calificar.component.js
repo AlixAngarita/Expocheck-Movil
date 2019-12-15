@@ -1,6 +1,6 @@
 import React from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import {Text, View, StyleSheet } from "react-native";
+import {Text, View, StyleSheet, Alert } from "react-native";
 
 styles = StyleSheet.create({
     cameraContainer: {
@@ -24,13 +24,16 @@ const CalfificarComponent = props => {
     return (
            <View style={{flex:1}}>
                 
-                { !props.ok && (
+                { !props.ok && !props.hasQrCode && (
                    <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : props.handleBarCodeScanned}
                     style={[StyleSheet.absoluteFillObject, styles.cameraContainer]}
                     />
                 )}
-                {props.ok && (<Text>Ya escaneo xd</Text>)}
+                {props.ok && props.valid && (<Text>{props.code}</Text>)}
+                {props.ok && !props.valid && (Alert.alert('Codigo invalido', 
+                'El cosigo QR escaneado no es valido', 
+                [{text: 'Scanear', onPress: () => props.scanear()}]))}
            </View>
     )
 }
