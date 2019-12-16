@@ -51,7 +51,7 @@ const Home = props => {
          <View style={styles.avatarContainer}>
              <Avatar 
              size="xlarge"
-             source={{uri:'https://firebasestorage.googleapis.com/v0/b/easy-check-37c9b.appspot.com/o/logos%2Flogo.PNG?alt=media&token=253848ed-e4a0-4b58-b15d-66737a968989'}}/> 
+             source={{uri:'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/logo.jpeg?alt=media&token=a9b3c664-96dc-46d5-bc6d-215f233d11b9'}}/> 
            
             <View style={{marginTop:20}}>
                 <View style={{ flexDirection:'row'}}>

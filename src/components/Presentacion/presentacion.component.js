@@ -78,13 +78,15 @@ const Presentacion = props => {
       {props.presentacion != '' && !props.loading ?
         <React.Fragment>
             <View style={styles.titleContainer}>
-                <Text style={{fontSize:20}}>{props.presentacion.titulo}</Text>
+                <Text style={{fontSize:20, textAlign:'center',marginBottom:20}}>{props.presentacion.titulo}</Text>
                 <Rating
                       imageSize={25}
                       type="custom"
                       readonly
+                      fractions={1}
                       startingValue={props.presentacion.calificacion.length > 0 ? (props.presentacion.calificacion.reduce((a, b) => a + b, 0))/props.presentacion.calificacion.length:0}
                     />
+                  <Text style={{fontSize:10, color:'grey'}}>{'('+props.presentacion.calificacion.length+' votaciones )'}</Text>
             </View>
 
             <View style={styles.commentsContainer}>

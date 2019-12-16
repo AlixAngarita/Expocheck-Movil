@@ -51,7 +51,12 @@ class Calificacion extends React.Component{
         try {
          AsyncStorage.getItem('qrs')
          .then(qrs => {
-            this.setState({qrs:JSON.parse(qrs)})
+             if(qrs == null){
+                this.setState({qrs:[]})
+             }else{
+                this.setState({qrs:JSON.parse(qrs)})
+             }
+            
          })
             
         } catch (error) {
@@ -68,6 +73,7 @@ class Calificacion extends React.Component{
             }else{
                 await AsyncStorage.removeItem('qrs')
                 const currentCodes = this.state.qrs
+                console.log(currentCodes)
                 currentCodes.push(code)
                 await AsyncStorage.setItem('qrs', JSON.stringify(currentCodes))
             }
