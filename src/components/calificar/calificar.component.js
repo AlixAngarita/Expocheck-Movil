@@ -99,7 +99,7 @@ const CalfificarComponent = props => {
                           reviews={["Mala", "Aceptable", "Buena", "Muy buena", "Exelente"]}
                           defaultRating={props.calificada !='' ? props.calificada:0}
                           size={35}
-                          // isDisabled={props.calificada != ''}
+                          isDisabled={props.calificada != ''}
                           onFinishRating={(rating) => props.calificar(rating)}
                         />
                         <Text style={{fontSize:10, color:'grey'}}>{props.calificada !='' ? 'Calificada':'Solo puede calificar una vez'}</Text>

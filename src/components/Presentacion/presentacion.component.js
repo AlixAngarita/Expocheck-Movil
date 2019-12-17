@@ -62,7 +62,7 @@ const renderItem = ({ item }) => (
     
       <View style={styles.comentStyle}>
         <Text style={styles.comment}>
-          {item.subtitle}
+          {item}
         </Text>
       </View>
 );
@@ -94,7 +94,7 @@ const Presentacion = props => {
               {props.presentacion.comentarios.length > 0 ?
                 <FlatList
                 keyExtractor={keyExtractor}
-                data={props.comentarios}
+                data={props.presentacion.comentarios}
                 renderItem={renderItem}
               /> :
               <View style={{ display:'flex',flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
