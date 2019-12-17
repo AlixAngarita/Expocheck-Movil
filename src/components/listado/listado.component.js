@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 const keyExtractor = (item, index) => index.toString()
 
 const renderItem = ({ item }, props) => (
-    <TouchableHighlight onPress={()=> props.navigation.push('Presentación',{presentacion:item})}>
+    <TouchableHighlight onPress={()=> props.navigation.push('Presentación',{presentacion:item, id:props.id, fechaInicio:props.fechaInicio, fechaFinaliza:props.fechaFinaliza})}>
         <ListItem
             title={<Text style={{fontSize:17}}>{item.titulo}</Text>}
             subtitle={

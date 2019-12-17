@@ -177,7 +177,6 @@ addAllDocuemnts(deal, data){
             
             if (!doc.empty){
                 doc.forEach(async document => {
-                  console.log(document)
                     await docRef.doc(document.id).update(data)
                     resolve(true)
                 });

@@ -7,10 +7,11 @@ import {
   StyleSheet,
   FlatList,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from "react-native";
 import { Rating,Icon} from "react-native-elements";
-
+import moment from 'moment';
 
 const styles = StyleSheet.create({
   container: {
@@ -105,7 +106,12 @@ const Presentacion = props => {
                 offsetX={20}
                 renderIcon = {(active) => <Icon name="done" color="white"/>}
                 buttonColor="rgba(10, 189, 227,1.0)"
-                onPress={() => props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode()})}
+                onPress={() => {
+                    moment(moment().format('YYYY-MM-DD')).isBetween( moment(props.fechaInicio), moment(props.fechaFinaliza),  null, '[]') ?
+                    props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada}) :
+                    Alert.alert('Fuera de fecha', 'Solo puede ver la presentación.')
+                  } 
+                }
               />
             </View>
         </React.Fragment>:null

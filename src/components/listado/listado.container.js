@@ -8,7 +8,9 @@ class Listado extends React.Component {
 
         this.state = {
             presentaciones:[ ],
-            loading:true
+            loading:true,
+            fechaFinaliza:'',
+            fechaInicio:''
         }
     }
 
@@ -18,11 +20,21 @@ class Listado extends React.Component {
 
     getPresentaciones(){
         FirebaseService.getDocById('jornadas', this.props.id)
-        .then(jornada => this.setState({presentaciones:jornada.presentaciones, loading:false}))
+        .then(jornada => this.setState({
+            presentaciones:jornada.presentaciones, 
+            loading:false,
+            fechaInicio:jornada.fechaInicio, 
+            fechaFinaliza:jornada.fechaFinaliza
+        }))
     }
 
     render(){
-        return(<ListadoComponent listado={this.state.presentaciones} loading={this.state.loading}/>)
+        return(<ListadoComponent listado={this.state.presentaciones}
+             loading={this.state.loading}
+             id={this.props.id}
+             fechaInicio={this.state.fechaInicio}
+             fechaFinaliza={this.state.fechaFinaliza}
+             />)
     }
 }
 

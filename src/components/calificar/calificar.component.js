@@ -70,8 +70,10 @@ const CalfificarComponent = props => {
         height:45,
         color:'grey'
       }
-  })
+     })
     const { hasCameraPermission, scanned } = props;
+
+    const [value, onChangeText] = React.useState('');
 
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>;
@@ -95,22 +97,19 @@ const CalfificarComponent = props => {
                         <AirbnbRating
                           count={5}
                           reviews={["Mala", "Aceptable", "Buena", "Muy buena", "Exelente"]}
-                          defaultRating={0}
+                          defaultRating={props.calificada !='' ? props.calificada:0}
                           size={35}
+                          // isDisabled={props.calificada != ''}
+                          onFinishRating={(rating) => props.calificar(rating)}
                         />
-                        <Text style={{fontSize:10, color:'grey'}}>Solo puede calificar una vez</Text>
-                        <Button
-                          buttonStyle={{backgroundColor:'#48dbfb', marginTop:20}}
-                            icon={ <Icon
-                              name='check'
-                              size={20}
-                              color='white'
-                            />}
-                          />
+                        <Text style={{fontSize:10, color:'grey'}}>{props.calificada !='' ? 'Calificada':'Solo puede calificar una vez'}</Text>
+                        
                     </View>
                     <KeyboardAvoidingView  style={styles.inputContainer}
                      behavior="padding" >
                       <TextInput
+                      onChangeText={text => onChangeText(text)}
+                      value={value}
                       style={styles.input}
                       multiline={true}
                       autoFocus={true}
@@ -123,6 +122,10 @@ const CalfificarComponent = props => {
                           size={12}
                           color='white'
                         />}
+                        onPress={() => {
+                          props.addComment(value)
+                          onChangeText('')
+                        }}
                       />
                     </KeyboardAvoidingView >
                   </React.Fragment>

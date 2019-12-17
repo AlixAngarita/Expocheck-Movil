@@ -13,7 +13,10 @@ class Presentacion extends React.Component {
         this.state = {
             presentacion:'',
             loading:true,
-            presentacionSeleccionada:false
+            presentacionSeleccionada:false,
+            idJornada:0,
+            fechaInicio:'',
+            fechaFinaliza:''
         }
         this.hasCode = this.hasCode.bind(this)
     }
@@ -26,9 +29,15 @@ class Presentacion extends React.Component {
         const presentacion = this.props.navigation.getParam('presentacion')
         if(presentacion){
             this.setState({presentacion, loading:false, presentacionSeleccionada:true})
+            this.setState({idJornada:this.props.navigation.getParam('id')})
+            this.setState({fechaInicio:this.props.navigation.getParam('fechaInicio')})
+            this.setState({fechaFinaliza:this.props.navigation.getParam('fechaFinaliza')})
         }else{
             FirebaseService.getDocById('jornadas', this.props.id)
             .then(jornada => {
+                this.setState({idJornada:jornada._id})
+                this.setState({fechaInicio:jornada.fechaInicio})
+                this.setState({fechaFinaliza:jornada.fechaFinaliza})
             })
         }
     }
@@ -55,12 +64,17 @@ class Presentacion extends React.Component {
         })
     }
 
+    
+
     render(){
         return(
             <PresentacionComponent
             presentacion={this.state.presentacion}
             hasCode={this.hasCode}
             presentacionSeleccionada={this.state.presentacionSeleccionada}
+            idJornada={this.state.idJornada}
+            fechaInicio={this.state.fechaInicio}
+            fechaFinaliza={this.state.fechaFinaliza}
             />)
     }
 }
