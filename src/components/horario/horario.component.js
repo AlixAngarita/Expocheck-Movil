@@ -46,7 +46,7 @@ const renderItem = ({ item }) => (
   <View style={styles.containerAgenda}>
     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
       <View>
-        <Text style={{ color: "grey", fontSize: 20 }}>{item.hora +' - '+item.tiempo+' minutos'}</Text>
+        <Text style={{ color: "grey", fontSize: 20 }}>{item.hora}<Text style={{fontSize:10}}>{' ('+item.tiempo+' min)'}</Text></Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={{ marginRight: 10, color: "grey" }}>{item.nombreDia}</Text>

@@ -19,27 +19,29 @@ class Socket {
     // cuando comenten
     addCommet(comment, tituloPresentacion,  idJornada){
        try {
-            /*envio al server, comparo en el cliente si el nuevo comentario  es para la presentacion actual
-            y ago push del comentario*/
-            this.forum.emit('add', {comment, idJornada, titulo:tituloPresentacion})
+            if(comment.trim().length > 0){
+                /*envio al server, comparo en el cliente si el nuevo comentario  es para la presentacion actual
+                y ago push del comentario*/
+                this.forum.emit('add', {comment, idJornada, titulo:tituloPresentacion})
 
-            // guardo en la base de datos el nuevo comentario
-            FirebaseService.getDocById('jornadas', idJornada)
-            .then(async jornada => {
-                let presentaciones = jornada.presentaciones
-   
-                presentaciones.map( (pr, index) => {
-                    if(pr.titulo == tituloPresentacion ){
-                        pr.comentarios.push(comment)
-                        pr.comentarios = pr.comentarios.reverse()
-                        presentaciones[index] = pr
-                    }
+                // guardo en la base de datos el nuevo comentario
+                FirebaseService.getDocById('jornadas', idJornada)
+                .then(async jornada => {
+                    let presentaciones = jornada.presentaciones
+    
+                    presentaciones.map( (pr, index) => {
+                        if(pr.titulo == tituloPresentacion ){
+                            pr.comentarios.push(comment)
+                            pr.comentarios = pr.comentarios.reverse()
+                            presentaciones[index] = pr
+                        }
+                    })
+                    
+                    jornada.presentaciones = presentaciones
+                    await FirebaseService.updateDocument('jornadas', idJornada, jornada)
+                    
                 })
-                
-                jornada.presentaciones = presentaciones
-                await FirebaseService.updateDocument('jornadas', idJornada, jornada)
-                
-            })
+            }
        } catch (error) {
             console.log('Error -> ',error)
        }

@@ -9,15 +9,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const CalfificarComponent = props => {
 
   const [focus, setfocus] = useState(true)
-  const [heigthKeyboard, setheigthKeyboard] = useState(291)
 
   const keyboardDidHide = () => {
     setfocus(false)
   }
 
-  const keyboardDidShow = (e) => {
+  const keyboardDidShow = () => {
     setfocus(true)
-    setheigthKeyboard(e.endCoordinates.height)
   }
 
     useEffect(() => {
@@ -55,19 +53,20 @@ const CalfificarComponent = props => {
         marginTop:20
       },
       inputContainer:{
-        flex: focus ? 1.7:0.1
+        flex: 1.7
         , 
         flexDirection:'row',
         justifyContent:'space-around',
         alignContent:'center',
-        alignItems:'center',
+        alignItems:focus ? 'center':'flex-end',
       },
       input:{
         borderColor:'#0abde3', 
         borderRadius:20, borderWidth:1, 
         padding:8, 
         width:'80%', 
-        height:45,
+        minHeight:45,
+        maxHeight:100,
         color:'grey'
       }
      })
@@ -109,17 +108,20 @@ const CalfificarComponent = props => {
                      behavior="padding" >
                       <TextInput
                       onChangeText={text => onChangeText(text)}
+                      autoCapitalize="sentences"
+                      autoCorrect={true}
                       value={value}
-                      style={styles.input}
+                      style={[styles.input, {marginBottom: focus ? 15: 10}]}
                       multiline={true}
                       autoFocus={true}
                       placeholder="Escribe algo..."
+                      large={true}
                       />
                       <Button
-                      buttonStyle={{backgroundColor:'#0abde3', borderRadius:20}}
+                      buttonStyle={{backgroundColor:'#0abde3', borderRadius:50, marginBottom: focus ? 15: 10, width:45,height:45}}
                         icon={ <Icon
                           name='paper-plane'
-                          size={12}
+                          size={18}
                           color='white'
                         />}
                         onPress={() => {
