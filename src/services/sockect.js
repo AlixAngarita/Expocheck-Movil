@@ -7,8 +7,9 @@ import { YellowBox } from 'react-native'
 class Socket {
     
     constructor(){
-        this.forum = io('http://192.168.1.3:3000/forum')
-        this.rating = io('http://192.168.1.3:3000/rating')
+        this.forum = io('http://192.168.1.4:3000/forum')
+        this.rating = io('http://192.168.1.4:3000/rating')
+        
 
         YellowBox.ignoreWarnings([
             'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
@@ -78,6 +79,8 @@ class Socket {
         }
         
     }
+
+    
 }
 
 export default new Socket()

@@ -4,12 +4,13 @@ import FirebaseService from '../../services/firebaseService'
 import { withNavigation } from 'react-navigation';
 import { AsyncStorage } from "react-native";
 import moment from 'moment';
+import  io from 'socket.io-client'
+const pr = io('http://192.168.1.4:3000/presentation')
 
 class Presentacion extends React.Component {
 
     constructor(props){
         super(props)
-        
         this.state = {
             presentacion:'',
             loading:true,
@@ -19,6 +20,7 @@ class Presentacion extends React.Component {
             fechaFinaliza:''
         }
         this.hasCode = this.hasCode.bind(this)
+        this.onNextPresentation()
     }
 
     componentDidMount(){
@@ -26,6 +28,7 @@ class Presentacion extends React.Component {
     }
 
     getPresentacionActual(){
+        this.setState({presentacion:'', loading:true})
         const presentacion = this.props.navigation.getParam('presentacion')
         if(presentacion){
             this.setState({presentacion, loading:false, presentacionSeleccionada:true})
@@ -87,7 +90,11 @@ class Presentacion extends React.Component {
         })
     }
 
-    
+    onNextPresentation(){
+        pr.on('nextPresentation',() => {
+            this.getPresentacionActual()
+        })
+    }
 
     render(){
         return(
