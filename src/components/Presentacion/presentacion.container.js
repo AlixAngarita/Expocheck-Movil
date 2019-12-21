@@ -3,7 +3,7 @@ import PresentacionComponent from './presentacion.component'
 import FirebaseService from '../../services/firebaseService'
 import { withNavigation } from 'react-navigation';
 import { AsyncStorage } from "react-native";
-
+import moment from 'moment';
 
 class Presentacion extends React.Component {
 
@@ -38,8 +38,31 @@ class Presentacion extends React.Component {
                 this.setState({idJornada:jornada._id})
                 this.setState({fechaInicio:jornada.fechaInicio})
                 this.setState({fechaFinaliza:jornada.fechaFinaliza})
+
+                jornada.presentaciones.map(presentacion => { 
+                    const format = 'hh:mm a'
+                    // hay una presentacion disponible para hoy?
+                    const now = moment().format('YYYY-MM-DD')
+                    if(moment(now, 'YYYY-MM-DD hh:mm a').format('D')==presentacion.dia){
+                      const horaInicio = moment(presentacion.fecha,'MM-DD-YYYY hh:mm a').format(format)
+                      const horatermina = moment(presentacion.fecha, 'MM-DD-YYYY hh:mm a').add(presentacion.tiempo,'m').format(format)
+                      // hay una presentacion para la hora actual ?
+                      if(moment(moment().format(format),format).isBetween(moment(horaInicio,format), moment(horatermina,format),  null, '[)')){
+                        this.setState({presentacion, loading:false})
+                        this.setState({idJornada:jornada._id})
+                        this.setState({fechaInicio:jornada.fechaInicio})
+                        this.setState({fechaFinaliza:jornada.fechaFinaliza})
+                      }else{
+                        this.setState({loading:false})
+                    }
+                    }else{
+                        this.setState({loading:false})
+                    }
+                })
+                
             })
         }
+        
     }
 
     hasCode(){
@@ -75,6 +98,7 @@ class Presentacion extends React.Component {
             idJornada={this.state.idJornada}
             fechaInicio={this.state.fechaInicio}
             fechaFinaliza={this.state.fechaFinaliza}
+            loading={this.state.loading}
             />)
     }
 }
