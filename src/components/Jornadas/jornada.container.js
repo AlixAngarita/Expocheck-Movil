@@ -22,6 +22,7 @@ class Jornada extends  Component {
     getJornadas(){
         firebaseService.getDocuments('jornadas')
         .then(jornadas => this.setState({jornadas, loading:false}))
+        .catch(err => console.error(err))
     }
     
 

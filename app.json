@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Easy check",
-    "slug": "easycheck",
+    "slug": "Easy-check",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -24,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.upb.easyCheck"
+    },
+    "android": {
+      "package": "com.upb.easycheck"
     }
   }
 }
