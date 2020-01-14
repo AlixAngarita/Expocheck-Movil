@@ -1,12 +1,17 @@
 import React from "react";
-import {Avatar, Button} from 'react-native-elements'
-import { View, StyleSheet, Text} from "react-native";
+import {Button} from 'react-native-elements'
+import { View, StyleSheet, Text, Image} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation';
+import { SliderBox } from "react-native-image-slider-box";
+
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        flexDirection:'column',
+        justifyContent:'space-around',
+        backgroundColor:'#ecf0f1'
     },
     avatarContainer:{
         flex:1,
@@ -45,42 +50,40 @@ const styles = StyleSheet.create({
     }
 })
 
+const images = [
+  "https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/Calificar%20presentaci%C3%B3n.png?alt=media&token=87b0948e-78cb-4bb8-bf50-6433958a57bc"
+]
+
 const Home = props => {
  return(
      <View style={styles.container}>
-         <View style={styles.avatarContainer}>
-             <Avatar 
-             size="xlarge"
-             source={{uri:'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/logo.jpeg?alt=media&token=a9b3c664-96dc-46d5-bc6d-215f233d11b9'}}/> 
-           
-            <View style={{marginTop:20}}>
-                <View style={{ flexDirection:'row'}}>
-                    <Icon name="star" size={30} color="#f1c40f" />
-                    <Icon name="star" size={30} color="#f1c40f" />
-                    <Icon name="star" size={30} color="#f1c40f" />
-                    <Icon name="star" size={30} color="#f1c40f" />
-                    <Icon name="star" size={30} color="#f1c40f" />
-                </View>
-                 <Text style={styles.texMuted}>
-                     Califica
-                </Text>
-            </View>
 
-            <View style={{marginTop:20}}>
-                <Icon  name="comments" size={35} color="#0abde3" />
-            </View>
-
-            <View style={{marginTop:20}}>
+        <View style={{flexDirection:'column', alignItems:'center', marginTop:20}}>
+            <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/icon%20-%20prod.png?alt=media&token=1e11c661-16db-4623-8fdf-a49c8cddf734'}} style={{width: 150, height: 150}} />
+        </View>
+        <View>
+            <Text style={{color:'#0abde3', fontSize:25, textAlign:'center'}}>Calificar una presentación es asi de facil!</Text>
+        </View>
+        <View >
+            <SliderBox images={images} />
+        </View>
+        <View style={{flexDirection:'column', alignItems:'center'}}>
                 <Button
+                    containerStyle={{backgroundColor:'#54a0ff'}}
+                    titleStyle={{ color:'white', padding:5}}
+                    icon={
+                    <Icon
+                      name="check"
+                      size={20}
+                      color="white"
+                    />
+                    }
                     onPress={() => props.navigation.navigate('Jornadas')}
-                    title="Comienza!"
+                    title="Comienza ahora"
                     type="outline"
                 />
             </View>
-         </View>
-         <View style={styles.creditContainer}>
-            <Text style={styles.texMuted}>Created by Deiver Carrascal</Text>
-         </View>
+         
      </View>
  )
 }
