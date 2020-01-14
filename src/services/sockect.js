@@ -1,15 +1,14 @@
 import  io from 'socket.io-client'
 import FirebaseService from '../services/firebaseService'
 import { YellowBox } from 'react-native'
-
+import config from '../config/server'
 
 
 class Socket {
     
     constructor(){
-        this.forum = io('http://192.168.1.4:3000/forum')
-        this.rating = io('http://192.168.1.4:3000/rating')
-        
+        this.forum = io(config.host+'/forum')
+        this.rating = io(config.host+'/rating')
 
         YellowBox.ignoreWarnings([
             'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
