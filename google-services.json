@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "888063604860",
+    "firebase_url": "https://easy-check-b9106.firebaseio.com",
+    "project_id": "easy-check-b9106",
+    "storage_bucket": "easy-check-b9106.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888063604860:android:b4ec90b7973fc45cdf31f9",
+        "android_client_info": {
+          "package_name": "com.upb.easycheck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "888063604860-glhjqe5jdku04gk741phvme9frgnbac5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvdbr7QzaCPqZGG2C6WefPowQR738iQ4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "888063604860-glhjqe5jdku04gk741phvme9frgnbac5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

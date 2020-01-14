@@ -26,90 +26,12 @@ const firebaseConfig = {
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore()
-  const storage = firebase.storage();
 
 class FirebaseService {
 
       constructor(){
         
       }
-
-
-
-
-     static addDocumentWithImagen(deal, imagen, body){
-      return new Promise( (resolve, reject) => {
-          try {
-                const urlImage = []
-                let docRef = db.collection(deal).doc()
-                
-                 
-                  const storageRef = storage.ref();
-                  const imagesRef = storageRef.child(deal);
-                  const spaceRef = imagesRef.child(imagen.name);
-                 
-                  spaceRef.put(imagen).then( function(snapshot) {
-                    spaceRef.getDownloadURL().then(async(url) => {
-                      urlImage.push(url)
-                      const _id = Date.parse(new Date())
-                      body['_id'] = _id
-                      body['url'] = urlImage
-                      await docRef.set(body)
-                      resolve(true)
-                    })
-                  });
-
-          } catch (error) {
-            reject(error)
-          }
-      })
-     }
-   
-   
-
-    static UploadImage(deal, imageFiles){
-      return new Promise( (resolve, reject) => {
-        try {
-          const urlImage = []
-
-          const storageRef = storage.ref();
-            const imagesRef = storageRef.child(deal);
-            const spaceRef = imagesRef.child(imageFiles.name);
-           
-            spaceRef.put(imageFiles).then( function(snapshot) {
-              spaceRef.getDownloadURL().then(async(url) => {
-                urlImage.push(url)
-                resolve(urlImage)
-              })
-            });
-
-        } catch (error) {
-          reject(error)
-        }
-    })
-     }
-
-     
-addAllDocuemnts(deal, data){
-  return new Promise((resolve,reject) => {
-        try {
-          const batch = db.batch();
-
-          data.map(doc => {
-              const  nycRef = db.collection(deal).doc();
-              batch.set(nycRef, doc);
-          })
-    
-            // Commit the batch
-            batch.commit().then(function () {
-                resolve(true)
-            });
-
-        } catch (error) {
-          reject(error)
-        }
-    })
-}
 
 
   static addDocument(deal, data){
@@ -145,7 +67,7 @@ addAllDocuemnts(deal, data){
             reject(error)
           }
         })
-      }
+  }
 
   static deleteDocument(deal, id){
         return new Promise( async (resolve, reject) => {
@@ -166,7 +88,7 @@ addAllDocuemnts(deal, data){
              reject(error)
           }
         })
-      }
+  }
 
 
   static updateDocument(deal, id, data){

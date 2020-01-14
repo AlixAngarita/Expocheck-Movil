@@ -28,6 +28,7 @@
       "bundleIdentifier": "com.upb.easyCheck"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "package": "com.upb.easycheck"
     }
   }
