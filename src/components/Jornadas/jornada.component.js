@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, TouchableHighlight, View, Text, StyleSheet, ActivityIndicator, Alert} from 'react-native'
+import {FlatList, View, Text, StyleSheet, ActivityIndicator, Alert} from 'react-native'
 import { ListItem, Divider} from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
@@ -20,6 +20,27 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     }
 })
+
+
+
+const renderItem = ({item}, props) => 
+    <ListItem
+        onPress={() => {
+            { moment(moment().format('YYYY-MM-DD')).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
+                props.navigation.navigate('EasyCheck',{id:item._id})
+                :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
+                [
+                {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
+                ])
+            }
+            
+        }}
+        title={item.titulo}
+        subtitle={moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
+        leftAvatar={{title:item.gradoJornada}}
+        chevron
+    />
+
 const Jornada = props => {
 
     return (
@@ -30,24 +51,7 @@ const Jornada = props => {
                 showsVerticalScrollIndicator={false}
                 keyExtractor={keyExtractor}
                 data={props.jornadas}
-                renderItem = {({item}) => 
-                <TouchableHighlight  onPress={() => {
-                    { moment(moment().format('YYYY-MM-DD')).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
-                        props.navigation.navigate('EasyCheck',{id:item._id})
-                        :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
-                        [
-                          {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
-                        ])
-                    }
-                    
-                }}>
-                    <ListItem
-                        title={item.titulo}
-                        subtitle={moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
-                        leftAvatar={{title:item.gradoJornada}}
-                        chevron
-                    />
-                </TouchableHighlight >}
+                renderItem = {(item) => renderItem(item,props)}
                 ItemSeparatorComponent={() => <Divider navigation={props.navigation}/>}
                 /> 
             }

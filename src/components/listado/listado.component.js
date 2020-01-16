@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList, StyleSheet, TouchableHighlight, Text, ActivityIndicator} from "react-native";
+import { View, FlatList, StyleSheet,  Text, ActivityIndicator} from "react-native";
 import { ListItem } from 'react-native-elements'
 import { Rating, Header } from 'react-native-elements';
 import { withNavigation } from 'react-navigation';
@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
 const keyExtractor = (item, index) => index.toString()
 
 const renderItem = ({ item }, props) => (
-    <TouchableHighlight onPress={()=> props.navigation.push('Presentación',{presentacion:item, id:props.id, fechaInicio:props.fechaInicio, fechaFinaliza:props.fechaFinaliza})}>
         <ListItem
+            onPress={()=> props.navigation.push('Presentación',{presentacion:item, id:props.id, fechaInicio:props.fechaInicio, fechaFinaliza:props.fechaFinaliza})}
             title={<Text style={{fontSize:17}}>{item.titulo}</Text>}
             subtitle={
             <View style={styles.presentacionContainer}>
@@ -32,7 +32,6 @@ const renderItem = ({ item }, props) => (
             bottomDivider
             chevron
         />
-    </TouchableHighlight>
   )
   
 const Listado = props => {
