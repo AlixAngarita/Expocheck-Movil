@@ -4,8 +4,9 @@ import FirebaseService from '../../services/firebaseService'
 import { withNavigation } from 'react-navigation';
 import { AsyncStorage } from "react-native";
 import moment from 'moment';
+import config from '../../config/server'
 import  io from 'socket.io-client'
-const pr = io('http://192.168.1.4:3000/presentation')
+const pr = io(config.host+'/presentation')
 
 class Presentacion extends React.Component {
 
