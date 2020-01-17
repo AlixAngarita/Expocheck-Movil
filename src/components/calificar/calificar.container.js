@@ -42,6 +42,8 @@ class Calificacion extends React.Component{
        
     }
 
+   
+
     async componentWillMount(){
         this.setState({ scanned: false});
     }
@@ -149,7 +151,7 @@ class Calificacion extends React.Component{
     }
 
     scanear(){
-        this.setState({ok:false, scaned:true})
+        this.setState({ok:false, scaned:true, valid:true})
     }
 
     addComment(comment){

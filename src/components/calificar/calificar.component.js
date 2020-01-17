@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import {Text, View, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Keyboard } from "react-native";
-import { AirbnbRating } from 'react-native-elements';
+import { AirbnbRating, Divider, Image } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import {withNavigation} from 'react-navigation'
+const qrimage = require('../../../assets/images/qrcode.png')
 
 const CalfificarComponent = props => {
 
@@ -42,7 +43,7 @@ const CalfificarComponent = props => {
       cameraContainer: {
           margin:0,
           height: '115%',
-          padding: 0,
+          padding: 0
       },
   
       ratingContainer:{
@@ -85,10 +86,19 @@ const CalfificarComponent = props => {
            <View style={{flex:1}}>
                 
                 { !props.ok && !props.hasQrCode && (
-                   <BarCodeScanner
-                    onBarCodeScanned={scanned ? undefined : props.handleBarCodeScanned}
-                    style={[StyleSheet.absoluteFillObject, styles.cameraContainer]}
+                   <View style={{flex:1}}>
+                     <BarCodeScanner
+                      onBarCodeScanned={scanned ? undefined : props.handleBarCodeScanned}
+                      style={[StyleSheet.absoluteFillObject, styles.cameraContainer]}
                     />
+                    <Divider  style={{position:'relative', top:'50%', backgroundColor:'red'}}/>
+                    <Button 
+                      onPress={() => props.navigation.goBack()}
+                      type='clear'
+                      containerStyle={{position:'relative', top:'90%'}}
+                      title={"Cancelar"}
+                      titleStyle={{color:'white', fontSize:20}}/>
+                   </View>
                 )}
                 {props.ok && props.valid && (
                   <React.Fragment>
@@ -132,11 +142,33 @@ const CalfificarComponent = props => {
                     </KeyboardAvoidingView >
                   </React.Fragment>
                 )}
+                { !props.valid &&  !props.scanned && (
+                  <View style={{flex:1, flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
+                      
+                        <Text style={{color:'red', fontSize:20, marginBottom:20}}>Código no valido</Text>
+                        <Image
+                          source={qrimage}
+                          style={{ width: 200, height: 200 }}
+                        />
+                        <Button 
+                          buttonStyle={{backgroundColor:'#0abde3', marginTop:20}}
+                          icon={
+                          <Icon
+                            name="qrcode"
+                            size={40}
+                            color="white"
+                          />
+                        }
+                        type="solid" 
+                        onPress={() => props.scanear()} ></Button>
+                      
+                  </View>
+                )}
                 {props.ok && !props.valid && (Alert.alert('Codigo invalido', 
-                'El cosigo QR escaneado no es valido', 
-                [{text: 'Scanear', onPress: () => props.scanear()}]))}
+                'El codigo QR escaneado no es valido', 
+                [{ text: 'Cancelar'},{text: 'Scanear', onPress: () => props.scanear()}]))}
            </View>
     )
 }
 
-export default CalfificarComponent
+export default withNavigation(CalfificarComponent)
