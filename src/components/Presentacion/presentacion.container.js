@@ -43,6 +43,8 @@ class Presentacion extends React.Component {
                 this.setState({fechaInicio:jornada.fechaInicio})
                 this.setState({fechaFinaliza:jornada.fechaFinaliza})
 
+                if(jornada.presentaciones.length == 0)
+                    this.setState({loading:false})
                 jornada.presentaciones.map(presentacion => { 
                     const format = 'hh:mm a'
                     // hay una presentacion disponible para hoy?

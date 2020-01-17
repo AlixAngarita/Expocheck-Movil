@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, View, Text, StyleSheet, ActivityIndicator, Alert, TouchableHighlight} from 'react-native'
+import {FlatList, View, Text, StyleSheet, ActivityIndicator, Alert, TouchableHighlight, SafeAreaView, ScrollView } from 'react-native'
 import { ListItem, Divider} from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
@@ -21,28 +21,18 @@ const styles = StyleSheet.create({
     }
 })
 
+const now = moment().format('YYYY-MM-DD')
 
-
-const renderItem = ({item}, props) => 
-<TouchableHighlight
- onPress={() => {
-    { moment(moment().format('YYYY-MM-DD')).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
+const callDate = (item,props) => {
+    moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
         props.navigation.navigate('EasyCheck',{id:item._id})
         :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
         [
         {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
         ])
-    }
-    
-}}>
-    <ListItem
-            title={item.titulo}
-            subtitle={moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
-            leftAvatar={{title:item.gradoJornada}}
-            chevron
-        />
-</TouchableHighlight>
-    
+}
+
+
 
 const Jornada = props => {
 
@@ -50,13 +40,23 @@ const Jornada = props => {
         <View style={{flex:1}}>
             {
                 props.jornadas.length > 0 &&
-                <FlatList
-                showsVerticalScrollIndicator={false}
-                keyExtractor={keyExtractor}
-                data={props.jornadas}
-                renderItem = {(item) => renderItem(item,props)}
-                ItemSeparatorComponent={() => <Divider navigation={props.navigation}/>}
-                /> 
+               <SafeAreaView>
+                   <ScrollView>
+                       {props.jornadas.map((item, index) => (
+                           <TouchableHighlight
+                           key={index.toString()}
+                           onPress={() => callDate(item,props)}>
+                              <ListItem
+                                      key={item.titulo}
+                                      title={item.titulo}
+                                      subtitle={moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
+                                      leftAvatar={{title:item.gradoJornada}}
+                                      chevron
+                                  />
+                          </TouchableHighlight>
+                       ))}
+                   </ScrollView>
+               </SafeAreaView>
             }
 
             { !props.loading && props.jornadas.length == 0  ?

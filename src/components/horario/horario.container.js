@@ -24,7 +24,10 @@ class HorarioContainer extends React.Component {
 
     getAgenda(){
         FirebaseService.getDocById('jornadas', this.props.id)
-        .then(jornada => this.setState({horario:jornada.agenda, loading:false, fechaInicio:jornada.fechaInicio}))
+        .then(jornada => {
+            let horario = jornada.agenda ? jornada.agenda:[]
+            this.setState({horario, loading:false, fechaInicio:jornada.fechaInicio})
+        })
     }
 
     filtrar(dia_filtrado){

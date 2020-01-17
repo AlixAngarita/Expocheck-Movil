@@ -65,7 +65,7 @@ const Home = props => {
             <Text style={{color:'#0abde3', fontSize:25, textAlign:'center'}}>Calificar una presentación es asi de facil!</Text>
         </View>
         <View >
-            <SliderBox images={images} />
+            <SliderBox  images={images} />
         </View>
         <View style={{flexDirection:'column', alignItems:'center'}}>
                 <Button
