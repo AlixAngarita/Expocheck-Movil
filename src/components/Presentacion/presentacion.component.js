@@ -119,7 +119,7 @@ const Presentacion = props => {
 
       {!props.loading && props.presentacion == '' ?
         <View style={{ display:'flex',flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-          <Text style={{color:'grey'}}>No  hay una presentacion agendada.</Text>
+          <Text style={{color:'grey', fontSize:17}}>No  hay una presentacion agendada.</Text>
         </View>:null
       } 
 

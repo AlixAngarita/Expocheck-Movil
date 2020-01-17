@@ -105,7 +105,7 @@ const Horario = props => {
             justifyContent: "center"
           }}
         >
-          <Text style={{ color: "grey" }}>Sin agenda.</Text>
+          <Text style={{ color: "grey", fontSize:17}}>Sin agenda.</Text>
         </View>
       ) : null}
 

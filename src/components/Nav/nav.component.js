@@ -45,7 +45,6 @@ export default class TabViewExample extends React.Component {
   render() {
     return (
       <TabView
-        lazy={true}
         tabBarPosition='bottom'
         renderTabBar={props => (
           <TabBar
