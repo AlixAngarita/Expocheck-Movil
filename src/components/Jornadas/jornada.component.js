@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, View, Text, StyleSheet, ActivityIndicator, Alert} from 'react-native'
+import {FlatList, View, Text, StyleSheet, ActivityIndicator, Alert, TouchableHighlight} from 'react-native'
 import { ListItem, Divider} from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
@@ -24,22 +24,25 @@ const styles = StyleSheet.create({
 
 
 const renderItem = ({item}, props) => 
+<TouchableHighlight
+ onPress={() => {
+    { moment(moment().format('YYYY-MM-DD')).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
+        props.navigation.navigate('EasyCheck',{id:item._id})
+        :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
+        [
+        {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
+        ])
+    }
+    
+}}>
     <ListItem
-        onPress={() => {
-            { moment(moment().format('YYYY-MM-DD')).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
-                props.navigation.navigate('EasyCheck',{id:item._id})
-                :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
-                [
-                {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
-                ])
-            }
-            
-        }}
-        title={item.titulo}
-        subtitle={moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
-        leftAvatar={{title:item.gradoJornada}}
-        chevron
-    />
+            title={item.titulo}
+            subtitle={moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
+            leftAvatar={{title:item.gradoJornada}}
+            chevron
+        />
+</TouchableHighlight>
+    
 
 const Jornada = props => {
 
