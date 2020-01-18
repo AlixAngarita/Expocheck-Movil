@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import {Text, View, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Keyboard } from "react-native";
+import {Text, View, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Keyboard, Animated } from "react-native";
 import { AirbnbRating, Divider, Image } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +10,7 @@ const qrimage = require('../../../assets/images/qrcode.png')
 const CalfificarComponent = props => {
 
   const [focus, setfocus] = useState(true)
+  const [animated, setanimated] = useState(new Animated.Value(0)) 
 
   const keyboardDidHide = () => {
     setfocus(false)
@@ -19,8 +20,16 @@ const CalfificarComponent = props => {
     setfocus(true)
   }
 
+ const runAnimateScanner = () => {
+  Animated.loop(
+    Animated.timing(animated,{
+      toValue:1,
+      duration:1300
+    })
+   ).start() 
+  }
     useEffect(() => {
-
+      runAnimateScanner()
       this.keyboardDidShowListener = Keyboard.addListener(
         'keyboardDidShow',
         keyboardDidShow,
@@ -34,7 +43,7 @@ const CalfificarComponent = props => {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
       }
-    },[]);
+    });
 
     
 
@@ -91,7 +100,14 @@ const CalfificarComponent = props => {
                       onBarCodeScanned={scanned ? undefined : props.handleBarCodeScanned}
                       style={[StyleSheet.absoluteFillObject, styles.cameraContainer]}
                     />
-                    <Divider  style={{position:'relative', top:'50%', backgroundColor:'red'}}/>
+                    <Animated.View 
+                      style={{position:'relative', top:'50%', height:1, backgroundColor:'red',
+                      opacity:animated.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 1]  
+                      })}}>
+
+                    </Animated.View>
                     <Button 
                       onPress={() => props.navigation.goBack()}
                       type='clear'

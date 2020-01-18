@@ -58,7 +58,7 @@ const Listado = props => {
             }
             { !props.loading && props.listado.length == 0  ?
                 <View style={{ display:'flex',flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-                         <Text style={{color:'grey', fontSize:17}}>No se encontraron presentaciones.</Text>
+                         <Text style={{color:'grey', fontSize:17}}>No hay presentaciones.</Text>
                 </View>:null
             }
         </View>
