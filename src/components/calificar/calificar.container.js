@@ -170,6 +170,8 @@ class Calificacion extends React.Component{
             calificada={this.state.calificada}
             calificar={this.calificar}
             addComment={this.addComment}
+            granted={this.state.hasCameraPermission == 'granted' || 'undetermined'}
+            pedirPermiso={this.getPermissionsAsync}
             />)
     }
 }

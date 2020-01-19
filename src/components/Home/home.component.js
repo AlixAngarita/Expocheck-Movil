@@ -3,8 +3,6 @@ import {Button} from 'react-native-elements'
 import { View, StyleSheet, Text, Image} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation';
-import { SliderBox } from "react-native-image-slider-box";
-
 
 const styles = StyleSheet.create({
     container:{
@@ -50,9 +48,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const images = [
-  "https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/Calificar%20presentaci%C3%B3n.png?alt=media&token=87b0948e-78cb-4bb8-bf50-6433958a57bc"
-]
+
 
 const Home = props => {
  return(
@@ -64,9 +60,7 @@ const Home = props => {
         <View>
             <Text style={{color:'#0abde3', fontSize:25, textAlign:'center'}}>Calificar una presentación es asi de facil!</Text>
         </View>
-        <View >
-            <SliderBox  images={images} />
-        </View>
+        <Image style={{width:'100%', height:280}} resizeMode='center' source={{uri:'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/Calificar%20presentaci%C3%B3n.png?alt=media&token=87b0948e-78cb-4bb8-bf50-6433958a57bc'}}/>
         <View style={{flexDirection:'column', alignItems:'center'}}>
                 <Button
                     containerStyle={{backgroundColor:'#54a0ff'}}
