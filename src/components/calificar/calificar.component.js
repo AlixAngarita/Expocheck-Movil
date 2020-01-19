@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import {Text, View, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Keyboard, Animated } from "react-native";
-import { AirbnbRating, Divider, Image } from 'react-native-elements';
+import { AirbnbRating, Image } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {withNavigation} from 'react-navigation'
@@ -49,12 +49,6 @@ const CalfificarComponent = props => {
 
     
     const styles = StyleSheet.create({
-      cameraContainer: {
-          margin:0,
-          height: '115%',
-          padding: 0
-      },
-  
       ratingContainer:{
         flex:1,
         flexDirection: "column",
@@ -93,12 +87,13 @@ const CalfificarComponent = props => {
 
     return (
            <View style={{flex:1}}>
-                
-                { !props.ok && !props.hasQrCode && (
-                   <View style={{flex:1}}>
+                {props.granted && (
+                  <React.Fragment>
+                    { !props.ok && !props.hasQrCode && (
+                   <View style={{flex: 1,backgroundColor: '#000000'}}>
                      <BarCodeScanner
                       onBarCodeScanned={scanned ? undefined : props.handleBarCodeScanned}
-                      style={[StyleSheet.absoluteFillObject, styles.cameraContainer]}
+                      style={[StyleSheet.absoluteFillObject]}
                     />
                     <Animated.View 
                       style={{position:'relative', top:'50%', height:1, backgroundColor:'red',
@@ -183,6 +178,18 @@ const CalfificarComponent = props => {
                 {props.ok && !props.valid && (Alert.alert('Codigo invalido', 
                 'El codigo QR escaneado no es valido', 
                 [{ text: 'Cancelar'},{text: 'Scanear', onPress: () => props.scanear()}]))}
+                  </React.Fragment>
+                )}
+
+                {!props.granted && (
+                  <View style={{flex:1, flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
+                    <Text style={{fontSize:20, color:'grey', textAlign:'center', marginBottom:30, marginHorizontal:15}}>Permita que easy check pueda acceder a la camara del dispositivo.</Text>
+                    <Button 
+                    title="Permitir"
+                    buttonStyle={{backgroundColor:'#0abde3'}}
+                    onPress={() => props.pedirPermiso()}/>
+                  </View>
+                )}
            </View>
     )
 }
