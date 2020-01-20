@@ -1,7 +1,5 @@
-import React from "react";
-import {Button} from 'react-native-elements'
-import { View, StyleSheet, Text, Image} from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, {useState, useEffect} from "react";
+import { View, StyleSheet, Text, Image, TouchableOpacity, Animated } from "react-native";
 import { withNavigation } from 'react-navigation';
 
 const styles = StyleSheet.create({
@@ -51,6 +49,25 @@ const styles = StyleSheet.create({
 
 
 const Home = props => {
+    const [animation] = useState(new Animated.Value(0))
+
+    startAnimate = () => {
+      Animated.loop(
+          Animated.sequence([
+              Animated.delay(1500),
+              Animated.spring(animation,{
+                toValue:2,
+                friction:3,
+                delay:1000
+              })
+          ])
+      ).start()
+    }
+
+    useEffect(() => {
+        startAnimate()
+    })
+      
  return(
      <View style={styles.container}>
 
@@ -62,21 +79,28 @@ const Home = props => {
         </View>
         <Image style={{width:'100%', height:280}} resizeMode='center' source={{uri:'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/Calificar%20presentaci%C3%B3n.png?alt=media&token=87b0948e-78cb-4bb8-bf50-6433958a57bc'}}/>
         <View style={{flexDirection:'column', alignItems:'center'}}>
-                <Button
-                    containerStyle={{backgroundColor:'#54a0ff'}}
-                    titleStyle={{ color:'white', padding:5}}
-                    icon={
-                    <Icon
-                      name="check"
-                      size={20}
-                      color="white"
-                    />
-                    }
-                    onPress={() => props.navigation.navigate('Jornadas')}
-                    title="Comienza ahora"
-                    type="outline"
-                />
-            </View>
+               
+                      <TouchableOpacity activeOpacity={0.5} onPress={() => props.navigation.navigate('Jornadas')}>
+                        <Animated.View style={{borderRadius:100, backgroundColor:'#0abde3', transform:[
+                                {scale:animation.interpolate({
+                                inputRange:[0, 1, 2],
+                                outputRange:[1, .8, 1]
+                                })}
+                            ],
+                            shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 1,
+},
+shadowOpacity: 0.22,
+shadowRadius: 2.22,
+
+elevation: 3}}>
+                            <Text style={{color:'white', fontSize:18, padding:12}}>Comienza ahora</Text>
+                        </Animated.View>
+                     </TouchableOpacity>
+                
+        </View>
          
      </View>
  )

@@ -9,6 +9,7 @@ import {
   Text,
   ActivityIndicator,
   Alert
+  
 } from "react-native";
 import { Rating,Icon} from "react-native-elements";
 import moment from 'moment';
@@ -67,8 +68,12 @@ const renderItem = ({ item }) => (
       </View>
 );
 
-const Presentacion = props => {
 
+ 
+
+
+const Presentacion = props => {
+ 
   return (
     <View style={styles.container}>
       <Header
@@ -101,18 +106,18 @@ const Presentacion = props => {
                 <Text style={{color:'grey'}}>Sin comentarios.</Text>
               </View>
               }
-              <ActionButton
-                offsetY={5}
-                offsetX={20}
-                renderIcon = {(active) => <Icon name="done" color="white"/>}
-                buttonColor="rgba(10, 189, 227,1.0)"
-                onPress={() => {
-                    moment(moment().format('YYYY-MM-DD')).isBetween( moment(props.fechaInicio), moment(props.fechaFinaliza),  null, '[]') ?
-                    props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada}) :
-                    Alert.alert('Fuera de fecha', 'Solo puede ver la presentación.')
-                  } 
-                }
-              />
+                <ActionButton
+                  offsetY={5}
+                  offsetX={20}
+                  renderIcon = {(active) => <Icon name="done" color="white"/>}
+                  buttonColor="rgba(10, 189, 227,1.0)"
+                  onPress={() => {
+                      moment(moment().format('YYYY-MM-DD')).isBetween( moment(props.fechaInicio), moment(props.fechaFinaliza),  null, '[]') ?
+                      props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada}) :
+                      Alert.alert('Fuera de fecha', 'Solo puede ver la presentación.')
+                    } 
+                  }
+                />
             </View>
         </React.Fragment>:null
       }
