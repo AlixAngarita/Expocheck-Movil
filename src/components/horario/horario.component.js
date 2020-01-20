@@ -73,10 +73,7 @@ const Horario = props => {
           <View style={{ flexDirection: "column", alignItems: "center" }}>
             <Picker
               style={{
-                width: 200,
-                borderColor: "#0abde3",
-                borderWidth: 5,
-                borderStyle: "solid"
+                width: 200
               }}
               onValueChange={(itemValue, itemIndex) => props.filtrar(itemValue)}
               selectedValue={props.diaSeleccionado}
