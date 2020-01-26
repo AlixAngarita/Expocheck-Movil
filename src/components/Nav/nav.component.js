@@ -1,11 +1,9 @@
 import React from "react";
 import {  Dimensions } from "react-native";
-import { TabView } from "react-native-tab-view";
-import { TabBar } from "react-native-tab-view";
+import { TabView, TabBar } from "react-native-tab-view";
 import Presentacion from '../Presentacion/presentacion.container'
 import Horario from '../horario/horario.container'
 import Listado from '../listado/listado.container'
-import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class TabViewExample extends React.Component {
 
@@ -18,43 +16,25 @@ export default class TabViewExample extends React.Component {
   state = {
     index: 0,
     routes: [
-      { key: "Presentacion", title: "Presentando"},
-      {key:'Listado', title:'Expuestas'},
-      { key: "Horario", title: "Horarios" },
+      { key: "Presentacion", title: "Exponiendo"},
+      {key:'Listado', title:'Listado'},
+      { key: "Horario", title: "Agenda" },
     ]
   };
 
-  renderIcon (props){
-    const {route} = props
-
-    if (route.key === 'Presentacion'){
-      return  <Icon name='history' size={30} color={'white'}/>
-    }
-     
-    else if (route.key === 'Listado'){
-      return <Icon name='list-ul' size={30} color={'white'}/>
-    }
-      
-    else{
-      return <Icon name='calendar' size={30} color={'white'}/>
-    }
-     
-  
-  }
 
   render() {
     return (
       <TabView
-        tabBarPosition='bottom'
+        tabBarPosition='top'
+        navigationState={this.state}
         renderTabBar={props => (
           <TabBar
             {...props}
-            renderLabel={props => this.renderIcon(props)}
-            indicatorStyle={{ backgroundColor: "white", position:'relative', top:0, height:3}}
+            indicatorStyle={{ backgroundColor: "white"}}
             style={{ backgroundColor: "#0abde3" }}
           />
         )}
-        navigationState={this.state}
         renderScene={ ({route}) => {
           switch (route.key) {
             case 'Presentacion':

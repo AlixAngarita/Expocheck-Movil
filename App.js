@@ -25,13 +25,13 @@ const AppNavigator = createStackNavigator({
   EasyCheck:{
     screen:EasyCheckScreen,
     navigationOptions:{
-      header:null
+      title:'Expocheck'
     }
   },
   Presentación:{
     screen:Presentación,
     navigationOptions:{
-      header:null
+      title:'Presentación'
     }
   }
 
@@ -41,7 +41,9 @@ const AppNavigator = createStackNavigator({
   defaultNavigationOptions:{
     headerStyle:{
       backgroundColor:'#0abde3',
-      shadowColor:'white'
+      elevation: 0, //for android
+      shadowOpacity: 0, //for ios
+      borderBottomWidth: 0, //for ios
     },
     headerTintColor:'white'
   },

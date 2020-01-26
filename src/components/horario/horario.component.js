@@ -7,7 +7,7 @@ import {
   Picker,
   ActivityIndicator
 } from "react-native";
-import { Avatar, Header } from "react-native-elements";
+import { Avatar} from "react-native-elements";
 import moment from "moment";
 
 const styles = StyleSheet.create({
@@ -60,14 +60,6 @@ const renderItem = ({ item }) => (
 const Horario = props => {
   return (
     <View style={{ flex: 1 }}>
-      <Header
-        backgroundColor="#0abde3"
-        centerComponent={{
-          text: "Agenda " + (props.fechaInicio != null ? moment(props.fechaInicio).format("MMM Y"): ''),
-          style: { color: "#fff", fontSize: 20 }
-        }}
-      />
-
       {props.horario.length > 0 && !props.loading ? (
         <React.Fragment>
           <View style={{ flexDirection: "column", alignItems: "center" }}>

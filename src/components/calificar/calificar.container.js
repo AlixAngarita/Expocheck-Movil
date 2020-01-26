@@ -114,9 +114,10 @@ class Calificacion extends React.Component{
         califications.push({titulo:this.state.presentacion.titulo, rating})
         AsyncStorage.setItem('califications', JSON.stringify(califications))
         .then( ok => {
+                console.log('Entro al storage')
                 this.setState({calificada:rating})
                 Socket.calification(rating, this.state.presentacion.titulo, this.props.navigation.getParam('idJornada'))
-        })
+        }).catch(err => console.log('"Error al entrar al storage -> ',err))
     }
 
     async validCode(code){
