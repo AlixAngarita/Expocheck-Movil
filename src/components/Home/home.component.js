@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity, Animated } from "react-native";
 import { withNavigation } from 'react-navigation';
+import assets from '../../config/assets'
 
 const styles = StyleSheet.create({
     container:{
@@ -72,15 +73,15 @@ const Home = props => {
      <View style={styles.container}>
 
         <View style={{flexDirection:'column', alignItems:'center', marginTop:20}}>
-            <Image source={{uri: 'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/icon%20-%20prod.png?alt=media&token=1e11c661-16db-4623-8fdf-a49c8cddf734'}} style={{width: 150, height: 150}} />
+            <Image source={{uri:assets.logo }} style={{width: 150, height: 150}} />
         </View>
         <View>
             <Text style={{color:'#0abde3', fontSize:25, textAlign:'center'}}>Calificar una presentación es asi de facil!</Text>
         </View>
-        <Image style={{width:'100%', height:280}} resizeMode='center' source={{uri:'https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/Calificar%20presentaci%C3%B3n.png?alt=media&token=87b0948e-78cb-4bb8-bf50-6433958a57bc'}}/>
+        <Image style={{width:'100%', height:280}} resizeMode='center' source={{uri:assets.steps}}/>
         <View style={{flexDirection:'column', alignItems:'center'}}>
                
-                      <TouchableOpacity activeOpacity={0.5} onPress={() => props.navigation.navigate('Jornadas')}>
+                      <TouchableOpacity activeOpacity={0.5} onPress={() => props.navigation.navigate('Login')}>
                         <Animated.View style={{borderRadius:100, backgroundColor:'#0abde3', transform:[
                                 {scale:animation.interpolate({
                                 inputRange:[0, 1, 2],

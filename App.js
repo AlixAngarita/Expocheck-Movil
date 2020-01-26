@@ -6,9 +6,16 @@ import JornaadaScrenn from './src/components/Jornadas/jornada.container'
 import EasyCheckScreen from  './src/components/easyCheck/EasyCheck.container'
 import Calificar from './src/components/calificar/calificar.container'
 import Presentación from './src/components/Presentacion/presentacion.container'
+import Login from './src/components/login/login.container'
 
 const AppNavigator = createStackNavigator({
 
+  Login:{
+    screen:Login,
+    navigationOptions:{
+      header:null
+    }
+  },
   Home:HomeScreen,
   Calificar:{
     screen:Calificar,
