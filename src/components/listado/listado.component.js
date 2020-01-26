@@ -1,7 +1,7 @@
 import React from "react";
 import { View, FlatList, StyleSheet,  Text, ActivityIndicator} from "react-native";
 import { ListItem } from 'react-native-elements'
-import { Rating, Header } from 'react-native-elements';
+import { Rating } from 'react-native-elements';
 import { withNavigation } from 'react-navigation';
 
 const styles = StyleSheet.create({
@@ -38,10 +38,7 @@ const Listado = props => {
 
     return (
         <View style={{flex:1}}>
-            <Header
-            backgroundColor='#0abde3'
-            centerComponent={{ text: 'Presentaciones', style: { color: '#fff', fontSize:20 } }}
-            />
+           
             {
                 props.listado.length > 0 && !props.loading? 
                 (<FlatList

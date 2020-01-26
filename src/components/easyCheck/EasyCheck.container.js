@@ -38,14 +38,30 @@ class EasyCheck extends Component {
             
               // Get the token that uniquely identifies this device
               let token = await Notifications.getExpoPushTokenAsync();
-              return {token, existingStatus:existingStatus!="granted"};
+              return {token};
+        }
+
+        existToken(token) {
+            return new Promise((resolve, reject) => {
+                FirebaseService.getDocuments('tokens')
+                .then(tokens => {
+                    tokens.map(to => console.log(to))
+                    exist = tokens.some(current_token => current_token.token == token)
+                    console.log(exist)
+                    resolve(exist)
+                }).catch(err => reject(err))
+            })
         }
 
         async saveToken(){
-            const {token, existingStatus} = await this.getPushToken()
-            if (token != undefined && existingStatus){
-                await FirebaseService.addDocument("tokens", {token})
-            }
+            const {token} = await this.getPushToken()
+            this.existToken(token).then( async exist => {
+                if (!exist){
+                    await FirebaseService.addDocument("tokens", {token})
+                    console.log('se guardo')
+                }
+            })
+            
         }
 
         render(){

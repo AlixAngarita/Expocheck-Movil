@@ -1,5 +1,4 @@
 import React from "react";
-import {  Header } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import { withNavigation } from 'react-navigation';
 import {
@@ -76,10 +75,7 @@ const Presentacion = props => {
  
   return (
     <View style={styles.container}>
-      <Header
-            backgroundColor='#0abde3'
-            centerComponent={{ text: props.presentacionSeleccionada ? 'Presentación':'Exponiendo', style: { color: '#fff', fontSize:20 } }}
-            />
+    
       
       {props.presentacion != '' && !props.loading ?
         <React.Fragment>
