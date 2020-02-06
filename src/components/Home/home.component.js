@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection:'column',
         justifyContent:'space-around',
-        backgroundColor:'#ecf0f1'
+        backgroundColor:'#f1f2f6'
     },
     avatarContainer:{
         flex:1,

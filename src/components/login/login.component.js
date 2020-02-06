@@ -15,7 +15,7 @@ const LoginComponent = props => {
         justifyContent:'center' }}
         behavior="padding">
              <TextInput
-            placeholder="Digite si ID ..."
+            placeholder="Digite su ID ..."
             keyboardType='number-pad'
             maxLength={9}
             style={{borderColor:'#74b9ff', borderRadius:20, borderWidth:1, height:40,
