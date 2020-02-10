@@ -7,7 +7,7 @@ import EasyCheckScreen from  './src/components/easyCheck/EasyCheck.container'
 import Calificar from './src/components/calificar/calificar.container'
 import Presentación from './src/components/Presentacion/presentacion.container'
 import Login from './src/components/login/login.container'
-
+import MenuComponent from './src/components/menu'
 const AppNavigator = createStackNavigator({
 
   Login:{
@@ -26,7 +26,8 @@ const AppNavigator = createStackNavigator({
   Jornadas:{
     screen:JornaadaScrenn,
     navigationOptions:{
-      title:'Seleccione una jornada'
+      title:'Seleccione una jornada',
+      headerRight:null
     }
   },
   EasyCheck:{
@@ -46,6 +47,7 @@ const AppNavigator = createStackNavigator({
 {
   initialRouteName:'Home',
   defaultNavigationOptions:{
+    headerRight:(<MenuComponent/>),
     headerStyle:{
       backgroundColor:'#0abde3',
       elevation: 0, //for android
