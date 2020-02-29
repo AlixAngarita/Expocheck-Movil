@@ -8,6 +8,8 @@ import Calificar from './src/components/calificar/calificar.container'
 import Presentación from './src/components/Presentacion/presentacion.container'
 import Login from './src/components/login/login.container'
 import MenuComponent from './src/components/menu'
+import { Provider } from 'react-redux';
+import store from './src/redux/store'
 const AppNavigator = createStackNavigator({
 
   Login:{
@@ -59,4 +61,15 @@ const AppNavigator = createStackNavigator({
   headerLayoutPreset:'center'
 })
 
-export default createAppContainer(AppNavigator)
+const Navigator = createAppContainer(AppNavigator)
+class App extends React.Component {
+  render(){
+    return(
+      <Provider store={store}>
+        <Navigator/>
+      </Provider>
+    )
+  }
+}
+
+export default App
