@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import JornadaComponent from './jornada.component'
 import firebaseService from '../../services/firebaseService'
-
+import {connect} from 'react-redux'
+import {getJornadas} from '../../redux/actions/jornadas.action'
 
 class Jornada extends  Component {
     constructor(props){
@@ -20,7 +21,7 @@ class Jornada extends  Component {
     }
 
     getJornadas(){
-        firebaseService.getDocuments('jornadas')
+        this.props.jornadas
         .then(jornadas => this.setState({jornadas, loading:false}))
         .catch(err => console.error(err))
     }
@@ -31,4 +32,14 @@ class Jornada extends  Component {
     }
     
 }
-export default Jornada
+const mapStateToProps = (state) => {
+    return {
+        jornadas: state.jornadas
+    }
+}
+
+const mapDispatchToProps = {
+    getJornadas
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Jornada)
