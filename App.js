@@ -9,7 +9,9 @@ import Presentación from './src/components/Presentacion/presentacion.container'
 import Login from './src/components/login/login.container'
 import MenuComponent from './src/components/menu'
 import { Provider } from 'react-redux';
-import store from './src/redux/store'
+import { store, persistor } from './src/redux/store'
+import { PersistGate } from 'redux-persist/integration/react';
+import {ActivityIndicator} from 'react-native'
 const AppNavigator = createStackNavigator({
 
   Login:{
@@ -29,7 +31,7 @@ const AppNavigator = createStackNavigator({
     screen:JornaadaScrenn,
     navigationOptions:{
       title:'Seleccione una jornada',
-      headerRight:null
+      header:null
     }
   },
   EasyCheck:{
@@ -66,7 +68,9 @@ class App extends React.Component {
   render(){
     return(
       <Provider store={store}>
-        <Navigator/>
+        <PersistGate loading={<ActivityIndicator/>}  persistor={persistor}>
+          <Navigator/>
+        </PersistGate>
       </Provider>
     )
   }

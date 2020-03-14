@@ -1,34 +1,11 @@
 import React, {Component} from "react";
 import JornadaComponent from './jornada.component'
-import firebaseService from '../../services/firebaseService'
 import {connect} from 'react-redux'
-import {getJornadas} from '../../redux/actions/jornadas.action'
+import {getJornadasThunk} from '../../redux/actions/jornadas.action'
 
 class Jornada extends  Component {
-    constructor(props){
-            
-        super(props)
-
-        this.state = {
-            jornadas:[],
-            loading:true
-        }
-    }
-
-    
-    componentDidMount(){
-        this.getJornadas()
-    }
-
-    getJornadas(){
-        this.props.jornadas
-        .then(jornadas => this.setState({jornadas, loading:false}))
-        .catch(err => console.error(err))
-    }
-    
-
     render(){
-        return (<JornadaComponent loading={this.state.loading} jornadas={this.state.jornadas}/>)
+        return (<JornadaComponent loading={true}/>)
     }
     
 }
@@ -39,7 +16,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    getJornadas
+    getJornadasThunk
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Jornada)
