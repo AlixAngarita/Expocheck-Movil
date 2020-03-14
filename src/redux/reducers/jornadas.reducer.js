@@ -1,7 +1,5 @@
 import {handleActions} from 'redux-actions'
-import FirebaseService from '../../services/firebaseService'
 import {getJornadas} from '../actions/jornadas.action'
-
 // sin actions
 // export default (state, action) => {
 //     switch(action.type){
@@ -15,7 +13,8 @@ import {getJornadas} from '../actions/jornadas.action'
 // con redux actions
 
 export default handleActions({
-    [getJornadas]:(state,action) => {
-        return FirebaseService.getDocuments('jornadas')
+    [getJornadas]: (state,action) =>  {
+        console.log("Cambio  el estado jornadas",action.payload)
+        return action.payload
     }
-},FirebaseService.getDocuments('jornadas'))
+},[])

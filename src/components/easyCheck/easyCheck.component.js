@@ -1,6 +1,6 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { withNavigation } from 'react-navigation';
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet,Text} from 'react-native';
 import Nav from '../Nav/nav.component'
 
 const styles = StyleSheet.create({
@@ -10,7 +10,9 @@ const styles = StyleSheet.create({
     content:{
     }
 })
+
 const EsyCheck  = props =>{
+      
     return(
         <View style={styles.container}>
             <Nav id ={props.navigation.getParam('id')}/>
