@@ -1,6 +1,7 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux'
 import jornadas from './reducers/jornadas.reducer'
 import connect from './reducers/offline.reducer'
+import loadingJornada from './reducers/loading.reducers'
 import thunk from 'redux-thunk'
 import { persistStore, persistReducer } from 'redux-persist';
 import createSecureStore from "redux-persist-expo-securestore";
@@ -23,7 +24,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     jornadas,
-    connect
+    connect,
+    loadingJornada
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

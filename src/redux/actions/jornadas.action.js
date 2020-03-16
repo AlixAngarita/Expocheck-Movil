@@ -1,11 +1,13 @@
 import {createAction} from 'redux-actions'
-import FirebaseService from '../../services/firebaseService'
+import {list} from '../../services/jornadas.service'
+import {loadingJornadas} from './loading.actions'
 
 export const  getJornadas = createAction('getJornadas')
 export const getJornadasThunk = () => async dispatch => {
     try {
-        let jornadas = await FirebaseService.getDocuments('jornadas')
-        dispatch(getJornadas(jornadas))
+        let jornadas = await list()
+        dispatch(getJornadas(jornadas.data))
+        dispatch(loadingJornadas(false))
     } catch (error) {
         console.error(error)
     }
