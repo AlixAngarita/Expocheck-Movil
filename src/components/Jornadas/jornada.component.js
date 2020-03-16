@@ -8,9 +8,12 @@ import FlipCard from 'react-native-flip-card'
 import {useSelector, useDispatch} from 'react-redux'
 import {getJornadasThunk} from '../../redux/actions/jornadas.action'
 import {setStateConection} from '../../redux/actions/offline.action'
+import {loadingJornadas} from '../../redux/actions/loading.actions'
 import NetInfo from '@react-native-community/netinfo';
 import {store} from '../../redux/store'
 import {StatusBar, Platform} from 'react-native';
+import { showMessage } from "react-native-flash-message";
+
 
 const styles = StyleSheet.create({
     titulo:{
@@ -40,7 +43,9 @@ const callDate = (item,props) => {
 
 
 const Jornada = props => {
+    
     let jornadas = useSelector(state => state.jornadas);
+    let loading = useSelector(state => state.loadingJornada);
     let dispatch = useDispatch();
    
     useEffect(() => {
@@ -49,6 +54,7 @@ const Jornada = props => {
              // si no esta conectado rehidrata el estado persistido
             if(!state.isConnected){
                 dispatch(getJornadasThunk(store.getState().jornadas))
+                dispatch(loadingJornadas(false))
             }
 
             // si esta conectado sigue con las acciones para consultar la data actualizada
@@ -59,6 +65,17 @@ const Jornada = props => {
         const unsubscribe = NetInfo.addEventListener(state => {
               // guardo el estado inicial de la conexion en el storage 
               dispatch(setStateConection(state.isConnected))
+              if(state.isConnected){
+                showMessage({
+                    message: "Vuelve a tener conexión",
+                    type: "info",
+                  });
+              }else{
+                showMessage({
+                    message: "Desconectado",
+                    type: "danger",
+                  });
+              }
         });
 
         return () => {
@@ -89,7 +106,7 @@ const Jornada = props => {
                 shadowRadius: 3.84,
                 elevation: 5}}>
                 {
-                    jornadas.length > 0 &&
+                    jornadas.length > 0 && !loading &&
                     <View >
                         <Text style={{fontSize:20, color:'grey', textAlign:'center', marginVertical:5}}>Seleccione una Jornada</Text>
                         <ScrollView showsVerticalScrollIndicator={false} >
@@ -106,7 +123,7 @@ const Jornada = props => {
                                                     <Avatar
                                                         size="small"
                                                         rounded
-                                                        title="XV"
+                                                        title={item.version}
                                                         activeOpacity={0.7}
                                                         />
                                                 </View>
@@ -135,20 +152,20 @@ const Jornada = props => {
                                                         <Text style={{fontSize:18, marginLeft:10}}>Descripción</Text>
                                                     </View>
                                                     <Text
-                                                    style={{color:'grey'}}>Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en demostraciones de tipografías o de borradores de diseño para probar el diseño visual antes de insertar el texto final</Text>
+                                                    style={{color:'grey'}}>{item.descripcion}</Text>
                                                 </View>
                                     </FlipCard>
                             ))}
                         </ScrollView>     
                     </View>
                 }
-                { !props.loading && jornadas.length == 0  ?
+                { !loading && jornadas.length == 0  ?
                 <View style={{ display:'flex',flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
                          <Text style={{color:'grey'}}>No se encontraron jornadas.</Text>
                     </View>:null
                 }
 
-                { props.loading  && jornadas.length == 0 ?
+                { loading  ?
                     <View style={styles.loading}>
                         <ActivityIndicator size="large" color="#0000ff" />
                     </View>:null

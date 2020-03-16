@@ -11,7 +11,9 @@ import MenuComponent from './src/components/menu'
 import { Provider } from 'react-redux';
 import { store, persistor } from './src/redux/store'
 import { PersistGate } from 'redux-persist/integration/react';
-import {ActivityIndicator} from 'react-native'
+import {ActivityIndicator, View} from 'react-native'
+import FlashMessage from "react-native-flash-message";
+
 const AppNavigator = createStackNavigator({
 
   Login:{
@@ -68,9 +70,15 @@ class App extends React.Component {
   render(){
     return(
       <Provider store={store}>
-        <PersistGate loading={<ActivityIndicator/>}  persistor={persistor}>
+        <PersistGate loading={<View style={{flex:1,flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+                                <View>
+                                  <ActivityIndicator size="large"/>
+                                </View>
+                            </View>}  
+                  persistor={persistor}>
           <Navigator/>
         </PersistGate>
+        <FlashMessage position="top" /> 
       </Provider>
     )
   }
