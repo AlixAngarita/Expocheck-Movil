@@ -1,93 +1,31 @@
 import React, {useState, useEffect} from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity, Animated } from "react-native";
+import { View, Text, Image, TouchableOpacity, Animated } from "react-native";
 import { withNavigation } from 'react-navigation';
-import assets from '../../config/assets'
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        flexDirection:'column',
-        justifyContent:'space-around',
-        backgroundColor:'#f1f2f6'
-    },
-    avatarContainer:{
-        flex:1,
-        flexDirection:'column',
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    texMuted:{
-        color:'grey',
-        textAlign:'center'
-    },
-    creditContainer:{
-        flex:0.1,
-        flexDirection:'row',
-        justifyContent:'center',
-        position:'absolute',
-        bottom:5,
-        left:'25%'
-    },
-    easyText:{
-        color:'grey',
-        textAlign:'center'
-    },
-    textEasyContainer:{
-        flex:0.2,
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    easy:{
-        flex:1,
-         flexDirection:'column', 
-         justifyContent:'center', 
-         alignItems:'center',
-         marginTop:1
-    }
-})
+import {Dimensions} from 'react-native'
+import { SliderBox } from "react-native-image-slider-box";
+import {StatusBar, Platform} from 'react-native';
 
 
 
 const Home = props => {
-    const [animation] = useState(new Animated.Value(0))
-
-    startAnimate = () => {
-      Animated.loop(
-          Animated.sequence([
-              Animated.delay(1500),
-              Animated.spring(animation,{
-                toValue:2,
-                friction:3,
-                delay:1000
-              })
-          ])
-      ).start()
-    }
-
-    useEffect(() => {
-        startAnimate()
-    })
+    const heightStatusBar = StatusBar.currentHeight
+   const images= [
+    "https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/steps%2FPaso%201.png?alt=media&token=7d3b0308-d0f6-4264-9686-71a448647a5c",
+    "https://firebasestorage.googleapis.com/v0/b/easy-check-b9106.appspot.com/o/steps%2FPaso%202.jpg?alt=media&token=86f5d167-8768-40c0-a86f-55f4290fc0f5",
+    ]
       
  return(
-     <View style={styles.container}>
-
-        <View style={{flexDirection:'column', alignItems:'center', marginTop:20}}>
-            <Image source={{uri:assets.logo }} style={{width: 150, height: 150}} />
+     <View style={{backgroundColor:'#F1F2F6', height:Dimensions.get('window').height}}>
+        <View style={{marginTop:Platform.OS === 'adroid' ? '10%':heightStatusBar+10,
+            width:Dimensions.get('window').width -10}}>
+            <SliderBox 
+            sliderBoxHeight={Dimensions.get('window').height -60} images={images}
+            circleLoop={false} resizeMode="contain"
+            dotColor="white"
+            dotStyle={{width:18, height:18, borderRadius:50}}/>
         </View>
-        <View>
-            <Text style={{color:'#0abde3', fontSize:25, textAlign:'center'}}>Calificar una presentación es asi de facil!</Text>
-        </View>
-        <Image style={{width:'100%', height:280}} resizeMode='center' source={{uri:assets.steps}}/>
-        <View style={{flexDirection:'column', alignItems:'center'}}>
-               
-                      <TouchableOpacity activeOpacity={0.5} onPress={() => props.navigation.navigate('Login')}>
-                        <Animated.View style={{borderRadius:100, backgroundColor:'#0abde3', transform:[
-                                {scale:animation.interpolate({
-                                inputRange:[0, 1, 2],
-                                outputRange:[1, .8, 1]
-                                })}
-                            ],
+        <View style={{borderRadius:100, backgroundColor:'#74b9ff', 
+                            marginVertical:20,
                             shadowColor: "#000",
                             shadowOffset: {
                                 width: 0,
@@ -95,14 +33,10 @@ const Home = props => {
                             },
                             shadowOpacity: 0.22,
                             shadowRadius: 2.22,
-
+                            width:100,
                             elevation: 3}}>
-                            <Text style={{color:'white', fontSize:18, padding:12}}>Comienza ahora</Text>
-                        </Animated.View>
-                     </TouchableOpacity>
-                
-        </View>
-         
+                            <Text style={{color:'white', fontSize:18, padding:10, textAlign:'center'}}>Login</Text>
+         </View>
      </View>
  )
 }

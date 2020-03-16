@@ -1,6 +1,6 @@
 import React,{useEffect} from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, Alert, TouchableHighlight, SafeAreaView, ScrollView } from 'react-native'
-import { Icon} from 'react-native-elements'
+import { Icon, Divider} from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 import {Dimensions} from 'react-native'
@@ -108,7 +108,8 @@ const Jornada = props => {
                 {
                     jornadas.length > 0 && !loading &&
                     <View >
-                        <Text style={{fontSize:20, color:'grey', textAlign:'center', marginVertical:5}}>Seleccione una Jornada</Text>
+                        <Text style={{fontSize:20, color:'grey', textAlign:'center', marginVertical:10}}>Seleccione una Jornada</Text>
+                        <Divider style={{marginBottom:5}}/>
                         <ScrollView showsVerticalScrollIndicator={false} >
                         {jornadas.map((item, index) => (
                                 
@@ -157,6 +158,7 @@ const Jornada = props => {
                                     </FlipCard>
                             ))}
                         </ScrollView>     
+                        <View style={{marginTop:10}}/>
                     </View>
                 }
                 { !loading && jornadas.length == 0  ?
