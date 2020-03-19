@@ -2,10 +2,11 @@ import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from './src/components/Home/home.container'
-import JornaadaScrenn from './src/components/Jornadas/jornada.container'
+import JornaadaScreen from './src/components/Jornadas/jornada.container'
 import EasyCheckScreen from  './src/components/easyCheck/EasyCheck.container'
 import Calificar from './src/components/calificar/calificar.container'
-import Presentación from './src/components/Presentacion/presentacion.container'
+import Presentacion from './src/components/Presentacion/presentacion.container'
+import Authentication from './src/components/autenticacion/autenticacion.container'
 import Login from './src/components/login/login.container'
 import MenuComponent from './src/components/menu'
 import { Provider } from 'react-redux';
@@ -16,34 +17,40 @@ import FlashMessage from "react-native-flash-message";
 
 const AppNavigator = createStackNavigator({
 
-  Login:{
+  Login: {
     screen:Login,
     navigationOptions:{
       header:null
     }
   },
+  Authentication: {
+    screen:Authentication,
+    navigationOptions:{
+      header:null
+    }
+  },
   Home:HomeScreen,
-  Calificar:{
+  Calificar: {
     screen:Calificar,
     navigationOptions:{
       title:'Calificar presentación'
     }
   },
-  Jornadas:{
-    screen:JornaadaScrenn,
+  Jornadas: {
+    screen:JornaadaScreen,
     navigationOptions:{
       title:'Seleccione una jornada',
       header:null
     }
   },
-  EasyCheck:{
+  EasyCheck: {
     screen:EasyCheckScreen,
     navigationOptions:{
       title:'Expocheck'
     }
   },
-  Presentación:{
-    screen:Presentación,
+  Presentación: {
+    screen:Presentacion,
     navigationOptions:{
       title:'Presentación'
     }
