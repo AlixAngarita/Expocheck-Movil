@@ -36,7 +36,7 @@ class LoginComponent extends Component {
                         keyboardType='email-address'
                         style={{ borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6' }} />
                     <TouchableOpacity activeOpacity={0.8} onPress={() =>
-                        this.state.checked ? this.props.navigation.navigate('Jornadas') : console.log('No se han aceptado')}>
+                        this.state.checked ? this.props.navigation.navigate('Authentication') : console.log('No se han aceptado')}>
                         <View style={{}}>
                         </View>
                         <Image source={boton} style={{ width: 280, marginTop: 10, resizeMode: 'contain' }} />
