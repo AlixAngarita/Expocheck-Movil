@@ -1,12 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { AzureInstance, AzureLoginView } from 'react-native-azure-ad-2';
+const loading = require('../../../assets/get-token.png');
 
 const credentials = {
     client_id: 'fa2fc1bf-4b02-4a57-a50f-8acd7f95aaa8',
     client_secret: 'ebUsl@eJvXes3D6He_G?4nS-VOOzSRJ9',
     scope: 'User.ReadBasic.All User.Read offline_access'
 };
+
+const LoadingToken = props => {
+    return (
+        <View style={{ flex: 1, overflow: 'hidden', alignItems: 'center' }}>
+                <ImageBackground source={loading} resizeMode='cover' style={{ height: '100%', width: '100%' }}/>
+        </View>
+    );
+}
 
 export default class AuthenticationComponent extends React.Component {
     constructor(props) {
@@ -39,6 +48,7 @@ export default class AuthenticationComponent extends React.Component {
             return (<AzureLoginView
                 azureInstance={this.azureInstance}
                 loadingMessage="Solicitando token"
+                loadingView = {<LoadingToken/>}
                 onSuccess={this._onLoginSuccess}
             />)
         }
