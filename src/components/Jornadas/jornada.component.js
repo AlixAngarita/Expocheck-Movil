@@ -65,17 +65,18 @@ const Jornada = props => {
         const unsubscribe = NetInfo.addEventListener(state => {
               // guardo el estado inicial de la conexion en el storage 
               dispatch(setStateConection(state.isConnected))
-              if(state.isConnected){
-                showMessage({
-                    message: "Vuelve a tener conexión",
-                    type: "info",
-                  });
-              }else{
+              if(!state.isConnected){
                 showMessage({
                     message: "Desconectado",
                     type: "danger",
                   });
               }
+            //   else{
+            //     showMessage({
+            //         message: "Vuelve a tener conexión",
+            //         type: "info",
+            //       });
+            //   }
         });
 
         return () => {
