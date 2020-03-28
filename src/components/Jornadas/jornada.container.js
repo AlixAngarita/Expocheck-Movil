@@ -4,14 +4,21 @@ import {connect} from 'react-redux'
 import {getJornadasThunk} from '../../redux/actions/jornadas.action'
 
 class Jornada extends  Component {
+
+    constructor(props) {
+        super(props);
+
+    }
     render(){
+        console.log('TEST PROPS   ' + JSON.stringify(this.props))
         return (<JornadaComponent loading={true}/>)
     }
     
 }
 const mapStateToProps = (state) => {
     return {
-        jornadas: state.jornadas
+        jornadas: state.jornadas,
+        auth: state.auth
     }
 }
 
