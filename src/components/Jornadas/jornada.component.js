@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Alert, TouchableHighlight, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, Alert,ScrollView } from 'react-native'
 import { Icon, Divider} from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
@@ -120,7 +120,10 @@ const Jornada = props => {
                                         {/* Face Side */}
                                             <View style={{flex:1, borderRadius:20, flexDirection:'row', alignItems:'center',        
                                                 backgroundColor:'white',
-                                                width:Dimensions.get('window').width - 50}}>
+                                                width:Dimensions.get('window').width - 50,
+                                                borderColor:moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ? '#48DBFB':'white',
+                                                borderStyle:'solid',
+                                                borderWidth:1}}>
                                                 <View style={{marginHorizontal:10}}>
                                                     <Avatar
                                                         size="small"

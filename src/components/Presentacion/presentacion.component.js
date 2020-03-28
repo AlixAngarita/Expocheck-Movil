@@ -1,19 +1,16 @@
-import React from "react";
+import React,  {useEffect, useState} from "react";
 import { Dimensions } from "react-native";
 import { withNavigation } from "react-navigation";
-import { Avatar, Card, Badge, Divider  } from "react-native-elements";
+import { Avatar, Card, Divider  } from "react-native-elements";
 import FlipCard from 'react-native-flip-card'
 import {
   View,
   StyleSheet,
-  FlatList,
   Text,
   ActivityIndicator,
-  Alert,
   ScrollView,
 } from "react-native";
 import { Rating, Icon , AirbnbRating} from "react-native-elements";
-import moment from "moment";
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -27,16 +24,16 @@ const styles = StyleSheet.create({
 });
 import Calificar from '../btnCalifcar/btnCalificar.component'
 
-const keyExtractor = (item, index) => index.toString();
-
-const renderItem = ({ item }) => (
-  <View style={styles.comentStyle}>
-    <Text style={styles.comment}>{item.contenido}</Text>
-  </View>
-);
-
 const width = Dimensions.get("window").width;
 const Presentacion = props => {
+
+  const [codeQR, setcodeQR] = useState('')
+
+  useEffect(() => {
+    props.hasCode().then(code => setcodeQR(code))
+    
+  })
+  
   return (
     <View style={styles.container}>
       {props.presentacion != "" && !props.loading && (
@@ -99,44 +96,43 @@ const Presentacion = props => {
                 ))}
               </View>
             
-             <Calificar/>
+             <Calificar presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
             </Card>
 
             <View style={{marginTop:30}}>
-              <View style={{flexDirection:'row'}}>
+              <View style={{flexDirection:'row', marginBottom:10}}>
                 <View style={{justifyContent:'center'}}>
                   <Icon
                   name='check'
                   type='font-awesome'
                   color='#fbc531' />
                 </View>
-                <Text style={{color:'grey', textAlign:'center', fontSize:20,marginBottom:10,
+                <Text style={{color:'grey', textAlign:'center', fontSize:20,
                   marginLeft:10}}>Calificaciones del auditorio</Text>
               </View>
               <Divider style={{marginBottom:5}}/>
             </View>
 
-            <View style={{ flexDirection: "row", padding:2,
-            width:'90%',
-            marginTop:10,
-            borderRadius:20,
-            backgroundColor:'#48DBFB'}}>
-                <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
-                  <View>
-                    <Icon
-                    raised
-                    name='arrow-up'
-                    type='font-awesome'
-                    color='#44BD32'
-                    onPress={() => console.log('hello')} />
+              <View style={{ flexDirection: "row", padding:2,
+              width:'90%',
+              marginTop:10,
+              borderRadius:20,
+              backgroundColor:'#48DBFB'}}>
+                  <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
+                    <View>
+                      <Icon
+                      raised
+                      name='arrow-up'
+                      type='font-awesome'
+                      color='#44BD32' />
+                    </View>
                   </View>
-                </View>
-                <View style={{ justifyContent: "center" }}>
-                  <Text style={{ color: "white", fontSize: 18 }}>
-                    Por encima de la media
-                  </Text>
-                </View>
-             </View>
+                  <View style={{ justifyContent: "center" }}>
+                      <Text style={{ color: "white", fontSize: 18 }}>
+                        Por encima de la media
+                      </Text>
+                  </View>
+              </View>
 
             {props.evaluacionPublica ? (
               <ScrollView  showsVerticalScrollIndicator={false}>
@@ -149,10 +145,10 @@ const Presentacion = props => {
                       width:width-30,
                       marginTop:10,
                       borderRadius:20,
-                      borderColor:'#95A5A6',
+                      borderColor:'#00A8FF',
                       borderStyle:'solid',
                       borderWidth:1 }}>
-                            <Text style={{textAlign:'center', fontSize:20}}>{evaluacion.metrica} </Text>
+                            <Text style={{textAlign:'center', fontSize:20, color:'grey'}}>{evaluacion.metrica} </Text>
                             <View  style={{ alignItems:'center'}}>
                               <Rating
                                   startingValue={evaluacion.calificaciones.length > 0 ? (evaluacion.calificaciones.reduce((a, b) => a+b,0))/evaluacion.calificaciones.length:0}
@@ -168,17 +164,31 @@ const Presentacion = props => {
                       width:width-30,
                       marginTop:10,
                       borderRadius:20,
-                      borderColor:'#FFC312',
+                      borderColor:'#00A8FF',
                       borderStyle:'solid',
                       borderWidth:1 }}>
                             <View  style={{ alignItems:'center'}}>
+                              {codeQR != '' ? (
                               <AirbnbRating
+                                  showRating={false}
                                   count={5}
                                   reviews={['Mala','Regular','Aceptable','Buena','Excelente']}
-                                  imageSize={30}
+                                  imageSize={25}
                                   type="custom"
                                   fractions={0.5}
-                                                />
+                                                />):(
+                                <View style={{flexDirection:'column', alignItems:'center'}}>
+                                  <Icon
+                                    raised
+                                    name='qrcode'
+                                    type='font-awesome'
+                                    color='#00A8FF'
+                                    onPress={() => {
+                                      props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada, back:true}) 
+                                    } } />
+                                    <Text style={{color:'grey'}}>Escanear código QR</Text>
+                                </View>
+                              )}
                             </View>
                     </View>
                            
@@ -196,7 +206,7 @@ const Presentacion = props => {
                       width:width-30,
                       marginTop:10,
                       borderRadius:20,
-                      backgroundColor:'#FFC312' }}>
+                      backgroundColor:'#4cd137' }}>
                           <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
                             <View>
                               <Icon
@@ -219,14 +229,15 @@ const Presentacion = props => {
                       width:width-30,
                       marginTop:10,
                       borderRadius:20,
-                      borderColor:'#FFC312',
+                      borderColor:'#00A8FF',
                       borderStyle:'solid',
                       borderWidth:1 }}>
                             <View  style={{ alignItems:'center'}}>
                               <AirbnbRating
+                                  showRating={false}
                                   count={5}
                                   reviews={['Mala','Regular','Aceptable','Buena','Excelente']}
-                                  imageSize={30}
+                                  imageSize={25}
                                   type="custom"
                                   fractions={0.5}
                                                 />
@@ -238,25 +249,7 @@ const Presentacion = props => {
             )}
           </View>
 
-          {/* <ActionButton
-                  offsetY={5}
-                  offsetX={20}
-                  renderIcon = {(active) => <Icon name="done" color="white"/>}
-                  buttonColor="rgba(10, 189, 227,1.0)"
-                  onPress={() => {
-                      moment(moment().format('YYYY-MM-DD')).isBetween( moment(props.fechaInicio), moment(props.fechaFinaliza),  null, '[]') ?
-                      props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada}) :
-                      Alert.alert('Fuera de fecha', 'Solo puede ver la presentación.')
-                    } 
-                  }
-                /> 
-                <Rating
-                      imageSize={25}
-                      type="custom"
-                      readonly
-                      fractions={1}
-                      startingValue={props.presentacion.calificacion.length > 0 ? (props.presentacion.calificacion.reduce((a, b) => a + b, 0))/props.presentacion.calificacion.length:0}
-                    />*/}
+          
         </ScrollView>
       )}
 

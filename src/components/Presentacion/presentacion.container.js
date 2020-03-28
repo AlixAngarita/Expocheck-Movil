@@ -121,7 +121,7 @@ class Presentacion extends React.Component {
             .then(qrs => {
                 qrs = JSON.parse(qrs)
                 if(qrs.length > 0){
-                    const code = this.state.presentacion.qr
+                    const code = this.state.presentacion.codigoQR
                     if (qrs.includes(code) == true){
                         resolve(code)
                     }else{
@@ -150,8 +150,6 @@ class Presentacion extends React.Component {
             hasCode={this.hasCode}
             presentacionSeleccionada={this.state.presentacionSeleccionada}
             idJornada={this.state.idJornada}
-            fechaInicio={this.state.fechaInicio}
-            fechaFinaliza={this.state.fechaFinaliza}
             loading={this.state.loading}
             evaluaciones={this.state.evaluaciones}
             evaluacionPublica={this.state.evaluacionPublica}
