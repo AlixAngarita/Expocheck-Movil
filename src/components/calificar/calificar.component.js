@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import {Text, View, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Keyboard, Animated } from "react-native";
-import { AirbnbRating, Image } from 'react-native-elements';
-import { Button } from 'react-native-elements';
+import {Text, View, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Keyboard, Animated,
+Platform, Dimensions, StatusBar} from "react-native";
+import { Image, Button, Divider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {withNavigation} from 'react-navigation'
+import {ScrollView} from 'react-native'
 const qrimage = require('../../../assets/images/qrcode.png')
+
 
 const CalfificarComponent = props => {
 
@@ -28,6 +30,7 @@ const CalfificarComponent = props => {
     })
    ).start() 
   }
+
     useEffect(() => {
       runAnimateScanner()
       this.keyboardDidShowListener = Keyboard.addListener(
@@ -57,12 +60,11 @@ const CalfificarComponent = props => {
         marginTop:20
       },
       inputContainer:{
-        flex: 1.7
-        , 
         flexDirection:'row',
         justifyContent:'space-around',
         alignContent:'center',
         alignItems:focus ? 'center':'flex-end',
+        marginBottom:focus ? 30:5
       },
       input:{
         borderColor:'#0abde3', 
@@ -75,8 +77,9 @@ const CalfificarComponent = props => {
       }
      })
     const { hasCameraPermission, scanned } = props;
-
     const [value, onChangeText] = React.useState('');
+    const heightStatusBar = StatusBar.currentHeight
+    const heightScreen = Dimensions.get('window').height
 
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>;
@@ -86,7 +89,7 @@ const CalfificarComponent = props => {
     }
 
     return (
-           <View style={{flex:1}}>
+           <View style={{flex:1 , justifyContent: 'center', alignItems: 'center' }}>
                 {props.granted && (
                   <React.Fragment>
                     { !props.ok && !props.hasQrCode && (
@@ -112,8 +115,24 @@ const CalfificarComponent = props => {
                    </View>
                 )}
                 {props.ok && props.valid && (
-                  <React.Fragment>
-                    <View style={styles.ratingContainer}>
+                  <View style={{backgroundColor:'#F1F2F6', width:'90%',marginTop:Platform.OS === 'adroid' ? '10%':heightStatusBar,
+                  borderRadius:20, alignItems:'center',
+                  shadowColor: "#000",
+                  shadowOffset: {
+                      width: 0,
+                      height: 2,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                    ...Platform.select({
+                    ios: {
+                        height:heightScreen  - 50
+                    },
+                    android: {
+                        height:heightScreen  - 50
+                    }})}}>
+                    {/* <View style={styles.ratingContainer}>
                         <AirbnbRating
                           count={5}
                           reviews={["Mala", "Aceptable", "Buena", "Muy buena", "Exelente"]}
@@ -124,34 +143,75 @@ const CalfificarComponent = props => {
                         />
                         <Text style={{fontSize:10, color:'grey'}}>{props.calificada !='' ? 'Calificada':'Solo puede calificar una vez'}</Text>
                         
-                    </View>
-                    <KeyboardAvoidingView  style={styles.inputContainer}
+                    </View> */}
+                   
+                    <KeyboardAvoidingView 
                      behavior="padding" >
-                      <TextInput
-                      onChangeText={text => onChangeText(text)}
-                      autoCapitalize="sentences"
-                      autoCorrect={true}
-                      value={value}
-                      style={[styles.input, {marginBottom: focus ? 15: 10}]}
-                      multiline={true}
-                      autoFocus={true}
-                      placeholder="Escribe algo..."
-                      large={true}
-                      />
-                      <Button
-                      buttonStyle={{backgroundColor:'#0abde3', borderRadius:50, marginBottom: focus ? 15: 10, width:45,height:45}}
-                        icon={ <Icon
-                          name='paper-plane'
-                          size={18}
-                          color='white'
-                        />}
-                        onPress={() => {
-                          props.addComment(value)
-                          onChangeText('')
-                        }}
-                      />
+                      <Text style={{fontSize:20, color:'grey', textAlign:'center', marginVertical:10}}>{props.comment ? 'Comentarios':'Preguntas'}</Text>
+                      <Divider style={{marginBottom:5}}/>
+                      <ScrollView showsVerticalScrollIndicator={false}>
+                        {!props.comment && (
+                          <View style={{flex:1, borderRadius:20, flexDirection:'column', alignItems:'center',
+                            marginVertical:10}}>
+                            {props.presentacion.preguntas.length == 0 && (
+                              <Text style={{color:'#95A5A6', fontSize:20, textAlign:'center', marginVertical:20}}>Sé el primero en decir algo!.</Text>
+                            )}
+
+                            {props.presentacion.preguntas.map((pregunta, i) => (
+                              <View key={i.toString()} style={{backgroundColor:'white', width:Dimensions.get('window').width - 50,
+                              borderRadius:20, padding:10, marginVertical:5}}>
+                                      <Text style={{color:'#95A5A6'}}>{pregunta.contenido}</Text>
+                              </View>
+                            ))}
+
+                          </View>
+                        )}
+                        
+                        {props.comment && (
+                          <View style={{flex:1, borderRadius:20, flexDirection:'column', alignItems:'center',
+                            marginVertical:10}}>
+                            {props.presentacion.comentarios.length == 0 && (
+                              <Text style={{color:'#95A5A6', fontSize:20, textAlign:'center', marginVertical:20}}>Sé el primero en decir algo!.</Text>
+                            )}
+                            {props.presentacion.comentarios.map((comentario, i) => (
+                              <View key={i.toString()} style={{backgroundColor:'white', width:Dimensions.get('window').width - 50,
+                              borderRadius:20, padding:10, marginVertical:5}}>
+                                      <Text style={{color:'#95A5A6'}}>{comentario.contenido}</Text>
+                              </View>
+                            ))}
+                          </View>
+                        )}
+                      </ScrollView>
+                      
+                      <View style={styles.inputContainer}>
+                          <TextInput
+                          onChangeText={text => onChangeText(text)}
+                          autoCapitalize="sentences"
+                          autoCorrect={true}
+                          value={value}
+                          style={[styles.input, {marginBottom: focus ? 15: 10}]}
+                          multiline={true}
+                          autoFocus={true}
+                          placeholder="Escribe algo..."
+                          large={true}
+                          />
+                          <Button
+                          buttonStyle={{backgroundColor:'#0abde3', borderRadius:50, marginBottom: focus ? 15: 10, width:45,height:45,
+                          marginLeft:10}}
+                            icon={ <Icon
+                              name='paper-plane'
+                              size={18}
+                              color='white'
+                            />}
+                            onPress={() => {
+                              props.addComment(value)
+                              onChangeText('')
+                            }}
+                          />
+                      </View>
+                      
                     </KeyboardAvoidingView >
-                  </React.Fragment>
+                  </View>
                 )}
                 { !props.valid &&  !props.scanned && (
                   <View style={{flex:1, flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
