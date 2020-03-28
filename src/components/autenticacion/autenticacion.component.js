@@ -1,6 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { AzureInstance, AzureLoginView } from 'react-native-azure-ad-2';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withNavigation } from 'react-navigation';
+import {loginUser} from "../../redux/actions/auth.action.js"
+
 const loading = require('../../../assets/get-token.png');
 
 const credentials = {
@@ -17,7 +22,7 @@ const LoadingToken = props => {
     );
 }
 
-export default class AuthenticationComponent extends React.Component {
+class AuthenticationComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -34,7 +39,8 @@ export default class AuthenticationComponent extends React.Component {
                 loginSuccess: true,
                 azureLoginObject: result
             });
-            console.log(result);
+            //console.log(result);
+            this.props.loginUser(result);
         }).catch(err => {
             console.log(err);
         })
@@ -56,13 +62,47 @@ export default class AuthenticationComponent extends React.Component {
         const { userPrincipalName, givenName } = this.state.azureLoginObject;
 
         return (
+            
             <View style={styles.container}>
                 <Text style={styles.text}>Welcome {givenName}</Text>
                 <Text style={styles.text}>You logged into Azure with {userPrincipalName}</Text>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Jornadas')}>
+                            <Text style={{color:'red', fontSize:18, padding:10, textAlign:'center'}}>Continuar</Text>     
+            </TouchableOpacity>
             </View>
         );
     }
 }
+
+// ----- REDUX - REACT -----
+//const mapStateToProps = (state /*, ownProps*/) => {
+/*    return {
+      user: state.azureLoginObject
+    }
+  }
+  
+  const mapDispatchToProps = { loginUser }
+  
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AuthenticationComponent)
+
+*/
+// ----- REDUX - REACT -----
+AuthenticationComponent.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    //errors: PropTypes.object.isRequired,
+  };
+  const mapStateToProps = state => ({
+    auth: state.auth,
+    //errors: state.errors,
+  });
+  export default connect(
+    mapStateToProps,
+    { loginUser }
+  )(withNavigation(AuthenticationComponent));
 
 const styles = StyleSheet.create({
     container: {
