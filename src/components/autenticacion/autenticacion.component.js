@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withNavigation } from 'react-navigation';
 import {loginUser} from "../../redux/actions/auth.action.js"
+import Jornada from '../Jornadas/jornada.container'
 
 const loading = require('../../../assets/get-token.png');
 
@@ -39,8 +40,7 @@ class AuthenticationComponent extends Component {
                 loginSuccess: true,
                 azureLoginObject: result
             });
-            //console.log(result);
-            this.props.loginUser(result);
+            this.props.loginUser(result); //redux
         }).catch(err => {
             console.log(err);
         })
@@ -62,7 +62,8 @@ class AuthenticationComponent extends Component {
         const { userPrincipalName, givenName } = this.state.azureLoginObject;
 
         return (
-            
+            <Jornada/>
+            /*
             <View style={styles.container}>
                 <Text style={styles.text}>Welcome {givenName}</Text>
                 <Text style={styles.text}>You logged into Azure with {userPrincipalName}</Text>
@@ -70,25 +71,11 @@ class AuthenticationComponent extends Component {
                             <Text style={{color:'red', fontSize:18, padding:10, textAlign:'center'}}>Continuar</Text>     
             </TouchableOpacity>
             </View>
+            */
         );
     }
 }
 
-// ----- REDUX - REACT -----
-//const mapStateToProps = (state /*, ownProps*/) => {
-/*    return {
-      user: state.azureLoginObject
-    }
-  }
-  
-  const mapDispatchToProps = { loginUser }
-  
-  export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(AuthenticationComponent)
-
-*/
 // ----- REDUX - REACT -----
 AuthenticationComponent.propTypes = {
     loginUser: PropTypes.func.isRequired,
