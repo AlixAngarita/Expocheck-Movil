@@ -86,7 +86,10 @@ const Jornada = props => {
 
     const heightStatusBar = StatusBar.currentHeight
     const heightScreen = Dimensions.get('window').height
-    return (
+
+    
+    
+    return (    
         <View style={{flex:1 , justifyContent: 'center', alignItems: 'center' }}>
             <View style={{backgroundColor:'#F1F2F6', width:'90%',
                 ...Platform.select({
