@@ -10,7 +10,6 @@ class Jornada extends  Component {
 
     }
     render(){
-        console.log('TEST PROPS   ' + JSON.stringify(this.props))
         return (<JornadaComponent loading={true}/>)
     }
     
