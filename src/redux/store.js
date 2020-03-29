@@ -1,6 +1,7 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux'
 import jornadas from './reducers/jornadas.reducer'
 import connect from './reducers/offline.reducer'
+import authReducer from './reducers/auth.reducer'
 import loadingJornada from './reducers/loading.reducers'
 import thunk from 'redux-thunk'
 import { persistStore, persistReducer } from 'redux-persist';
@@ -15,7 +16,7 @@ const persistConfig = {
     storage,
     // Whitelist (Save Specific Reducers)
     whitelist: [
-      'jornadas','connect'
+      'jornadas','connect','auth'
     ],
     // Blacklist (Don't Save Specific Reducers)
     blacklist: [
@@ -25,7 +26,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     jornadas,
     connect,
-    loadingJornada
+    loadingJornada,
+    auth: authReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
