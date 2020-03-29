@@ -15,14 +15,15 @@ class LoginComponent extends Component {
         super(props);
 
         this.state = {
-
+            color: 'white'
         }
     }
 
-    handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
+    //handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
     
     render() {
         //console.log(this.props)
+        //console.log('No se han aceptado')}>
         return (
             <View style={{ flex: 1, overflow: 'hidden', alignItems: 'center' }}>
                 <ImageBackground source={background} resizeMode='cover' style={{ height: '100%', width: '100%' }}>
@@ -37,7 +38,7 @@ class LoginComponent extends Component {
                         keyboardType='email-address'
                         style={{ borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6' }} />
                     <TouchableOpacity activeOpacity={0.8} onPress={() =>
-                        this.state.checked ? this.props.navigation.navigate('Authentication') : console.log('No se han aceptado')}>
+                        this.state.checked ? this.props.navigation.navigate('Authentication') : this.setState({ color: 'red' })}>
                         <View style={{}}>
                         </View>
                         <Image source={boton} style={{ width: 280, marginTop: 10, resizeMode: 'contain' }} />
@@ -46,16 +47,15 @@ class LoginComponent extends Component {
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '40%' }}>
                         <CheckBox
                             center
-
                             checked={this.state.checked}
                             onPress={() => this.setState({ checked: !this.state.checked })}
                             checkedIcon='check-square'
-                            uncheckedColor='white'
+                            uncheckedColor={this.state.color}
                             checkedColor='white'
                             containerStyle={{ backgroundColor: 'transparent', borderWidth: 0, margin: 0 }}
                             style={{flex: 1, padding: 0}}
                         />
-                        <Text style={{ color: 'white', fontSize: 12 }}>
+                        <Text style={{ color: this.state.color, fontSize: 12 }}>
                             Acepto los{" "}
                             <Text style={{ textDecorationLine: 'underline' }}>
                                 términos y condiciones
