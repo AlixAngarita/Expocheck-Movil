@@ -33,7 +33,8 @@ const AppNavigator = createStackNavigator({
   Calificar: {
     screen:Calificar,
     navigationOptions:{
-      title:'Calificar presentación'
+      title:'Calificar presentación',
+      header:null
     }
   },
   Jornadas: {
@@ -58,7 +59,7 @@ const AppNavigator = createStackNavigator({
 
 }, 
 {
-  initialRouteName:'Login',
+  initialRouteName:'Jornadas',
   defaultNavigationOptions:{
     headerRight:(<MenuComponent/>),
     headerStyle:{

@@ -123,7 +123,7 @@ class Calificacion extends React.Component{
     async validCode(code){
         try {
            
-            if(this.state.presentacion.qr!=code ){
+            if(this.state.presentacion.codigoQR!=code ){
                 this.setState({valid:false})
             }else{
                 await AsyncStorage.removeItem('qrs')
@@ -131,6 +131,9 @@ class Calificacion extends React.Component{
                 console.log(currentCodes)
                 currentCodes.push(code)
                 await AsyncStorage.setItem('qrs', JSON.stringify(currentCodes))
+                if(this.props.navigation.getParam('back')){
+                    this.props.navigation.goBack()
+                }
             }
             
 
@@ -173,6 +176,8 @@ class Calificacion extends React.Component{
             addComment={this.addComment}
             granted={this.state.hasCameraPermission == 'granted' || 'undetermined'}
             pedirPermiso={this.getPermissionsAsync}
+            presentacion={this.state.presentacion}
+            comment={this.props.navigation.getParam('comment')}
             />)
     }
 }

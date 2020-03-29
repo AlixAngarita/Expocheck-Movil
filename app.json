@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Easy check",
-    "slug": "Easy-check",
+    "name": "Expocheck",
+    "slug": "Expo-check",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
