@@ -14,7 +14,6 @@ import {getJornadas} from '../actions/jornadas.action'
 
 export default handleActions({
     [getJornadas]: (state,action) =>  {
-        console.log("Cambio  el estado jornadas",action.payload)
         return action.payload
     }
 },[])

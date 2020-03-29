@@ -9,11 +9,21 @@ class EasyCheck extends Component {
 
         constructor(props){
             super(props)
+            this.state = {
+                notification: {},
+            };
         }
 
        async componentDidMount(){
             this.saveToken()
+            this._notificationSubscription = Notifications.addListener(this._handleNotification)
         }
+
+        _handleNotification = notification => {
+            // do whatever you want to do with the notification
+            console.log(JSON.stringify(notification.data))
+            this.setState({ notification: notification });
+        };
 
        async  getPushToken(){
             const { status: existingStatus } = await Permissions.getAsync(
