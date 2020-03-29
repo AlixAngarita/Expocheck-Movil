@@ -40,7 +40,9 @@ class AuthenticationComponent extends Component {
                 loginSuccess: true,
                 azureLoginObject: result
             });
-            this.props.loginUser(result); //redux
+            const token = this.azureInstance.getToken();
+            console.log(result.mail)
+            this.props.loginUser(result, token); //redux
         }).catch(err => {
             console.log(err);
         })
