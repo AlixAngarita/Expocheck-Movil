@@ -1,6 +1,5 @@
 import axios from "axios";
-
-var base = "https://expocheck-rest.herokuapp.com/api";
+import config from '../../config/server'
 
 const setAuthToken = token => {
     if (token) {
@@ -24,7 +23,7 @@ export const loginUser = (user, token) => dispatch => {
       aceptoTerminos: true
     }}
       axios
-        .post(base + "/usuario/nuevo", usuario, {headers})
+        .post(config.rest + "/api/usuario/nuevo", usuario, {headers})
         .then(res => {
           const user = res.data
           // Set current user
