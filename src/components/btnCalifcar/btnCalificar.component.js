@@ -7,7 +7,7 @@ import { withNavigation } from 'react-navigation';
 
 const Calificar =  (props) => {
     return (
-        <View style={{alignItems:'center', justifyContent:'center', marginTop:20}}>
+        <View style={{alignItems:'center', justifyContent:'center', marginTop:20, marginBottom:20}}>
         <View style={{flexDirection:'row'}}>
         <View style={{marginRight:50, flexDirection:'column', alignItems:'center'}}>
               <Avatar
@@ -20,7 +20,7 @@ const Calificar =  (props) => {
                 activeOpacity={0.7}
                 size="medium"
               />
-                <Text style={{color:'#95A5A6'}}>Comentarios</Text>
+                <Text style={{color:'white'}}>Comentarios</Text>
               <Badge
                 status="success"
                 containerStyle={{ position: 'absolute', top: 1, right: 4}}
@@ -40,7 +40,7 @@ const Calificar =  (props) => {
                 size="medium"
                 su
               />
-              <Text style={{color:'#95A5A6'}}>Preguntas</Text>
+              <Text style={{color:'white'}}>Preguntas</Text>
 
               <Badge
                 status="error"
