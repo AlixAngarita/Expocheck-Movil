@@ -10,8 +10,8 @@ class Login extends Component {
 
     }
     render(){
-        //return this.props.auth.isAuthenticated? <Authentication/> : <LoginComponent/>;
-        return <LoginComponent/>;
+        return this.props.auth.isAuthenticated? <Authentication/> : <LoginComponent/>;
+        //return <LoginComponent/>;
     }
 }
 const mapStateToProps = (state) => {
