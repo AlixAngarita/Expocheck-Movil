@@ -59,7 +59,7 @@ const AppNavigator = createStackNavigator({
 
 }, 
 {
-  initialRouteName:'Jornadas',
+  initialRouteName:'Login',
   defaultNavigationOptions:{
     headerRight:(<MenuComponent/>),
     headerStyle:{
