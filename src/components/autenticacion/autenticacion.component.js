@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react
 import { AzureInstance, AzureLoginView } from 'react-native-azure-ad-2';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withNavigation } from 'react-navigation';
 import {loginUser} from "../../redux/actions/auth.action.js"
 import Jornada from '../Jornadas/jornada.container'
 
@@ -41,7 +40,7 @@ class AuthenticationComponent extends Component {
                 azureLoginObject: result
             });
             const token = this.azureInstance.getToken();
-            console.log(result.mail)
+            console.log('autenticacion:', result.mail)
             this.props.loginUser(result, token); //redux
         }).catch(err => {
             console.log(err);
@@ -65,15 +64,6 @@ class AuthenticationComponent extends Component {
 
         return (
             <Jornada/>
-            /*
-            <View style={styles.container}>
-                <Text style={styles.text}>Welcome {givenName}</Text>
-                <Text style={styles.text}>You logged into Azure with {userPrincipalName}</Text>
-                <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Jornadas')}>
-                            <Text style={{color:'red', fontSize:18, padding:10, textAlign:'center'}}>Continuar</Text>     
-            </TouchableOpacity>
-            </View>
-            */
         );
     }
 }
@@ -91,7 +81,7 @@ AuthenticationComponent.propTypes = {
   export default connect(
     mapStateToProps,
     { loginUser }
-  )(withNavigation(AuthenticationComponent));
+  )(AuthenticationComponent);
 
 const styles = StyleSheet.create({
     container: {
