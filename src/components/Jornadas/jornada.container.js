@@ -10,7 +10,6 @@ class Jornada extends  Component {
 
     }
     render(){
-        console.log('test   ' + JSON.stringify(this.props))
         return (<JornadaComponent loading={true}/>)
     }
     
@@ -18,7 +17,7 @@ class Jornada extends  Component {
 const mapStateToProps = (state) => {
     return {
         jornadas: state.jornadas,
-        auth: state.auth
+        //auth: state.auth
     }
 }
 

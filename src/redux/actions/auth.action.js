@@ -1,16 +1,6 @@
 import axios from "axios";
 import config from '../../config/server'
 
-const setAuthToken = token => {
-    if (token) {
-      // Apply authorization token to every request if logged in
-      axios.defaults.headers.common["Authorization"] = token;
-    } else {
-      // Delete auth header
-      delete axios.defaults.headers.common["Authorization"];
-    }
-};
-
 const headers = {"Content-Type": "application/json"}
 // Login - POST api/usuario/nuevo -> Registra un nuevo usuario
 export const loginUser = (user, token) => dispatch => {
@@ -25,13 +15,14 @@ export const loginUser = (user, token) => dispatch => {
       axios
         .post(config.rest + "/api/usuario/nuevo", usuario, {headers})
         .then(res => {
-          const user = res.data
+          const userData = res.data
+          userData.nombres = user.givenName;
           // Set current user
-          dispatch(setCurrentUser(user));
+          dispatch(setCurrentUser(userData));
         })
         .catch(err => {
           console.info(err.config);
-          console.log('no se pudo')
+          console.log('no se guardo')
           /*dispatch({
             type: GET_ERRORS,
             payload: err.response.data,
@@ -54,44 +45,5 @@ export const setUserLoading = () => {
   }; // Log user out
   
 export const logoutUser = () => dispatch => {
-    // Remove auth header for future requests
-    setAuthToken(false);
-    // Set current user to empty object {} which will set isAuthenticated to false
-    dispatch(setCurrentUser({}));
+    dispatch(setCurrentUser());
 };
-
-/*
-replication.test().then(base => {
-  const usuario = {
-
-  }
-
-
-    axios
-      .post(base + "/usuario/nuevo", usuario)
-      .then(res => {
-        // Save to localStorage// Set token to localStorage
-        const id = res.data._id;
-        console.log(id)
-
-        //localStorage.setItem("jwtToken", token);
-        // Set token to Auth header
-        //setAuthToken(token);
-        // Decode token to get user data
-        //const decoded = jwt_decode(token);
-        //var isAmbulancia = decoded
-
-        // Set current user
-        dispatch(setCurrentUser(id, usuario));
-      })
-      .catch(err => {
-        console.info(err.config);
-        dispatch({
-          type: GET_ERRORS,
-          payload: err.response.data,
-        });
-      });
-  });
-
-
-*/

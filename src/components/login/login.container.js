@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import LoginComponent from './login.component'
 import {connect} from 'react-redux'
-import Authentication from '../autenticacion/autenticacion.container'
+import Jornada from '../Jornadas/jornada.container'
 
 class Login extends Component {
 
@@ -10,7 +10,7 @@ class Login extends Component {
 
     }
     render(){
-        return this.props.auth.isAuthenticated? <Authentication/> : <LoginComponent/>;
+        return this.props.auth.isAuthenticated? <Jornada/> : <LoginComponent/>;
         //return <LoginComponent/>;
     }
 }
