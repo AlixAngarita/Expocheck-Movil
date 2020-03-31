@@ -1,5 +1,5 @@
 import  io from 'socket.io-client'
-import FirebaseService from '../services/firebaseService'
+import {comentar, preguntar, calificarMetrica} from './presentacion.service'
 import { YellowBox } from 'react-native'
 import config from '../config/server'
 
@@ -17,39 +17,41 @@ class Socket {
 
 
     // cuando comenten
-    addCommet(comment, tituloPresentacion,  idJornada){
-       try {
-            if(comment.trim().length > 0){
-                /*envio al server, comparo en el cliente si el nuevo comentario  es para la presentacion actual
-                y ago push del comentario*/
-                this.forum.emit('add', {comment, idJornada, titulo:tituloPresentacion})
+    addCommet(comment, presentacion,  idJornada){
+      return new Promise((resolve, reject) => {
 
-                // guardo en la base de datos el nuevo comentario
-                FirebaseService.getDocById('jornadas', idJornada)
-                .then(async jornada => {
-                    let presentaciones = jornada.presentaciones
-    
-                    presentaciones.map( (pr, index) => {
-                        if(pr.titulo == tituloPresentacion ){
-                            pr.comentarios.push(comment)
-                            pr.comentarios = pr.comentarios.reverse()
-                            presentaciones[index] = pr
-                        }
-                    })
-                    
-                    jornada.presentaciones = presentaciones
-                    await FirebaseService.updateDocument('jornadas', idJornada, jornada)
-                    
-                })
-            }
-       } catch (error) {
-            console.log('Error -> ',error)
-       }
+                    if(comment.contenido.trim().length > 0){
+                        this.updateInRealtime(idJornada,presentacion)
+
+                        // guardo en la base de datos el nuevo comentario
+                        comentar(idJornada, presentacion._id, comment)
+                        .then(res => resolve(res))
+                        .catch(err => reject(err))
+                    }
+            
+      })
     }
 
+    // Cuando pregunten
+    addQuestion(question, presentacion,  idJornada){
+        return new Promise((resolve, reject) => {
+
+            if(question.contenido.trim().length > 0){
+
+                this.updateInRealtime(idJornada,presentacion)
+
+                // guardo en la base de datos la nueva pregunta
+                preguntar(idJornada, presentacion._id, question)
+                .then(res => resolve(res))
+                .catch(err => reject(err))
+            }
+    
+        })
+
+    }
 
     // cuando calfiquen
-   calification(rating, tituloPresentacion, idJornada){
+    calification(rating, tituloPresentacion, idJornada){
         try {
             /*envio al server, comparo en el cliente si la calificacion actual es para la presentacion actual
          y ago push de la nueva calificación*/
@@ -79,6 +81,10 @@ class Socket {
         
     }
 
+    // Servico real time
+    updateInRealtime(idJornada, presentacion){
+        this.forum.emit('onRealTimeEvent', {idJornada, titulo:presentacion.titulo})
+    }
     
 }
 

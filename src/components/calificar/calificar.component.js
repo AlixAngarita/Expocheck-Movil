@@ -204,7 +204,10 @@ const CalfificarComponent = props => {
                               color='white'
                             />}
                             onPress={() => {
-                              props.addComment(value)
+                              if(props.comment)
+                                  props.addComment(value)
+                              else
+                                  props.addQuestion(value)
                               onChangeText('')
                             }}
                           />

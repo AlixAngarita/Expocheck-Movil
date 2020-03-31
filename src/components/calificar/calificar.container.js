@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import CalfificarComponent from './calificar.component'
 import * as Permissions from 'expo-permissions';
 import { withNavigation } from 'react-navigation';
 import { AsyncStorage } from "react-native";
 import Socket from '../../services/sockect'
+import {findById, preguntar} from '../../services/presentacion.service'
+import {connect} from 'react-redux'
 
 
 class Calificacion extends React.Component{
@@ -11,6 +13,7 @@ class Calificacion extends React.Component{
         super(props)
         
         this.state = {
+            user:null,
             hasCameraPermission: null,
             scaned: true,
             ok:false,
@@ -30,6 +33,9 @@ class Calificacion extends React.Component{
         this.getPresentacion = this.getPresentacion.bind(this)
         this.calificar = this.calificar.bind(this)
         this.addComment = this.addComment.bind(this)
+        this.setPresentacion = this.setPresentacion.bind(this)
+        this.getUser = this.getUser.bind(this)
+        this.addQuestion = this.addQuestion.bind(this)
     }
 
     
@@ -39,6 +45,7 @@ class Calificacion extends React.Component{
         this.getCalificationsFromStorage()
         this.hasCodeQr()
         this.getPermissionsAsync();
+        this.getUser()
        
     }
 
@@ -108,6 +115,17 @@ class Calificacion extends React.Component{
         this.setState({presentacion})
     }
 
+    setPresentacion(){
+        findById(this.props.navigation.getParam('idJornada'), this.state.presentacion._id)
+        .then(res => this.setState({presentacion:res.data}))
+    }
+
+    getUser(){
+        const user = this.props.user
+        this.setState({user})
+        console.log("El user es ->", user)
+    }
+
     async calificar(rating){
         await AsyncStorage.removeItem('califications')
         const califications = this.state.califications
@@ -159,7 +177,15 @@ class Calificacion extends React.Component{
     }
 
     addComment(comment){
-        Socket.addCommet(comment,  this.state.presentacion.titulo, this.props.navigation.getParam('idJornada'))
+        const comentario = {contenido:comment, autor:this.state.user.correo}
+        Socket.addCommet(comentario, this.state.presentacion, this.props.navigation.getParam('idJornada'))
+        .then(res => this.setPresentacion())
+    }
+
+    addQuestion(question){
+        const pregunta = {contenido:question, autor:this.state.user.correo}
+        Socket.addQuestion(pregunta, this.state.presentacion, this.props.navigation.getParam('idJornada'))
+        .then(res => this.setPresentacion())
     }
 
     render(){
@@ -178,8 +204,14 @@ class Calificacion extends React.Component{
             pedirPermiso={this.getPermissionsAsync}
             presentacion={this.state.presentacion}
             comment={this.props.navigation.getParam('comment')}
+            addQuestion={this.addQuestion}
             />)
     }
 }
 
-export default  withNavigation(Calificacion)
+function mapStateToProps(state) {
+    const { auth } = state
+    return { user: auth.user }
+}
+
+export default  connect(mapStateToProps)(withNavigation(Calificacion))
