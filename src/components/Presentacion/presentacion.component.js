@@ -45,29 +45,30 @@ const Presentacion = props => {
               alignContent: "center"
             }}
           >
-            <Card
+            <View
               style={{
                 marginHorizontal:20,
-                marginTop: 10
+                marginTop: 10,
+                width:'96%',
+                borderRadius:20,
+                backgroundColor:'#48DBFB'
               }}
             >
-              <Text style={{  fontSize: 25 }}>
+              <Text style={{  fontSize: 25, color:'white', textAlign:'center', marginTop:20 }}>
                 {props.presentacion.titulo}
               </Text>
-              <Text style={{ color: "grey", fontSize: 20 }}>Integrantes</Text>
-              <View style={{ alignItems: "center" }}>
+              {/* <Text style={{ color: "grey", fontSize: 20 }}>Integrantes</Text> */}
+              <View style={{ alignItems: "center", marginTop:10}}>
                 {props.presentacion.integrantes.map((integrante, i) => (
                   <View
                    key={i.toString()}
                     style={{
                       marginTop:5,
-                      width:'100%',
+                      width:'96%',
                       borderRadius: 20,
                       padding: 5,
                       flexWrap: "nowrap",
-                      borderColor:'#DCDDE1',
-                      borderStyle:'solid',
-                      borderWidth:1
+                      backgroundColor:'white'
                     }}
                   >
                     <View style={{ flexDirection: "row", padding:2 }}>
@@ -96,8 +97,8 @@ const Presentacion = props => {
                 ))}
               </View>
             
-             <Calificar presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
-            </Card>
+             <Calificar   presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
+            </View>
 
             <View style={{marginTop:30}}>
               <View style={{flexDirection:'row', marginBottom:10}}>
@@ -117,7 +118,7 @@ const Presentacion = props => {
               width:'90%',
               marginTop:10,
               borderRadius:20,
-              backgroundColor:'#48DBFB'}}>
+              backgroundColor:'#00A8FF'}}>
                   <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
                     <View>
                       <Icon

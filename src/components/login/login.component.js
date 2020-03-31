@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, Text, Image, KeyboardAvoidingView, ImageBackground } from 'react-native'
 import { CheckBox } from 'react-native-elements'
-import assets from '../../config/assets'
 import { withNavigation } from 'react-navigation';
 const background = require('../../../assets/login/static-background.png');
 const logo = require('../../../assets/login/logo.png')
