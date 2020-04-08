@@ -10,6 +10,7 @@ const pr = io(config.host+'/presentation')
 import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import Socket from '../../services/sockect'
+import {store} from '../../redux/store'
 
 class Presentacion extends React.Component {
 
@@ -28,64 +29,106 @@ class Presentacion extends React.Component {
             evaluacionPublica:false,
             comentariosPublicos:false
         }
+
         this.hasCode = this.hasCode.bind(this)
         this.setEvaluacion = this.setEvaluacion.bind(this)
         this.calificar = this.calificar.bind(this)
         this.setPresentacion = this.setPresentacion.bind(this)
         this.getUser = this.getUser.bind(this)
+        this.getPresentacionWithConecction = this.getPresentacionWithConecction.bind(this)
+        this.getPresentacionWithoutConecction = this.getPresentacionWithoutConecction.bind(this)
         this.onNextPresentation()
     }
 
-    componentDidMount(){
-        this.getPresentacionActual()
-        this.getUser()
+    getPresentacionWithConecction(){
+        findJornadaById(this.props.id)
+        .then(j => {
+            const jornada = j.data
+            this.setState({jornada})
+            this.setState({idJornada:jornada._id})
+            this.setState({fechaInicio:jornada.fechaInicio})
+            this.setState({fechaFinaliza:jornada.fechaFinaliza})
+
+            if(jornada.presentaciones.length == 0)
+                this.setState({loading:false})
+                jornada.presentaciones.map(async presentacion => { 
+                const format = 'hh:mm a'
+                // hay una presentacion disponible para hoy?
+                const now = moment().format('YYYY-MM-DD')
+                if(moment(now, 'YYYY-MM-DD hh:mm a').format('D')==presentacion.dia){
+                  const horaInicio = moment(presentacion.fecha,'MM-DD-YYYY hh:mm a').format(format)
+                  const horatermina = moment(presentacion.fecha, 'MM-DD-YYYY hh:mm a').add(presentacion.duracion,'m').format(format)
+                  // hay una presentacion para la hora actual ?
+                  if(moment(moment().format(format),format).isBetween(moment(horaInicio,format), moment(horatermina,format),  null, '[)')){
+                    this.setState({presentacion, loading:false})
+                    this.setState({idJornada:jornada._id})
+                    this.setState({fechaInicio:jornada.fechaInicio})
+                    this.setState({fechaFinaliza:jornada.fechaFinaliza})
+                    this.setEvaluacion(presentacion, jornada)
+                  }else{
+                    this.setState({loading:false})
+                }
+                }else{
+                    this.setState({loading:false})
+                }
+            })
+            
+        })
     }
 
-    getPresentacionActual(){
+    getPresentacionWithoutConecction(){
+        store.getState().jornadas.map(jornada => {
+            if(jornada._id == this.state.idJornada){
+                if(jornada.presentaciones.length > 0){
+                        this.setState({loading:false})
+                        jornada.presentaciones.map(async presentacion => { 
+                        const format = 'hh:mm a'
+                        // hay una presentacion disponible para hoy?
+                        const now = moment().format('YYYY-MM-DD')
+                        if(moment(now, 'YYYY-MM-DD hh:mm a').format('D')==presentacion.dia){
+                        const horaInicio = moment(presentacion.fecha,'MM-DD-YYYY hh:mm a').format(format)
+                        const horatermina = moment(presentacion.fecha, 'MM-DD-YYYY hh:mm a').add(presentacion.duracion,'m').format(format)
+                        // hay una presentacion para la hora actual ?
+                        if(moment(moment().format(format),format).isBetween(moment(horaInicio,format), moment(horatermina,format),  null, '[)')){
+                            this.setState({presentacion, loading:false})
+                            this.setState({idJornada:jornada._id})
+                            this.setState({fechaInicio:jornada.fechaInicio})
+                            this.setState({fechaFinaliza:jornada.fechaFinaliza})
+                            this.setEvaluacion(presentacion, jornada)
+                        }else{
+                            this.setState({loading:false})
+                        }
+                        }else{
+                            this.setState({loading:false})
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+     componentDidMount(){
+        this.getPresentacionActual()
+        this.getUser()
+        
+    }
+
+    async getPresentacionActual(){
         this.setState({presentacion:'', loading:true})
         const presentacion = this.props.navigation.getParam('presentacion')
+        await this.setState({idJornada:this.props.idJornada})
         if(presentacion){
             const jornada = null
             this.setState({jornada})
             this.setState({presentacion, loading:false, presentacionSeleccionada:true})
-            this.setState({idJornada:this.props.navigation.getParam('id')})
             this.setState({fechaInicio:this.props.navigation.getParam('fechaInicio')})
             this.setState({fechaFinaliza:this.props.navigation.getParam('fechaFinaliza')})
             this.setEvaluacion(presentacion, this.state.jornada)
         }else{
-            findJornadaById(this.props.id)
-            .then(j => {
-                const jornada = j.data
-                this.setState({jornada})
-                this.setState({idJornada:jornada._id})
-                this.setState({fechaInicio:jornada.fechaInicio})
-                this.setState({fechaFinaliza:jornada.fechaFinaliza})
-
-                if(jornada.presentaciones.length == 0)
-                    this.setState({loading:false})
-                    jornada.presentaciones.map(presentacion => { 
-                    const format = 'hh:mm a'
-                    // hay una presentacion disponible para hoy?
-                    const now = moment().format('YYYY-MM-DD')
-                    if(moment(now, 'YYYY-MM-DD hh:mm a').format('D')==presentacion.dia){
-                      const horaInicio = moment(presentacion.fecha,'MM-DD-YYYY hh:mm a').format(format)
-                      const horatermina = moment(presentacion.fecha, 'MM-DD-YYYY hh:mm a').add(presentacion.duracion,'m').format(format)
-                      // hay una presentacion para la hora actual ?
-                      if(moment(moment().format(format),format).isBetween(moment(horaInicio,format), moment(horatermina,format),  null, '[)')){
-                        this.setState({presentacion, loading:false})
-                        this.setState({idJornada:jornada._id})
-                        this.setState({fechaInicio:jornada.fechaInicio})
-                        this.setState({fechaFinaliza:jornada.fechaFinaliza})
-                        this.setEvaluacion(presentacion, jornada)
-                      }else{
-                        this.setState({loading:false})
-                    }
-                    }else{
-                        this.setState({loading:false})
-                    }
-                })
-                
-            })
+            if(this.props.connect)
+                this.getPresentacionWithConecction()
+            else
+                this.getPresentacionWithoutConecction()
         }
         
     }
@@ -165,7 +208,6 @@ class Presentacion extends React.Component {
     getUser(){
         const user = this.props.user
         this.setState({user})
-        console.log("El user es ->", user)
     }
     
     async calificar(metrica, valor){
@@ -197,6 +239,7 @@ class Presentacion extends React.Component {
         return(
             <PresentacionComponent
             presentacion={this.state.presentacion}
+            jornada={this.state.jornada}
             hasCode={this.hasCode}
             presentacionSeleccionada={this.state.presentacionSeleccionada}
             idJornada={this.state.idJornada}
@@ -206,13 +249,14 @@ class Presentacion extends React.Component {
             comentariosPublicos={this.state.comentariosPublicos}
             calificar={this.calificar}
             autor={this.props.user.correo}
+            setPresentacion = {this.setPresentacion}
             />)
     }
 }
 
 function mapStateToProps(state) {
-    const { auth } = state
-    return { user: auth.user }
+    const { auth, connect, idJornada } = state
+    return { user: auth.user, connect, idJornada}
 }
 
 

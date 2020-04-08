@@ -25,14 +25,129 @@ const styles = StyleSheet.create({
 import Calificar from '../btnCalifcar/btnCalificar.component'
 
 const width = Dimensions.get("window").width;
+
+
+const getCalificacionesPorMetricaPublico = (presentacion, jornada) => {
+  let evaluaciones = {}
+  let total_ponderado = 0;
+  jornada.metricas.map(metrica => {
+    let valores_calificacion_metrica_actual = 0;
+    let cantidad_calificaciones = 0;
+    presentacion.evaluaciones.map(evaluacion => {
+      if(evaluacion.nombre == metrica.nombre){
+        valores_calificacion_metrica_actual += evaluacion.valor;
+        cantidad_calificaciones += 1;
+      }
+    })
+    let ponderado = valores_calificacion_metrica_actual/cantidad_calificaciones;
+    if(!isNaN(ponderado)){
+      evaluaciones[metrica.nombre] = ponderado;
+      total_ponderado += ponderado;
+    }else{
+      evaluaciones[metrica.nombre] = undefined;
+    }
+    
+    
+    
+  })
+  
+  
+  if(presentacion.evaluaciones.length>0){
+    return {acumulado:(total_ponderado/Object.keys(evaluaciones).length),metricas:evaluaciones}
+  }
+  
+}
+
+const getCalificacionesPorMetricaPrivado = (presentacion, jornada) => {
+  let ponderado = getPönderado(jornada)
+  let calificaciones = getCalificacionesPorMetricaPublico(presentacion,jornada)
+  let metricas = Object.keys(ponderado.metricas)
+  metricas.map(metrica =>{
+    if(calificaciones.metricas[metrica]>ponderado.metricas[metrica]){
+      calificaciones.metricas[metrica] = 1
+    }
+    else if(calificaciones.metricas[metrica] == ponderado.metricas[metrica]){
+      calificaciones.metricas[metrica] = 0
+    }
+    else if(calificaciones.metricas[metrica]<ponderado.metricas[metrica]){
+      calificaciones.metricas[metrica] = -1
+    }
+    else{
+      calificaciones.metricas[metrica] = undefined;
+    }
+  })
+  if(calificaciones.acumulado>ponderado.acumulado){
+    calificaciones.acumulado = 1
+  }
+  else if(calificaciones.acumulado==ponderado.acumulado){
+    calificaciones.acumulado = 0
+  }
+  else{
+    calificaciones.acumulado = -1
+  }
+  console.log(calificaciones)
+  return calificaciones
+}
+
+const getPönderado = (jornada) =>{
+  let ponderado = {}
+  let cantidad = {}
+  jornada.metricas.map(metrica =>{
+      ponderado[metrica.nombre] = 0
+      cantidad[metrica.nombre] = 0
+  })
+  
+  let presentaciones = []
+  jornada.presentaciones.map(presentacion =>{
+      let presentacion_actual = getCalificacionesPorMetricaPublico(presentacion,jornada);
+      if(!(typeof presentacion_actual === 'undefined')){
+      presentaciones.push(presentacion_actual)
+      }    
+  });
+  presentaciones.map(presentacion =>{
+      jornada.metricas.map(metrica => {
+      let valor_actual = presentacion.metricas[metrica.nombre]
+      if(!(typeof valor_actual === 'undefined')){
+          ponderado[metrica.nombre] += valor_actual
+          cantidad[metrica.nombre] += 1
+      }
+      
+      })
+  })
+  let ponderado_total = 0
+  jornada.metricas.map(metrica =>{
+      let valor_actual = ponderado[metrica.nombre]
+      if(!(typeof valor_actual === 'undefined')){
+      ponderado[metrica.nombre] = valor_actual/cantidad[metrica.nombre]
+      if(cantidad[metrica.nombre]>0){
+          ponderado_total += (valor_actual/cantidad[metrica.nombre])
+      }
+      
+      }
+      
+  })
+  
+  return {acumulado:(ponderado_total/Object.keys(cantidad).length),metricas:ponderado}
+
+}
+
 const Presentacion = props => {
 
   const [codeQR, setcodeQR] = useState('')
+  const [ponderado, setponderado] = useState('')
 
   useEffect(() => {
     props.hasCode().then(code => setcodeQR(code))
+    // const timer =  setInterval(() =>  props.setPresentacion(), 60000)
+    if(props.presentacion != ''){
+      setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
+    }
+    return () => {
+      // clearTimeout(timer);
+    }
     
-  })
+  }, [props.presentacion, props.jornada])
+
 
   const calificada = (metrica) => {
     let calificacion = {califico:false, valor:0}
@@ -46,6 +161,7 @@ const Presentacion = props => {
     return calificacion
   }
   
+
   return (
     <View style={styles.container}>
       {props.presentacion != "" && !props.loading && (
@@ -126,26 +242,43 @@ const Presentacion = props => {
               <Divider style={{marginBottom:5}}/>
             </View>
 
+            {ponderado!= '' && 
+            (
               <View style={{ flexDirection: "row", padding:2,
               width:'90%',
               marginTop:10,
               borderRadius:20,
-              backgroundColor:'#00A8FF'}}>
+              backgroundColor:'#48dbfb'}}>
                   <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
                     <View>
-                      <Icon
+                      {ponderado.acumulado == 1 && <Icon
                       raised
                       name='arrow-up'
                       type='font-awesome'
-                      color='#44BD32' />
+                      color='#44BD32' />}
+                      
+                      {ponderado.acumulado == 0 && <Icon
+                      raised
+                      name='balance-scale'
+                      type='font-awesome'
+                      color='#0984e3' />}
+
+                    {ponderado.acumulado == -1 && <Icon
+                                          raised
+                                          name='arrow-down'
+                                          type='font-awesome'
+                                          color='#e84118' />}
                     </View>
                   </View>
                   <View style={{ justifyContent: "center" }}>
                       <Text style={{ color: "white", fontSize: 18 }}>
-                        Por encima de la media
+                        {ponderado.acumulado == 1 && 'Por encima de la media'}
+                        {ponderado.acumulado == -1 && 'Por debajo de la media'}
+                        {ponderado.acumulado == 0 && 'En la media ponderada'}
                       </Text>
                   </View>
               </View>
+            )}
 
             <View style={{marginBottom:10}}>
                 {props.evaluacionPublica ? (
@@ -214,7 +347,9 @@ const Presentacion = props => {
                   </ScrollView>
                 ):(
                   <ScrollView showsVerticalScrollIndicator={false}>
-                    {props.evaluaciones.map((evaluacion, i) => (
+                    {ponderado != '' && (
+                      <View>
+                        {props.evaluaciones.map((evaluacion, i) => (
                       <FlipCard
                         style={{marginBottom:5}}
                         key={(i+3).toString()}>
@@ -222,18 +357,37 @@ const Presentacion = props => {
                           width:width-30,
                           marginTop:5,
                           borderRadius:20,
-                          backgroundColor:'#48DBFB' }}>
+                          backgroundColor:ponderado.metricas[evaluacion.metrica] == 1 || ponderado.metricas[evaluacion.metrica] == 0 ? '#4cd137':'#e84118' 
+                          }}>
                               <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
                                 <View>
-                                  <Icon
-                                  raised
-                                  name='arrow-up'
-                                  type='font-awesome'
-                                  color='#44BD32'/>
+                                {ponderado.metricas[evaluacion.metrica] == 1 && <Icon
+                                raised
+                                name='arrow-up'
+                                type='font-awesome'
+                                color='#44BD32' />}
+                                
+                                {isNaN(ponderado.metricas[evaluacion.metrica])&& <Icon
+                                raised
+                                name='eye-slash'
+                                type='font-awesome'
+                                color='#e84118' />}
+
+                                {ponderado.metricas[evaluacion.metrica] == 0 && <Icon
+                                                      raised
+                                                      name='balance-scale'
+                                                      type='font-awesome'
+                                                      color='#0984e3' />}
+
+                                { ponderado.metricas[evaluacion.metrica] == -1 && <Icon
+                                                      raised
+                                                      name='arrow-down'
+                                                      type='font-awesome'
+                                                      color='#e84118' />}
                                 </View>
                               </View>
-                              <View style={{ justifyContent: "center" }}>
-                                <Text style={{ color: "white", fontSize: 18 }}>
+                              <View style={{flex:1, justifyContent: "center", flexWrap:'nowrap'}}>
+                                <Text style={{ color: "white", fontSize: 18}}>
                                   {evaluacion.metrica}
                                 </Text>
                               </View>
@@ -276,6 +430,8 @@ const Presentacion = props => {
                         </View>
                       </FlipCard>
                     ))}
+                      </View>
+                    )}
                   </ScrollView>
                 )}
             </View>

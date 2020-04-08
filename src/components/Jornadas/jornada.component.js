@@ -6,7 +6,7 @@ import moment from 'moment';
 import {Dimensions} from 'react-native'
 import FlipCard from 'react-native-flip-card'
 import {useSelector, useDispatch} from 'react-redux'
-import {getJornadasThunk} from '../../redux/actions/jornadas.action'
+import {getJornadasThunk, getIdJornada} from '../../redux/actions/jornadas.action'
 import {setStateConection} from '../../redux/actions/offline.action'
 import {loadingJornadas} from '../../redux/actions/loading.actions'
 import NetInfo from '@react-native-community/netinfo';
@@ -31,12 +31,15 @@ import { Avatar } from 'react-native-elements';
 
 const now = moment().format('YYYY-MM-DD')
 
-const callDate = (item,props) => {
+const callDate = (item, props, dispatch) => {
     moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
-        props.navigation.navigate('EasyCheck',{id:item._id})
+        props.navigation.navigate('EasyCheck',{id:item._id}) &&  dispatch(getIdJornada(item._id))
         :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
         [
-        {text: 'OK', onPress: () => props.navigation.navigate('EasyCheck',{id:item._id})},
+        {text: 'OK', onPress: () => {
+            dispatch(getIdJornada(item._id))
+            props.navigation.navigate('EasyCheck',{id:item._id})
+            }},
         ])
 }
 
@@ -45,38 +48,26 @@ const callDate = (item,props) => {
 const Jornada = props => {
     
     let jornadas = useSelector(state => state.jornadas);
-    let loading = useSelector(state => state.loadingJornada);
+    let loading  = useSelector(state => state.loadingJornada);
     let dispatch = useDispatch();
    
     useEffect(() => {
-
-        NetInfo.fetch().then(state => {
-             // si no esta conectado rehidrata el estado persistido
-            if(!state.isConnected){
-                dispatch(getJornadasThunk(store.getState().jornadas))
-                dispatch(loadingJornadas(false))
-            }
-
-            // si esta conectado sigue con las acciones para consultar la data actualizada
-            dispatch(getJornadasThunk())
-        });
 
         // suscripción para estar pendiente del cambio en la conexion
         const unsubscribe = NetInfo.addEventListener(state => {
               // guardo el estado inicial de la conexion en el storage 
               dispatch(setStateConection(state.isConnected))
               if(!state.isConnected){
+                dispatch(getJornadasThunk(store.getState().jornadas))
+                dispatch(loadingJornadas(false))
                 showMessage({
                     message: "Desconectado",
                     type: "danger",
                   });
               }
-            //   else{
-            //     showMessage({
-            //         message: "Vuelve a tener conexión",
-            //         type: "info",
-            //       });
-            //   }
+              else{
+                dispatch(getJornadasThunk())
+              }
         });
 
         return () => {
@@ -144,7 +135,7 @@ const Jornada = props => {
                                                 <View style={{marginHorizontal:10}}>
                                                     <Icon  type='font-awesome' size={30}
                                                         name='arrow-circle-right'color='#48DBFB' 
-                                                        onPress={() => callDate(item,props)} />
+                                                        onPress={() => callDate(item,props,dispatch)} />
                                                 </View>
                                         </View>
                                         {/* Back Side */}
