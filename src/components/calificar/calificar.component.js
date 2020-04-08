@@ -99,7 +99,7 @@ const CalfificarComponent = props => {
                       style={[StyleSheet.absoluteFillObject, {width:Dimensions.get('window').width, height:heightScreen, padding:0, margin:0}]}
                     />
                     <Animated.View 
-                      style={{position:'relative', top:'50%', height:1, backgroundColor:'red',
+                      style={{position:'relative', top:(Dimensions.get('window').height/2), height:1, backgroundColor:'red',
                       opacity:animated.interpolate({
                         inputRange: [0, 1],
                         outputRange: [0, 1]  
@@ -109,13 +109,13 @@ const CalfificarComponent = props => {
                     <Button 
                       onPress={() => props.navigation.goBack()}
                       type='clear'
-                      containerStyle={{position:'relative', top:'90%'}}
+                      containerStyle={{position:'relative', top:(Dimensions.get('window').height * 0.8)}}
                       title={"Cancelar"}
                       titleStyle={{color:'white', fontSize:20}}/>
                    </View>
                 )}
                 {props.ok && props.valid && (
-                  <View style={{ alignItems:'center'}}>
+                  <View style={{ alignItems:'center', marginTop:10}}>
                         <View style={{backgroundColor:'#F1F2F6', width:'90%',marginTop:Platform.OS === 'adroid' ? '10%':heightStatusBar,
                         borderRadius:20, alignItems:'center',
                         shadowColor: "#000",

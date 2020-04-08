@@ -1,5 +1,6 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux'
 import jornadas from './reducers/jornadas.reducer'
+import idJornada from './reducers/idJornada.reducer'
 import connect from './reducers/offline.reducer'
 import authReducer from './reducers/auth.reducer'
 import loadingJornada from './reducers/loading.reducers'
@@ -24,6 +25,7 @@ const persistConfig = {
   };
 
 const rootReducer = combineReducers({
+    idJornada,
     jornadas,
     connect,
     loadingJornada,
