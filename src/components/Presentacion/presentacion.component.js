@@ -33,6 +33,18 @@ const Presentacion = props => {
     props.hasCode().then(code => setcodeQR(code))
     
   })
+
+  const calificada = (metrica) => {
+    let calificacion = {califico:false, valor:0}
+    
+    props.presentacion.evaluaciones.map(evaluacion => {
+      if(evaluacion.nombre == metrica && evaluacion.autor == props.autor){
+        calificacion.califico = true
+        calificacion.valor = evaluacion.valor
+      }
+    })
+    return calificacion
+  }
   
   return (
     <View style={styles.container}>
@@ -135,119 +147,138 @@ const Presentacion = props => {
                   </View>
               </View>
 
-            {props.evaluacionPublica ? (
-              <ScrollView  showsVerticalScrollIndicator={false}>
-                {props.evaluaciones.map((evaluacion, i) => (
-                   <FlipCard
-                      style={{marginBottom:10}}
-                      key={(i).toString()}>
-                      {/* Face Side */}
-                      <View  style={{ padding:2,
-                      width:width-30,
-                      marginTop:10,
-                      borderRadius:20,
-                      borderColor:'#00A8FF',
-                      borderStyle:'solid',
-                      borderWidth:1 }}>
-                            <Text style={{textAlign:'center', fontSize:20, color:'grey'}}>{evaluacion.metrica} </Text>
-                            <View  style={{ alignItems:'center'}}>
-                              <Rating
-                                  startingValue={evaluacion.calificaciones.length > 0 ? (evaluacion.calificaciones.reduce((a, b) => a+b,0))/evaluacion.calificaciones.length:0}
-                                  imageSize={30}
-                                  type="custom"
-                                  readonly
-                                  fractions={0.5}
-                                                />
-                            </View>
-                    </View>
-                      {/* Back Side */}
-                      <View  style={{ padding:2,
-                      width:width-30,
-                      marginTop:10,
-                      borderRadius:20,
-                      borderColor:'#00A8FF',
-                      borderStyle:'solid',
-                      borderWidth:1 }}>
-                            <View  style={{ alignItems:'center'}}>
-                              {codeQR != '' ? (
-                              <AirbnbRating
-                                  showRating={false}
-                                  count={5}
-                                  reviews={['Mala','Regular','Aceptable','Buena','Excelente']}
-                                  imageSize={25}
-                                  type="custom"
-                                  fractions={0.5}
-                                                />):(
-                                <View style={{flexDirection:'column', alignItems:'center'}}>
-                                  <Icon
-                                    raised
-                                    name='qrcode'
-                                    type='font-awesome'
-                                    color='#00A8FF'
-                                    onPress={() => {
-                                      props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada, back:true}) 
-                                    } } />
-                                    <Text style={{color:'grey'}}>Escanear código QR</Text>
+            <View style={{marginBottom:10}}>
+                {props.evaluacionPublica ? (
+                  <ScrollView  showsVerticalScrollIndicator={false}>
+                    {props.evaluaciones.map((evaluacion, i) => (
+                      <FlipCard
+                          style={{marginBottom:5}}
+                          key={(i).toString()}>
+                          {/* Face Side */}
+                          <View  style={{ padding:2,
+                          width:width-30,
+                          marginTop:5,
+                          borderRadius:20,
+                          borderColor:'#48DBFB',
+                          borderStyle:'solid',
+                          borderWidth:1 }}>
+                                <Text style={{textAlign:'center', fontSize:20, color:'grey'}}>{evaluacion.metrica} </Text>
+                                <View  style={{ alignItems:'center'}}>
+                                  <Rating
+                                      startingValue={evaluacion.calificaciones.length > 0 ? (evaluacion.calificaciones.reduce((a, b) => a+b,0))/evaluacion.calificaciones.length:0}
+                                      imageSize={30}
+                                      type="custom"
+                                      readonly
+                                      fractions={0.5}/>
                                 </View>
-                              )}
-                            </View>
-                    </View>
-                           
-                  </FlipCard>
-                 
-                ))}
-              </ScrollView>
-            ):(
-              <ScrollView showsVerticalScrollIndicator={false}>
-                {props.evaluaciones.map((evaluacion, i) => (
-                  <FlipCard
-                    style={{marginBottom:10}}
-                    key={(i+3).toString()}>
-                      <View style={{ flexDirection: "row", padding:2,
-                      width:width-30,
-                      marginTop:10,
-                      borderRadius:20,
-                      backgroundColor:'#4cd137' }}>
-                          <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
-                            <View>
-                              <Icon
-                              raised
-                              name='arrow-up'
-                              type='font-awesome'
-                              color='#44BD32'
-                              onPress={() => console.log('hello')} />
-                            </View>
+                        </View>
+                          {/* Back Side */}
+                          <View  style={{ padding:2,
+                          width:width-30,
+                          marginTop:10,
+                          borderRadius:20,
+                          borderColor:'#00A8FF',
+                          borderStyle:'solid',
+                          borderWidth:1 }}>
+                                <View  style={{ alignItems:'center'}}>
+                                  {codeQR != '' ? (
+                                  <React.Fragment>
+                                    <AirbnbRating
+                                      style={{marginTop:5, fontSize:20}}
+                                      defaultRating={calificada(evaluacion.metrica).califico ? calificada(evaluacion.metrica).valor:0}
+                                      showRating={false}
+                                      count={5}
+                                      onFinishRating={(valor) => props.calificar(evaluacion.metrica,valor)}/>
+                                    {calificada(evaluacion.metrica).califico && (
+                                          <Text style={{color:'grey', marginVertical:5}}>Calificada</Text>
+                                    )}
+                                  </React.Fragment>):(
+                                    <View style={{flexDirection:'column', alignItems:'center'}}>
+                                      <Icon
+                                        raised
+                                        name='qrcode'
+                                        type='font-awesome'
+                                        color='#00A8FF'
+                                        onPress={() => {
+                                          props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada, back:true}) 
+                                        } } />
+                                        <Text style={{color:'grey'}}>Escanear código QR</Text>
+                                    </View>
+                                  )}
+                                </View>
+                        </View>
+                              
+                      </FlipCard>
+                    
+                    ))}
+                  </ScrollView>
+                ):(
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    {props.evaluaciones.map((evaluacion, i) => (
+                      <FlipCard
+                        style={{marginBottom:5}}
+                        key={(i+3).toString()}>
+                          <View style={{ flexDirection: "row", padding:2,
+                          width:width-30,
+                          marginTop:5,
+                          borderRadius:20,
+                          backgroundColor:'#48DBFB' }}>
+                              <View style={{ marginHorizontal: 10, justifyContent: "center"}}>
+                                <View>
+                                  <Icon
+                                  raised
+                                  name='arrow-up'
+                                  type='font-awesome'
+                                  color='#44BD32'/>
+                                </View>
+                              </View>
+                              <View style={{ justifyContent: "center" }}>
+                                <Text style={{ color: "white", fontSize: 18 }}>
+                                  {evaluacion.metrica}
+                                </Text>
+                              </View>
                           </View>
-                          <View style={{ justifyContent: "center" }}>
-                            <Text style={{ color: "white", fontSize: 18 }}>
-                              {evaluacion.metrica}
-                            </Text>
-                          </View>
-                      </View>
 
-                      {/* Back Side */}
-                      <View  style={{ padding:2,
-                      width:width-30,
-                      marginTop:10,
-                      borderRadius:20,
-                      borderColor:'#00A8FF',
-                      borderStyle:'solid',
-                      borderWidth:1 }}>
-                            <View  style={{ alignItems:'center'}}>
-                              <AirbnbRating
-                                  showRating={false}
-                                  count={5}
-                                  reviews={['Mala','Regular','Aceptable','Buena','Excelente']}
-                                  imageSize={25}
-                                  type="custom"
-                                  fractions={0.5}
-                                                />
-                            </View>
-                    </View>
-                  </FlipCard>
-                ))}
-              </ScrollView>
-            )}
+                          {/* Back Side */}
+                          <View  style={{ padding:2,
+                          width:width-30,
+                          marginTop:10,
+                          borderRadius:20,
+                          borderColor:'#00A8FF',
+                          borderStyle:'solid',
+                          borderWidth:1 }}>
+                                <View  style={{ alignItems:'center'}}>
+                                  {codeQR != '' ? (
+                                  <React.Fragment>
+                                    <AirbnbRating
+                                      style={{marginTop:5}}
+                                      defaultRating={calificada(evaluacion.metrica).califico ? calificada(evaluacion.metrica).valor:0}
+                                      showRating={false}
+                                      count={5}
+                                      onFinishRating={(valor) => props.calificar(evaluacion.metrica,valor)}/>
+                                    {calificada(evaluacion.metrica).califico && (
+                                          <Text style={{color:'grey', marginVertical:5}}>Calificada</Text>
+                                    )}
+                                  </React.Fragment>):(
+                                    <View style={{flexDirection:'column', alignItems:'center'}}>
+                                      <Icon
+                                        raised
+                                        name='qrcode'
+                                        type='font-awesome'
+                                        color='#00A8FF'
+                                        onPress={() => {
+                                          props.navigation.navigate('Calificar', {presentacion:props.presentacion, hascode: props.hasCode(), idJornada:props.idJornada, back:true}) 
+                                        } } />
+                                        <Text style={{color:'grey'}}>Escanear código QR</Text>
+                                    </View>
+                                  )}
+                                </View>
+                        </View>
+                      </FlipCard>
+                    ))}
+                  </ScrollView>
+                )}
+            </View>
           </View>
 
           

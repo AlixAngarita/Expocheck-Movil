@@ -1,5 +1,5 @@
 import  io from 'socket.io-client'
-import {comentar, preguntar, calificarMetrica} from './presentacion.service'
+import {comentar, preguntar, calificarMetrica, actulizarMetrica} from './presentacion.service'
 import { YellowBox } from 'react-native'
 import config from '../config/server'
 
@@ -51,33 +51,28 @@ class Socket {
     }
 
     // cuando calfiquen
-    calification(rating, tituloPresentacion, idJornada){
-        try {
-            /*envio al server, comparo en el cliente si la calificacion actual es para la presentacion actual
-         y ago push de la nueva calificación*/
-         this.rating.emit('rating', {rating, titulo:tituloPresentacion})
+    addEvaluacion(evaluacion, presentacion, idJornada){
+        return new Promise((resolve, reject) => {
 
+            this.updateInRealtime(idJornada,presentacion)
 
-         // guardo en la base de datos la nueva calificacion
-         FirebaseService.getDocById('jornadas', idJornada)
-         .then(async jornada => {
-             let presentaciones = jornada.presentaciones
+            // guardo en la base de datos la nueva pregunta
+            calificarMetrica(idJornada, presentacion._id, evaluacion)
+            .then(res => resolve(res))
+            .catch(err => reject(err))
+        })
+        
+    }
 
-             presentaciones.map( (pr, index) => {
-                 if(pr.titulo == tituloPresentacion ){
-                     pr.calificacion.push(rating)
-                     presentaciones[index] = pr
-                 }
-             })
-             
-             jornada.presentaciones = presentaciones
-             await FirebaseService.updateDocument('jornadas', idJornada, jornada)
-             
-         })
- 
-        } catch (error) {
-            console.log('Error -> ',error)
-        }
+    updateEvaluacion(valor, presentacion, idJornada, idEvaluacion){
+        return new Promise((resolve, reject) => {
+
+            this.updateInRealtime(idJornada,presentacion)
+
+            actulizarMetrica(idJornada, presentacion._id, valor, idEvaluacion)
+            .then(res => resolve(res))
+            .catch(err => reject(err))
+        })
         
     }
 

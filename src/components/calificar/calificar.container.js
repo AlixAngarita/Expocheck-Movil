@@ -4,7 +4,7 @@ import * as Permissions from 'expo-permissions';
 import { withNavigation } from 'react-navigation';
 import { AsyncStorage } from "react-native";
 import Socket from '../../services/sockect'
-import {findById, preguntar} from '../../services/presentacion.service'
+import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 
 
@@ -22,16 +22,13 @@ class Calificacion extends React.Component{
             qrs:[],
             hasQrCode:false,
             presentacion:'',
-            calificada:'',
             califications:[]
         }
 
         this.scanear = this.scanear.bind(this)
         this.getCodesQr = this.getCodesQr.bind(this)
         this.hasCodeQr = this.hasCodeQr.bind(this)
-        this.getCalificationsFromStorage = this.getCalificationsFromStorage.bind(this)
         this.getPresentacion = this.getPresentacion.bind(this)
-        this.calificar = this.calificar.bind(this)
         this.addComment = this.addComment.bind(this)
         this.setPresentacion = this.setPresentacion.bind(this)
         this.getUser = this.getUser.bind(this)
@@ -42,7 +39,6 @@ class Calificacion extends React.Component{
 
      componentDidMount() {
         this.getPresentacion()
-        this.getCalificationsFromStorage()
         this.hasCodeQr()
         this.getPermissionsAsync();
         this.getUser()
@@ -83,32 +79,7 @@ class Calificacion extends React.Component{
       }
     }
 
-    async  getCalificationsFromStorage(){
-        try {
-         AsyncStorage.getItem('califications')
-         .then(califications => {
-             califications = JSON.parse(califications)
-
-             if(califications != null){
-                this.setState({califications})
-                califications.map(c =>{
-                    if(c.titulo == this.state.presentacion.titulo){
-                        this.setState({calificada:c.rating})
-                    }
-                })
-                
-             }else{
-                console.log('Calficiaciones bacias')
-             }
-            
-         })
-
-         
-            
-        } catch (error) {
-            console.log(error)
-      }
-    }
+    
 
     getPresentacion(){
         const presentacion = this.props.navigation.getParam('presentacion')
@@ -124,18 +95,6 @@ class Calificacion extends React.Component{
         const user = this.props.user
         this.setState({user})
         console.log("El user es ->", user)
-    }
-
-    async calificar(rating){
-        await AsyncStorage.removeItem('califications')
-        const califications = this.state.califications
-        califications.push({titulo:this.state.presentacion.titulo, rating})
-        AsyncStorage.setItem('califications', JSON.stringify(califications))
-        .then( ok => {
-                console.log('Entro al storage')
-                this.setState({calificada:rating})
-                Socket.calification(rating, this.state.presentacion.titulo, this.props.navigation.getParam('idJornada'))
-        }).catch(err => console.log('"Error al entrar al storage -> ',err))
     }
 
     async validCode(code){
@@ -197,8 +156,6 @@ class Calificacion extends React.Component{
             valid={this.state.valid}
             scanear={this.scanear}
             hasQrCode={this.hasQrCode}
-            calificada={this.state.calificada}
-            calificar={this.calificar}
             addComment={this.addComment}
             granted={this.state.hasCameraPermission == 'granted' || 'undetermined'}
             pedirPermiso={this.getPermissionsAsync}
