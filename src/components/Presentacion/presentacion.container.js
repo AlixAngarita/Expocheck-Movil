@@ -7,12 +7,17 @@ import moment from 'moment';
 import config from '../../config/server'
 import  io from 'socket.io-client'
 const pr = io(config.host+'/presentation')
+import {findById} from '../../services/presentacion.service'
+import {connect} from 'react-redux'
+import Socket from '../../services/sockect'
 
 class Presentacion extends React.Component {
 
     constructor(props){
         super(props)
         this.state = {
+            jornada:'',
+            user:null,
             presentacion:'',
             loading:true,
             presentacionSeleccionada:false,
@@ -25,26 +30,33 @@ class Presentacion extends React.Component {
         }
         this.hasCode = this.hasCode.bind(this)
         this.setEvaluacion = this.setEvaluacion.bind(this)
+        this.calificar = this.calificar.bind(this)
+        this.setPresentacion = this.setPresentacion.bind(this)
+        this.getUser = this.getUser.bind(this)
         this.onNextPresentation()
     }
 
     componentDidMount(){
         this.getPresentacionActual()
+        this.getUser()
     }
 
     getPresentacionActual(){
         this.setState({presentacion:'', loading:true})
         const presentacion = this.props.navigation.getParam('presentacion')
         if(presentacion){
+            const jornada = null
+            this.setState({jornada})
             this.setState({presentacion, loading:false, presentacionSeleccionada:true})
             this.setState({idJornada:this.props.navigation.getParam('id')})
             this.setState({fechaInicio:this.props.navigation.getParam('fechaInicio')})
             this.setState({fechaFinaliza:this.props.navigation.getParam('fechaFinaliza')})
-            this.setEvaluacion(presentacion)
+            this.setEvaluacion(presentacion, this.state.jornada)
         }else{
             findJornadaById(this.props.id)
             .then(j => {
                 const jornada = j.data
+                this.setState({jornada})
                 this.setState({idJornada:jornada._id})
                 this.setState({fechaInicio:jornada.fechaInicio})
                 this.setState({fechaFinaliza:jornada.fechaFinaliza})
@@ -78,7 +90,7 @@ class Presentacion extends React.Component {
         
     }
 
-    setEvaluacion(presentacion, jornada){
+    setEvaluacion(presentacion, jornada) {
         let evaluacionPublica = 0
                   let comentariosPublicos = 0
                   presentacion.integrantes.map(int => {
@@ -112,7 +124,6 @@ class Presentacion extends React.Component {
                     
                   })
                   this.setState({evaluaciones})
-                  console.log(this.state.evaluaciones)
     }
 
     hasCode(){
@@ -143,6 +154,45 @@ class Presentacion extends React.Component {
         })
     }
 
+    setPresentacion(){
+        findById(this.state.idJornada, this.state.presentacion._id)
+        .then(res => {
+            this.setState({presentacion:res.data})
+            this.setEvaluacion(res.data, this.state.jornada)
+        })
+    }
+
+    getUser(){
+        const user = this.props.user
+        this.setState({user})
+        console.log("El user es ->", user)
+    }
+    
+    async calificar(metrica, valor){
+        console.log('Evaluacion -> ', metrica, valor)
+        const evaluaciones = this.state.presentacion.evaluaciones
+        const evaluacion = {nombre:metrica, valor, autor:this.state.user.correo}
+
+        let update = false
+        evaluaciones.map(ev => {
+            if(ev.nombre == evaluacion.nombre && ev.autor == evaluacion.autor){
+                update = true
+                Socket.updateEvaluacion(evaluacion.valor, this.state.presentacion,
+                    this.state.idJornada, ev._id)
+                .then(res => this.setPresentacion())
+                .catch(err => console.error(err))
+            }
+                
+        })
+
+        if(!update){
+            Socket.addEvaluacion(evaluacion, this.state.presentacion, this.state.idJornada)
+            .then(res => this.setPresentacion())
+            .catch(err => console.error(err))
+        }
+        
+    }
+
     render(){
         return(
             <PresentacionComponent
@@ -154,8 +204,16 @@ class Presentacion extends React.Component {
             evaluaciones={this.state.evaluaciones}
             evaluacionPublica={this.state.evaluacionPublica}
             comentariosPublicos={this.state.comentariosPublicos}
+            calificar={this.calificar}
+            autor={this.props.user.correo}
             />)
     }
 }
 
-export default withNavigation(Presentacion)
+function mapStateToProps(state) {
+    const { auth } = state
+    return { user: auth.user }
+}
+
+
+export default connect(mapStateToProps)(withNavigation(Presentacion))

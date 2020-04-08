@@ -63,7 +63,7 @@ const CalfificarComponent = props => {
         flexDirection:'row',
         justifyContent:'space-around',
         alignContent:'center',
-        alignItems:focus ? 'center':'flex-end',
+        alignItems:focus ? 'flex-end':'flex-end',
         marginBottom:focus ? 30:5
       },
       input:{
@@ -132,18 +132,6 @@ const CalfificarComponent = props => {
                     android: {
                         height:heightScreen  - 50
                     }})}}>
-                    {/* <View style={styles.ratingContainer}>
-                        <AirbnbRating
-                          count={5}
-                          reviews={["Mala", "Aceptable", "Buena", "Muy buena", "Exelente"]}
-                          defaultRating={props.calificada !='' ? props.calificada:0}
-                          size={35}
-                          isDisabled={props.calificada != ''}
-                          onFinishRating={(rating) => props.calificar(rating)}
-                        />
-                        <Text style={{fontSize:10, color:'grey'}}>{props.calificada !='' ? 'Calificada':'Solo puede calificar una vez'}</Text>
-                        
-                    </View> */}
                    
                     <KeyboardAvoidingView 
                      behavior="padding" >
