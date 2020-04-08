@@ -63,7 +63,7 @@ const CalfificarComponent = props => {
         flexDirection:'row',
         justifyContent:'space-around',
         alignContent:'center',
-        alignItems:focus ? 'flex-end':'flex-end',
+        alignItems:focus ? 'center':'flex-end',
         marginBottom:focus ? 30:5
       },
       input:{
