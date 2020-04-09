@@ -230,14 +230,13 @@ const Presentacion = props => {
 
             <View style={{marginTop:30}}>
               <View style={{flexDirection:'row', marginBottom:10}}>
-                <View style={{justifyContent:'center'}}>
+                {/* <View style={{justifyContent:'center'}}>
                   <Icon
                   name='check'
                   type='font-awesome'
                   color='#fbc531' />
-                </View>
-                <Text style={{color:'grey', textAlign:'center', fontSize:20,
-                  marginLeft:10}}>Calificaciones del auditorio</Text>
+                </View> */}
+                <Text style={{color:'grey', textAlign:'center', fontSize:20}}>Ponderación global</Text>
               </View>
               <Divider style={{marginBottom:5}}/>
             </View>
@@ -280,6 +279,19 @@ const Presentacion = props => {
               </View>
             )}
 
+          <View style={{marginTop:10}}>
+                        <View style={{flexDirection:'row', marginBottom:10}}>
+                          <View style={{justifyContent:'center'}}>
+                            <Icon
+                            name='check'
+                            type='font-awesome'
+                            color='#fbc531' />
+                          </View>
+                          <Text style={{color:'grey', textAlign:'center', fontSize:20,
+                        marginLeft:6}}>Metricas de evaluación</Text>
+                        </View>
+                        <Divider style={{marginBottom:5}}/>
+            </View>
             <View style={{marginBottom:10}}>
                 {props.evaluacionPublica ? (
                   <ScrollView  showsVerticalScrollIndicator={false}>
