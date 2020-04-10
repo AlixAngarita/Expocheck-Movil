@@ -9,6 +9,7 @@ class Socket {
     constructor(){
         this.forum = io(config.host+'/forum')
         this.rating = io(config.host+'/rating')
+        this.generalEvent = io(config.host+'/generalEvent')
 
         YellowBox.ignoreWarnings([
             'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
@@ -21,11 +22,12 @@ class Socket {
       return new Promise((resolve, reject) => {
 
                     if(comment.contenido.trim().length > 0){
-                        this.updateInRealtime(idJornada,presentacion)
-
                         // guardo en la base de datos el nuevo comentario
                         comentar(idJornada, presentacion._id, comment)
-                        .then(res => resolve(res))
+                        .then(res => {
+                            this.updateInRealtime(idJornada,presentacion)
+                            resolve(res)
+                        })
                         .catch(err => reject(err))
                     }
             
@@ -42,7 +44,10 @@ class Socket {
 
                 // guardo en la base de datos la nueva pregunta
                 preguntar(idJornada, presentacion._id, question)
-                .then(res => resolve(res))
+                .then(res => {
+                    this.updateInRealtime(idJornada,presentacion)
+                    resolve(res)
+                })
                 .catch(err => reject(err))
             }
     
@@ -58,7 +63,10 @@ class Socket {
 
             // guardo en la base de datos la nueva pregunta
             calificarMetrica(idJornada, presentacion._id, evaluacion)
-            .then(res => resolve(res))
+            .then(res => {
+                this.updateInRealtime(idJornada,presentacion)
+                resolve(res)
+            })
             .catch(err => reject(err))
         })
         
@@ -70,7 +78,10 @@ class Socket {
             this.updateInRealtime(idJornada,presentacion)
 
             actulizarMetrica(idJornada, presentacion._id, valor, idEvaluacion)
-            .then(res => resolve(res))
+            .then(res => {
+                this.updateInRealtime(idJornada,presentacion)
+                resolve(res)
+            })
             .catch(err => reject(err))
         })
         
@@ -78,7 +89,7 @@ class Socket {
 
     // Servico real time
     updateInRealtime(idJornada, presentacion){
-        this.forum.emit('onRealTimeEvent', {idJornada, titulo:presentacion.titulo})
+        this.generalEvent.emit('onRealTimeEvent', {idJornada, titulo:presentacion.titulo})
     }
     
 }

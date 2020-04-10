@@ -6,6 +6,7 @@ import { Image, Button, Divider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {withNavigation} from 'react-navigation'
 import {ScrollView} from 'react-native'
+import {useSelector} from 'react-redux'
 const qrimage = require('../../../assets/images/qrcode.png')
 
 
@@ -13,6 +14,8 @@ const CalfificarComponent = props => {
 
   const [focus, setfocus] = useState(true)
   const [animated, setanimated] = useState(new Animated.Value(0)) 
+  const [integrantes, setintegrantes] = useState([])
+  const user = useSelector(state => state.auth.user)
 
   const keyboardDidHide = () => {
     setfocus(false)
@@ -32,6 +35,7 @@ const CalfificarComponent = props => {
   }
 
     useEffect(() => {
+      
       runAnimateScanner()
       this.keyboardDidShowListener = Keyboard.addListener(
         'keyboardDidShow',
@@ -42,11 +46,15 @@ const CalfificarComponent = props => {
         keyboardDidHide,
       );
 
+      if(props.presentacion != ''){
+        setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
+      }
+
       return () => {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
       }
-    });
+    },[props.presentacion]);
 
     
 
@@ -80,6 +88,7 @@ const CalfificarComponent = props => {
     const [value, onChangeText] = React.useState('');
     const heightStatusBar = StatusBar.currentHeight
     const heightScreen = Dimensions.get('window').height
+    
 
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>;
@@ -162,12 +171,14 @@ const CalfificarComponent = props => {
                                   {props.presentacion.comentarios.length == 0 && (
                                     <Text style={{color:'#95A5A6', fontSize:20, textAlign:'center', marginVertical:20}}>Sé el primero en decir algo!.</Text>
                                   )}
-                                  {props.presentacion.comentarios.map((comentario, i) => (
+                                  {props.comentariosPublicos || integrantes.includes(user.nombre.toUpperCase()) ?  props.presentacion.comentarios.map((comentario, i) => (
                                     <View key={i.toString()} style={{backgroundColor:'white', width:Dimensions.get('window').width - 50,
                                     borderRadius:20, padding:10, marginVertical:5}}>
                                             <Text style={{color:'#95A5A6'}}>{comentario.contenido}</Text>
                                     </View>
-                                  ))}
+                                  )):(
+                                    <Text style={{color:'#95A5A6', fontSize:20, textAlign:'center', marginVertical:20}}>Los comentarios estan ocultos</Text>
+                                  )}
                                 </View>
                               )}
                             </ScrollView>
