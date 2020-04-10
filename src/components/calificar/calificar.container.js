@@ -6,13 +6,16 @@ import { AsyncStorage } from "react-native";
 import Socket from '../../services/sockect'
 import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
-
+import config from '../../config/server'
+import  io from 'socket.io-client'
+const generalEvent = io(config.host+'/generalEvent')
 
 class Calificacion extends React.Component{
     constructor(props){
         super(props)
         
         this.state = {
+            comentariosPublicos:false,
             user:null,
             hasCameraPermission: null,
             scaned: true,
@@ -33,6 +36,9 @@ class Calificacion extends React.Component{
         this.setPresentacion = this.setPresentacion.bind(this)
         this.getUser = this.getUser.bind(this)
         this.addQuestion = this.addQuestion.bind(this)
+        this.realtimeEvent = this.realtimeEvent.bind(this)
+        this.setComentariosPublicos = this.setComentariosPublicos.bind(this)
+        this.realtimeEvent()
     }
 
     
@@ -45,7 +51,12 @@ class Calificacion extends React.Component{
        
     }
 
-   
+    realtimeEvent(){
+        generalEvent.on('reloadPresentation',() => {
+            this.setPresentacion()
+            this.setComentariosPublicos(this.state.presentacion)
+        })
+    }
 
     async componentWillMount(){
         this.setState({ scanned: false});
@@ -84,6 +95,23 @@ class Calificacion extends React.Component{
     getPresentacion(){
         const presentacion = this.props.navigation.getParam('presentacion')
         this.setState({presentacion})
+        this.setComentariosPublicos(presentacion)
+    }
+
+    setComentariosPublicos(presentacion){
+         let comentariosPublicos = 0
+         presentacion.integrantes.map(int => {
+         if(int.autor != undefined){
+             if(int.autor.comentariosPublicos){
+                comentariosPublicos+=1
+             }
+            }
+         })
+
+                  
+         if (comentariosPublicos > (presentacion.integrantes.length/2) || comentariosPublicos == presentacion.integrantes.length){
+            this.setState({comentariosPublicos:true})
+        }
     }
 
     setPresentacion(){
@@ -162,6 +190,7 @@ class Calificacion extends React.Component{
             presentacion={this.state.presentacion}
             comment={this.props.navigation.getParam('comment')}
             addQuestion={this.addQuestion}
+            comentariosPublicos={this.state.comentariosPublicos}
             />)
     }
 }

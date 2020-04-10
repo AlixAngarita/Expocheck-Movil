@@ -7,6 +7,7 @@ import moment from 'moment';
 import config from '../../config/server'
 import  io from 'socket.io-client'
 const pr = io(config.host+'/presentation')
+const generalEvent = io(config.host+'/generalEvent')
 import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import Socket from '../../services/sockect'
@@ -37,7 +38,8 @@ class Presentacion extends React.Component {
         this.getUser = this.getUser.bind(this)
         this.getPresentacionWithConecction = this.getPresentacionWithConecction.bind(this)
         this.getPresentacionWithoutConecction = this.getPresentacionWithoutConecction.bind(this)
-        this.onNextPresentation()
+        this.realtimeEvent = this.realtimeEvent.bind(this)
+        this.realtimeEvent()
     }
 
     getPresentacionWithConecction(){
@@ -191,9 +193,21 @@ class Presentacion extends React.Component {
         })
     }
 
-    onNextPresentation(){
-        pr.on('nextPresentation',() => {
-            this.getPresentacionActual()
+    realtimeEvent(){
+        pr.on('nextPresentation', (data) => {
+            findById(this.state.idJornada, data.id)
+            .then(res => {
+                this.setState({presentacion:res.data})
+                this.setEvaluacion(res.data, this.state.jornada)
+            })
+        })
+
+        generalEvent.on('reloadPresentation',() => {
+            findById(this.state.idJornada, this.state.presentacion._id)
+            .then(res => {
+                this.setState({presentacion:res.data})
+                this.setEvaluacion(res.data, this.state.jornada)
+            })
         })
     }
 

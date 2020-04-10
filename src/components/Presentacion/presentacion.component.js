@@ -1,8 +1,9 @@
-import React,  {useEffect, useState} from "react";
+import React,  {useEffect, useState,} from "react";
 import { Dimensions } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Avatar, Card, Divider  } from "react-native-elements";
 import FlipCard from 'react-native-flip-card'
+import {useSelector} from 'react-redux'
 import {
   View,
   StyleSheet,
@@ -135,11 +136,14 @@ const Presentacion = props => {
 
   const [codeQR, setcodeQR] = useState('')
   const [ponderado, setponderado] = useState('')
+  const [integrantes, setintegrantes] = useState([])
+  const user = useSelector(state => state.auth.user)
 
   useEffect(() => {
     props.hasCode().then(code => setcodeQR(code))
     // const timer =  setInterval(() =>  props.setPresentacion(), 60000)
     if(props.presentacion != ''){
+      setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }
     return () => {
@@ -182,8 +186,8 @@ const Presentacion = props => {
                 backgroundColor:'#48DBFB'
               }}
             >
-              <Text style={{  fontSize: 25, color:'white', textAlign:'center', marginTop:20 }}>
-                {props.presentacion.titulo}
+              <Text style={{  fontSize: 25, color:'white', textAlign:'center', marginTop:20 , padding:10}}>
+                {props.presentacion.titulo.toUpperCase()}
               </Text>
               {/* <Text style={{ color: "grey", fontSize: 20 }}>Integrantes</Text> */}
               <View style={{ alignItems: "center", marginTop:10}}>
@@ -280,20 +284,27 @@ const Presentacion = props => {
             )}
 
           <View style={{marginTop:10}}>
-                        <View style={{flexDirection:'row', marginBottom:10}}>
-                          <View style={{justifyContent:'center'}}>
-                            <Icon
-                            name='check'
-                            type='font-awesome'
-                            color='#fbc531' />
+                        <View style={{flexDirection:'column', alignItems:'center'}}>
+                          <View style={{flexDirection:'row'}}>
+                            <View style={{justifyContent:'center'}}>
+                              <Icon
+                              name='check'
+                              type='font-awesome'
+                              color='#fbc531' />
+                            </View>
+                            <Text style={{color:'grey', textAlign:'center', fontSize:20,
+                              marginLeft:6}}>Metricas de evaluación
+                            </Text>
                           </View>
-                          <Text style={{color:'grey', textAlign:'center', fontSize:20,
-                        marginLeft:6}}>Metricas de evaluación</Text>
+                          {!props.evaluacionPublica && 
+                          (<Text style={{color:'grey',textAlign:'center', fontSize:12, marginBottom:5}}>
+                            La evaluación es privada (solo puede ver su ponderado)
+                          </Text>)}
                         </View>
                         <Divider style={{marginBottom:5}}/>
             </View>
             <View style={{marginBottom:10}}>
-                {props.evaluacionPublica ? (
+                {props.evaluacionPublica || integrantes.includes(user.nombre.toUpperCase()) ? (
                   <ScrollView  showsVerticalScrollIndicator={false}>
                     {props.evaluaciones.map((evaluacion, i) => (
                       <FlipCard
@@ -365,7 +376,7 @@ const Presentacion = props => {
                       <FlipCard
                         style={{marginBottom:5}}
                         key={(i+3).toString()}>
-                          <View style={{ flexDirection: "row", padding:2,
+                          <View style={{ flexDirection: "row", padding:2, paddingRight:5,
                           width:width-30,
                           marginTop:5,
                           borderRadius:20,
