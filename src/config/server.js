@@ -1,4 +1,4 @@
 export default {
-  host:"http://192.168.1.3:3000",
+  host:"https://exporcheck-socket-server.herokuapp.com",
   rest:"https://expocheck-rest.herokuapp.com"
 }
