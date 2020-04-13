@@ -23,9 +23,11 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+import { Video } from 'expo-av';
 import Calificar from '../btnCalifcar/btnCalificar.component'
 
 const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 
 const getCalificacionesPorMetricaPublico = (presentacion, jornada) => {
@@ -189,8 +191,23 @@ const Presentacion = props => {
               <Text style={{  fontSize: 25, color:'white', textAlign:'center', marginTop:20 , padding:10}}>
                 {props.presentacion.titulo.toUpperCase()}
               </Text>
-              {/* <Text style={{ color: "grey", fontSize: 20 }}>Integrantes</Text> */}
-              <View style={{ alignItems: "center", marginTop:10}}>
+              
+              <Video
+                source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="contain"
+                shouldPlay={false}
+                isLooping={false}
+                useNativeControls
+                style={{ width:'100%', height: height/3 }}
+              />
+            
+             <Calificar   presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
+            </View>
+
+            {/* <View style={{ alignItems: "center", marginTop:10}}>
                 {props.presentacion.integrantes.map((integrante, i) => (
                   <View
                    key={i.toString()}
@@ -227,11 +244,7 @@ const Presentacion = props => {
                     </View>
                   </View>
                 ))}
-              </View>
-            
-             <Calificar   presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
-            </View>
-
+              </View> */}
             <View style={{marginTop:30}}>
               <View style={{flexDirection:'row', marginBottom:10}}>
                 {/* <View style={{justifyContent:'center'}}>
