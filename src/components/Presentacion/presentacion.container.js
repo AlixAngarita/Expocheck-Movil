@@ -40,15 +40,14 @@ class Presentacion extends React.Component {
         this.getPresentacionWithConecction = this.getPresentacionWithConecction.bind(this)
         this.getPresentacionWithoutConecction = this.getPresentacionWithoutConecction.bind(this)
         this.realtimeEvent = this.realtimeEvent.bind(this)
-        this.setLoading = this.setLoading.bind(this)
         this.realtimeEvent()
     }
 
-    setLoading(){
-        this.timer = setTimeout(() => {
-            this.setState({loadingVideo:false})
-          }, 1);
-    }
+    // setLoading(){
+    //     this.timer = setTimeout(() => {
+    //         this.setState({loadingVideo:false})
+    //       }, 1);
+    // }
 
     getPresentacionWithConecction(){
         findJornadaById(this.props.id)
@@ -122,9 +121,9 @@ class Presentacion extends React.Component {
         this.getUser()
         
     }
-    componentWillMount(){
-         clearTimeout(this.timer);
-    }
+    // componentWillMount(){
+    //      clearTimeout(this.timer);
+    // }
 
     async getPresentacionActual(){
         this.setState({presentacion:'', loading:true})
@@ -206,12 +205,11 @@ class Presentacion extends React.Component {
 
     realtimeEvent(){
         pr.on('nextPresentation', (data) => {
-            this.setState({loadingVideo:true})
             findById(this.state.idJornada, data.id)
             .then(res => {
-                this.setState({presentacion:res.data})
+                this.setState({presentacion:res.data, loadingVideo:true})
                 this.setEvaluacion(res.data, this.state.jornada)
-                this.setLoading()
+                this.setState({ loadingVideo:false})
             })
         })
 
