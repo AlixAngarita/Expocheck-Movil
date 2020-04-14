@@ -199,11 +199,9 @@ const Presentacion = props => {
                 volume={1.0}
                 isMuted={false}
                 resizeMode="contain"
-                shouldPlay={false}
+                shouldPlay
                 isLooping={false}
                 useNativeControls
-                posterSource={{uri: 'https://fidena.es/wp-content/uploads/2017/02/video.jpg'}}
-                usePoster={true}
                 style={{ width:'100%', height: height/3 }}
               />
               ):(
