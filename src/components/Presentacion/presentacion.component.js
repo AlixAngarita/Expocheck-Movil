@@ -192,8 +192,9 @@ const Presentacion = props => {
                 {props.presentacion.titulo.toUpperCase()}
               </Text>
               
-              <Video
-                source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+              {props.presentacion.video != '' ? (
+                <Video
+                source={{ uri: props.presentacion.video }}
                 rate={1.0}
                 volume={1.0}
                 isMuted={false}
@@ -203,11 +204,8 @@ const Presentacion = props => {
                 useNativeControls
                 style={{ width:'100%', height: height/3 }}
               />
-            
-             <Calificar   presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
-            </View>
-
-            {/* <View style={{ alignItems: "center", marginTop:10}}>
+              ):(
+                <View style={{ alignItems: "center", marginTop:10}}>
                 {props.presentacion.integrantes.map((integrante, i) => (
                   <View
                    key={i.toString()}
@@ -244,7 +242,13 @@ const Presentacion = props => {
                     </View>
                   </View>
                 ))}
-              </View> */}
+              </View>
+              )}
+             <Calificar   presentacion={props.presentacion} hasCode={props.hasCode} idJornada={props.idJornada}/>
+            </View>
+
+            
+
             <View style={{marginTop:30}}>
               <View style={{flexDirection:'row', marginBottom:10}}>
                 {/* <View style={{justifyContent:'center'}}>
