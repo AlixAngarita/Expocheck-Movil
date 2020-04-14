@@ -22,6 +22,7 @@ class Presentacion extends React.Component {
             user:null,
             presentacion:'',
             loading:true,
+            loadingVideo:false,
             presentacionSeleccionada:false,
             idJornada:0,
             fechaInicio:'',
@@ -39,7 +40,14 @@ class Presentacion extends React.Component {
         this.getPresentacionWithConecction = this.getPresentacionWithConecction.bind(this)
         this.getPresentacionWithoutConecction = this.getPresentacionWithoutConecction.bind(this)
         this.realtimeEvent = this.realtimeEvent.bind(this)
+        this.setLoading = this.setLoading.bind(this)
         this.realtimeEvent()
+    }
+
+    setLoading(){
+        this.timer = setTimeout(() => {
+            this.setState({loadingVideo:false})
+          }, 1);
     }
 
     getPresentacionWithConecction(){
@@ -109,10 +117,13 @@ class Presentacion extends React.Component {
         })
     }
 
-     componentDidMount(){
+    componentDidMount(){
         this.getPresentacionActual()
         this.getUser()
         
+    }
+    componentWillMount(){
+         clearTimeout(this.timer);
     }
 
     async getPresentacionActual(){
@@ -195,10 +206,12 @@ class Presentacion extends React.Component {
 
     realtimeEvent(){
         pr.on('nextPresentation', (data) => {
+            this.setState({loadingVideo:true})
             findById(this.state.idJornada, data.id)
             .then(res => {
                 this.setState({presentacion:res.data})
                 this.setEvaluacion(res.data, this.state.jornada)
+                this.setLoading()
             })
         })
 
@@ -216,6 +229,7 @@ class Presentacion extends React.Component {
         .then(res => {
             this.setState({presentacion:res.data})
             this.setEvaluacion(res.data, this.state.jornada)
+            
         })
     }
 
@@ -264,6 +278,7 @@ class Presentacion extends React.Component {
             calificar={this.calificar}
             autor={this.props.user.correo}
             setPresentacion = {this.setPresentacion}
+            loadingVideo={this.state.loadingVideo}
             />)
     }
 }

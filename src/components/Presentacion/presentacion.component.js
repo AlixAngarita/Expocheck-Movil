@@ -192,7 +192,7 @@ const Presentacion = props => {
                 {props.presentacion.titulo.toUpperCase()}
               </Text>
               
-              {props.presentacion.video != '' ? (
+              {props.presentacion.video != '' && !props.loadingVideo ? (
                 <Video
                 source={{ uri: props.presentacion.video }}
                 rate={1.0}
@@ -202,6 +202,8 @@ const Presentacion = props => {
                 shouldPlay={false}
                 isLooping={false}
                 useNativeControls
+                posterSource={{uri: 'https://fidena.es/wp-content/uploads/2017/02/video.jpg'}}
+                usePoster={true}
                 style={{ width:'100%', height: height/3 }}
               />
               ):(
