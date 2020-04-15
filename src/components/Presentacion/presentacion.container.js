@@ -274,7 +274,7 @@ class Presentacion extends React.Component {
             evaluacionPublica={this.state.evaluacionPublica}
             comentariosPublicos={this.state.comentariosPublicos}
             calificar={this.calificar}
-            autor={this.props.user.correo}
+            autor={this.props.user != undefined ? this.props.user.correo: 'No asignado'}
             setPresentacion = {this.setPresentacion}
             loadingVideo={this.state.loadingVideo}
             />)
