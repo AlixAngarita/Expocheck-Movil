@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, ActivityIndicator } from 'react-native';
 import { AzureInstance, AzureLoginView } from 'react-native-azure-ad-2';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {loginUser} from "../../redux/actions/auth.action.js"
 import Jornada from '../Jornadas/jornada.container'
 
-const loading = require('../../../assets/get-token.png');
+const loading = require('../../../assets/redirect.png');
 
 const credentials = {
     client_id: 'fa2fc1bf-4b02-4a57-a50f-8acd7f95aaa8',
@@ -14,10 +14,11 @@ const credentials = {
     scope: 'User.ReadBasic.All User.Read offline_access'
 };
 
-const LoadingToken = props => {
+const LoadingToken = () => {
     return (
         <View style={{ flex: 1, overflow: 'hidden', alignItems: 'center' }}>
                 <ImageBackground source={loading} resizeMode='cover' style={{ height: '100%', width: '100%' }}/>
+                <ActivityIndicator style={{top: '60%', position: 'absolute'}} size="large" color="#ffff" />
         </View>
     );
 }
