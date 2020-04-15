@@ -37,6 +37,7 @@ class MenuComponent extends React.PureComponent {
   logOut= () =>  {
     console.log('Cerrando sesion...')
     RCTNetworking.clearCookies((cleared) => {
+      this._menu.hide()
       console.log('Cookies cleared, had cookies=' + cleared.toString());  
       this.props.logoutUser();
       this.props.navigation.navigate('Login');      
