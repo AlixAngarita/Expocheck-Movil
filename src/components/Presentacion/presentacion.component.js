@@ -36,13 +36,17 @@ const getCalificacionesPorMetricaPublico = (presentacion, jornada) => {
   jornada.metricas.map(metrica => {
     let valores_calificacion_metrica_actual = 0;
     let cantidad_calificaciones = 0;
-    presentacion.evaluaciones.map(evaluacion => {
-      if(evaluacion.nombre == metrica.nombre){
-        valores_calificacion_metrica_actual += evaluacion.valor;
-        cantidad_calificaciones += 1;
-      }
-    })
-    let ponderado = valores_calificacion_metrica_actual/cantidad_calificaciones;
+
+    if(presentacion.evaluaciones.length > 0){
+      presentacion.evaluaciones.map(evaluacion => {
+        if(evaluacion.nombre == metrica.nombre){
+          valores_calificacion_metrica_actual += evaluacion.valor;
+          cantidad_calificaciones += 1;
+        }
+      })
+    }
+
+    let ponderado = cantidad_calificaciones != 0 ? valores_calificacion_metrica_actual/cantidad_calificaciones:0;
     if(!isNaN(ponderado)){
       evaluaciones[metrica.nombre] = ponderado;
       total_ponderado += ponderado;
@@ -55,9 +59,8 @@ const getCalificacionesPorMetricaPublico = (presentacion, jornada) => {
   })
   
   
-  if(presentacion.evaluaciones.length>0){
     return {acumulado:(total_ponderado/Object.keys(evaluaciones).length),metricas:evaluaciones}
-  }
+  
   
 }
 
