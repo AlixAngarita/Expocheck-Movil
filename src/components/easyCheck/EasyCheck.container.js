@@ -3,7 +3,8 @@ import EsyCheckComponent from './easyCheck.component'
 import {View} from 'react-native'
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
-import FirebaseService from '../../services/firebaseService'
+import {getTokens, addToken} from '../../services/user.service'
+import { connect } from 'react-redux';
 
 class EasyCheck extends Component {
 
@@ -48,16 +49,18 @@ class EasyCheck extends Component {
             
               // Get the token that uniquely identifies this device
               let token = await Notifications.getExpoPushTokenAsync();
+              console.log("El token para el usuario es -> ",token)
               return {token};
         }
 
         existToken(token) {
             return new Promise((resolve, reject) => {
-                FirebaseService.getDocuments('tokens')
-                .then(tokens => {
-                    tokens.map(to => console.log(to))
-                    exist = tokens.some(current_token => current_token.token == token)
-                    console.log(exist)
+                getTokens()
+                .then(async res => {
+                    const tokenList = res.data
+                    tokens = await tokenList.map(t => t.token)
+                    exist = await tokens.includes(token)
+                    console.log("El token para push existe -> ",exist)
                     resolve(exist)
                 }).catch(err => reject(err))
             })
@@ -67,8 +70,8 @@ class EasyCheck extends Component {
             const {token} = await this.getPushToken()
             this.existToken(token).then( async exist => {
                 if (!exist){
-                    await FirebaseService.addDocument("tokens", {token})
-                    console.log('se guardo')
+                    await addToken(this.props.user._id, token)
+                    console.log('se guardo el token')
                 }
             })
             
@@ -83,4 +86,9 @@ class EasyCheck extends Component {
         }
 }
 
-export default EasyCheck
+function mapStateToProps(state) {
+    const { auth, connect, idJornada } = state
+    return { user: auth.user, connect, idJornada}
+}
+
+export default connect(mapStateToProps)(EasyCheck)
