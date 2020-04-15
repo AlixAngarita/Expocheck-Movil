@@ -142,7 +142,10 @@ const Presentacion = props => {
   const [codeQR, setcodeQR] = useState('')
   const [ponderado, setponderado] = useState('')
   const [integrantes, setintegrantes] = useState([])
-  const user = useSelector(state => state.auth.user)
+  let user = useSelector(state => state.auth.user)
+  if(user == undefined){
+    user =  {nombre :'No asignado'}
+  }
 
   useEffect(() => {
     props.hasCode().then(code => setcodeQR(code))
