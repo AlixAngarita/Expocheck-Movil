@@ -46,7 +46,7 @@ class Presentacion extends React.Component {
     // setLoading(){
     //     this.timer = setTimeout(() => {
     //         this.setState({loadingVideo:false})
-    //       }, 1);
+    //       }, 100);
     // }
 
     getPresentacionWithConecction(){
@@ -145,7 +145,7 @@ class Presentacion extends React.Component {
         
     }
 
-    setEvaluacion(presentacion, jornada) {
+     setEvaluacion(presentacion, jornada) {
         let evaluacionPublica = 0
                   let comentariosPublicos = 0
                   presentacion.integrantes.map(int => {
@@ -160,12 +160,13 @@ class Presentacion extends React.Component {
                   })
 
                   if (evaluacionPublica > (presentacion.integrantes.length/2) || evaluacionPublica==presentacion.integrantes.length){
-                    this.setState({evaluacionPublica:true})
+                     this.setState({evaluacionPublica:true})
                   }
                   if (comentariosPublicos > (presentacion.integrantes.length/2) || comentariosPublicos==presentacion.integrantes.length){
-                    this.setState({comentariosPublicos:true})
+                     this.setState({comentariosPublicos:true})
                   }
 
+                  console.log("Para la presentación -> ", presentacion.titulo +" la evaluación es ", this.state.evaluacionPublica)
                   let evaluaciones = []
                   jornada.metricas.map(metrica => {
                     let valores_calificacion_metrica_actual = []
@@ -206,10 +207,12 @@ class Presentacion extends React.Component {
     realtimeEvent(){
         pr.on('nextPresentation', (data) => {
             findById(this.state.idJornada, data.id)
-            .then(res => {
-                this.setState({presentacion:res.data, loadingVideo:true})
-                this.setEvaluacion(res.data, this.state.jornada)
-                this.setState({ loadingVideo:false})
+            .then( res => {
+                const presentacion = res.data
+                const jornada= this.state.jornada
+                this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
+                this.setEvaluacion(presentacion, jornada)
+                this.setState({loadingVideo:false})
             })
         })
 

@@ -151,7 +151,7 @@ const CalfificarComponent = props => {
                               {!props.comment && (
                                 <View style={{flex:1, borderRadius:20, flexDirection:'column', alignItems:'center',
                                   marginVertical:10}}>
-                                  {props.presentacion.preguntas.length == 0 && (
+                                  {props.presentacion.preguntas.length == 0  && (
                                     <Text style={{color:'#95A5A6', fontSize:20, textAlign:'center', marginVertical:20}}>Sé el primero en decir algo!.</Text>
                                   )}
 
@@ -168,7 +168,7 @@ const CalfificarComponent = props => {
                               {props.comment && (
                                 <View style={{flex:1, borderRadius:20, flexDirection:'column', alignItems:'center',
                                   marginVertical:10}}>
-                                  {props.presentacion.comentarios.length == 0 && (
+                                  {props.presentacion.comentarios.length == 0 && props.presentacion.comentariosPublicos && (
                                     <Text style={{color:'#95A5A6', fontSize:20, textAlign:'center', marginVertical:20}}>Sé el primero en decir algo!.</Text>
                                   )}
                                   {props.comentariosPublicos || integrantes.includes(user.nombre.toUpperCase()) ?  props.presentacion.comentarios.map((comentario, i) => (
