@@ -6,12 +6,7 @@ const background = require('../../../assets/login/static-background.png');
 const logo = require('../../../assets/login/logo.png')
 const boton = require('../../../assets/login/boton.png')
 const {Terminos} = require('./termsandconditions')
-//import { WebView } from 'react-native-webview';
 
-
-
-//width: '100%', height: '100%', 
-//const LoginComponent = props => {
 class LoginComponent extends Component {
 
     constructor(props) {
@@ -20,8 +15,10 @@ class LoginComponent extends Component {
         this.state = {
             color: 'white',
             keyboard: false,
-            modalVisible: false
+            modalVisible: false,
+            correo: ''
         }
+        this.handleChange= this.handleChange.bind(this);
     }
 
     setModalVisible = (visible) => {
@@ -58,6 +55,10 @@ class LoginComponent extends Component {
         </ScrollView>
         );
     }*/
+
+    handleChange(value) {
+        this.setState({correo: value});
+      }
     
 
     render() {
@@ -107,11 +108,14 @@ class LoginComponent extends Component {
                 <KeyboardAvoidingView style={{ position: 'absolute', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', top: '50%' }}
                     behavior="padding">
                     <TextInput
+                        name="correo"
                         placeholder="example@upb.edu.co"
                         keyboardType='email-address'
-                        style={{ borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6' }} />
+                        style={{ borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6' }}
+                        onChangeText={this.handleChange}
+                        value={this.state.correo} />
                     <TouchableOpacity activeOpacity={0.8} onPress={() =>
-                        this.state.checked ? this.props.navigation.navigate('Authentication') : this.setState({ color: 'red' })}>
+                        this.state.checked ? this.props.navigation.navigate('Authentication', {correo: this.state.correo}) : this.setState({ color: 'red' })}>
                         <Image source={boton} style={{ width: 280, marginTop: 10, resizeMode: 'contain' }} />
                     </TouchableOpacity>
 

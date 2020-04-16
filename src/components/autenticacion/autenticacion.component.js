@@ -64,6 +64,7 @@ class AuthenticationComponent extends Component {
                 loadingMessage="Solicitando token"
                 loadingView = {<LoadingToken/>}
                 onSuccess={this._onLoginSuccess}
+                mail={this.props.correo}
             />)
         }
 
