@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, View, TextInput, TouchableOpacity, Text, Image, KeyboardAvoidingView, ImageBackground, Keyboard, Modal, StyleSheet, TouchableHighlight } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 const background = require('../../../assets/login/static-background.png');
 const logo = require('../../../assets/login/logo.png')
 const boton = require('../../../assets/login/boton.png')
@@ -16,7 +17,9 @@ class LoginComponent extends Component {
             color: 'white',
             keyboard: false,
             modalVisible: false,
-            correo: ''
+            correo: '',
+            iconInput: 'envelope',
+            inputColor: '#95A5A6'
         }
         this.handleChange= this.handleChange.bind(this);
     }
@@ -40,26 +43,18 @@ class LoginComponent extends Component {
         this.keyboardDidHideListener.remove();
     }
 
-    /*Terminos = () => {
-        const { modalVisible } = this.state
-        if (!modalVisible) {
-          return null
-        }
-        return (
-            
-        <ScrollView style={{flex:1}}>
-            <WebView
-            originWhitelist={['*']}
-            source={{ html: '<h1>Hello world</h1>' }}
-            />
-        </ScrollView>
-        );
-    }*/
+    validate = (email) => {
+        const expression = /^\w+\.(\w+|\w+\.\d+)@upb.edu.co$/i;
+        return expression.test(String(email).toLowerCase())
+    }
 
     handleChange(value) {
+        const valido = this.validate(value)
         this.setState({correo: value});
-      }
-    
+        valido? 
+        this.setState({iconInput: 'check-circle', inputColor: '#94d82d'}) : 
+        this.setState({iconInput: 'times-circle', inputColor: 'red', correo: ''})
+    }    
 
     render() {
         //console.log(this.props)
@@ -88,7 +83,6 @@ class LoginComponent extends Component {
                         <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <Terminos/>
-
                             <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#0abde3" }}
                             onPress={() => {
@@ -102,18 +96,20 @@ class LoginComponent extends Component {
                     </Modal>
                     </View>
 
-
-                    
                 </ImageBackground>
                 <KeyboardAvoidingView style={{ position: 'absolute', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', top: '50%' }}
                     behavior="padding">
-                    <TextInput
-                        name="correo"
-                        placeholder="example@upb.edu.co"
-                        keyboardType='email-address'
-                        style={{ borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6' }}
-                        onChangeText={this.handleChange}
-                        value={this.state.correo} />
+                    <View style={styles.inputView}>
+                        <TextInput
+                            name="correo"
+                            placeholder="example@upb.edu.co"
+                            keyboardType='email-address'
+                            style={{flex: 1}}
+                            onChangeText={this.handleChange}
+                            />
+                        <Icon style={{marginRight:0, padding:'auto'}} name={this.state.iconInput} size={20} color={this.state.inputColor}/>
+
+                    </View> 
                     <TouchableOpacity activeOpacity={0.8} onPress={() =>
                         this.state.checked ? this.props.navigation.navigate('Authentication', {correo: this.state.correo}) : this.setState({ color: 'red' })}>
                         <Image source={boton} style={{ width: 280, marginTop: 10, resizeMode: 'contain' }} />
@@ -137,11 +133,8 @@ class LoginComponent extends Component {
                             >
                         <Text style={{ color: this.state.color, fontSize: 12 }}>
                             Acepto los{" "}
-                            
-                            
                                 <Text style={{ textDecorationLine: 'underline' }}>
                                 términos y condiciones </Text>
-                            
                         </Text>
                         </TouchableOpacity>
                     </View>
@@ -150,12 +143,7 @@ class LoginComponent extends Component {
     }
 }
 
-/*
-<Text style={{ textDecorationLine: 'underline' }}>
-                                términos y condiciones
-                            </Text>
-
-*/
+//value={this.state.correo} 
 
 const styles = StyleSheet.create({
     centeredView: {
@@ -198,6 +186,10 @@ const styles = StyleSheet.create({
     modalText: {
       marginBottom: 15,
       textAlign: "center"
+    },
+    inputView: {
+        flexDirection: 'row',
+        borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6'//input
     }
   });
 
