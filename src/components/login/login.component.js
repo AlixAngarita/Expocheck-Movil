@@ -50,15 +50,13 @@ class LoginComponent extends Component {
 
     handleChange(value) {
         const valido = this.validate(value)
-        this.setState({correo: value});
         valido? 
-        this.setState({iconInput: 'check-circle', inputColor: '#94d82d'}) : 
+        this.setState({iconInput: 'check-circle', inputColor: '#94d82d', correo: value}) : 
         this.setState({iconInput: 'times-circle', inputColor: 'red', correo: ''})
     }    
 
     render() {
         //console.log(this.props)
-        //console.log('No se han aceptado')}>
         const { modalVisible } = this.state;
         return (
             <View style={{ flex: 1, overflow: 'hidden', alignItems: 'center' }}>
@@ -66,10 +64,8 @@ class LoginComponent extends Component {
                     {!this.state.keyboard ? 
                     <ScrollView>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                        
                         <Image source={logo} style={{ width: 120, height: 140, marginTop: '20%' }} />
                     </View></ScrollView> : undefined}
-
 
                     <View style={styles.centeredView}>
                     <Modal

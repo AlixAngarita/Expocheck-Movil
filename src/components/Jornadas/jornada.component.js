@@ -6,7 +6,7 @@ import moment from 'moment';
 import {Dimensions} from 'react-native'
 import FlipCard from 'react-native-flip-card'
 import {useSelector, useDispatch} from 'react-redux'
-import {getJornadasThunk, getIdJornada} from '../../redux/actions/jornadas.action'
+import {getJornadasThunk, getIdJornada, updateAuthors} from '../../redux/actions/jornadas.action'
 import {setStateConection} from '../../redux/actions/offline.action'
 import {loadingJornadas} from '../../redux/actions/loading.actions'
 import NetInfo from '@react-native-community/netinfo';
@@ -32,7 +32,7 @@ import { Avatar } from 'react-native-elements';
 const now = moment().format('YYYY-MM-DD')
 
 const callDate = (item, props, dispatch) => {
-    moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
+    /*moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
         props.navigation.navigate('EasyCheck',{id:item._id}) &&  dispatch(getIdJornada(item._id))
         :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
         [
@@ -40,7 +40,25 @@ const callDate = (item, props, dispatch) => {
             dispatch(getIdJornada(item._id))
             props.navigation.navigate('EasyCheck',{id:item._id})
             }},
-        ])
+        ])*/
+        if(moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]'))
+        {
+            props.navigation.navigate('EasyCheck',{id:item._id}) &&  dispatch(getIdJornada(item._id))
+            if(props.auth != undefined && props.auth.user.nuevo)
+            {
+                dispatch(updateAuthors(props.auth.user, item._id))
+            }        
+        }
+        else
+        {
+            Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
+            [
+            {text: 'OK', onPress: () => {
+                dispatch(getIdJornada(item._id))
+                props.navigation.navigate('EasyCheck',{id:item._id})
+                }},
+            ])
+        }
 }
 
 
