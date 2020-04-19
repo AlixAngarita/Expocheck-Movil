@@ -46,7 +46,8 @@ class MenuComponent extends React.PureComponent {
  
   render() {
     //console.log(this.props.auth)
-    var user = this.props.auth.user;
+    var props = this.props;
+    //console.log(props);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TouchableWithoutFeedback
@@ -83,10 +84,10 @@ class MenuComponent extends React.PureComponent {
               onToggle={() => this.setState({ comentarios_toggle: !this.state.comentarios_toggle })}
             />
             </View>
+            <MenuDivider style={{marginVertical:10}}/>
+            <Text style={{color:'grey', fontSize:15, textAlign:'center', marginBottom:10, marginTop:20}}>Mi cuenta</Text>
             <MenuDivider style={{marginVertical:5}}/>
-            <Text style={{color:'grey', fontSize:15, textAlign:'center', marginVertical:10}}>Mi cuenta</Text>
-            <MenuDivider style={{marginVertical:5}}/>
-            <Text style={{ color: "black", fontSize:17, marginVertical:10, marginLeft:10}}>{user == undefined? 'Nombre de usuario': user.nombres}</Text>
+            <Text style={{ color: "black", fontSize:17, marginVertical:10, marginLeft:10}}>{props.auth.user == undefined? 'Nombre de usuario': props.auth.user.nombres}</Text>
             <View style={{marginHorizontal: 30, marginBottom:10, fontSize:17}}>
               <Button
                 onPress={this.logOut.bind(this)}

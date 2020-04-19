@@ -10,14 +10,14 @@ class Jornada extends  Component {
 
     }
     render(){
-        return (<JornadaComponent loading={true}/>)
+        return (<JornadaComponent loading={true} auth={this.props.auth}/>)
     }
     
 }
 const mapStateToProps = (state) => {
     return {
         jornadas: state.jornadas,
-        //auth: state.auth
+        auth: state.auth
     }
 }
 
