@@ -8,6 +8,7 @@ import config from '../../config/server'
 import  io from 'socket.io-client'
 const pr = io(config.host+'/presentation')
 const generalEvent = io(config.host+'/generalEvent')
+const jornadaEvents = io(config.host+'/jornadaEvents')
 import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import Socket from '../../services/sockect'
@@ -130,11 +131,11 @@ class Presentacion extends React.Component {
         const presentacion = this.props.navigation.getParam('presentacion')
         await this.setState({idJornada:this.props.idJornada})
         if(presentacion){
-            const jornada = null
+            const jornada = this.props.navigation.getParam('jornada')
             this.setState({jornada})
             this.setState({presentacion, loading:false, presentacionSeleccionada:true})
-            this.setState({fechaInicio:this.props.navigation.getParam('fechaInicio')})
-            this.setState({fechaFinaliza:this.props.navigation.getParam('fechaFinaliza')})
+            this.setState({fechaInicio:jornada.fechaInicio})
+            this.setState({fechaFinaliza:jornada.fechaFinaliza})
             this.setEvaluacion(presentacion, this.state.jornada)
         }else{
             if(this.props.connect)
@@ -223,6 +224,12 @@ class Presentacion extends React.Component {
                 this.setEvaluacion(res.data, this.state.jornada)
             })
         })
+        
+        jornadaEvents.on('jornadaEvents',(data) => {
+            console.log("Se actualizo la jornada en presentacion!")
+            this.getPresentacionActual()
+        })
+    
     }
 
     setPresentacion(){
@@ -268,7 +275,7 @@ class Presentacion extends React.Component {
         return(
             <PresentacionComponent
             presentacion={this.state.presentacion}
-            jornada={this.state.jornada}
+            jornada={this.state.jornada }
             hasCode={this.hasCode}
             presentacionSeleccionada={this.state.presentacionSeleccionada}
             idJornada={this.state.idJornada}

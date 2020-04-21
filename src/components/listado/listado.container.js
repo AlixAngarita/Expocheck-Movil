@@ -1,6 +1,10 @@
 import React from "react";
 import ListadoComponent from './listado.component'
-import FirebaseService from '../../services/firebaseService'
+import {findJornadaById} from '../../services/jornadas.service'
+import config from '../../config/server'
+import  io from 'socket.io-client'
+const generalEvent = io(config.host+'/generalEvent')
+const jornadaEvents = io(config.host+'/jornadaEvents')
 
 class Listado extends React.Component {
     constructor(props){
@@ -9,9 +13,10 @@ class Listado extends React.Component {
         this.state = {
             presentaciones:[ ],
             loading:true,
-            fechaFinaliza:'',
-            fechaInicio:''
+            jornada:{}
         }
+        this.realtimeEvent = this.realtimeEvent.bind(this)
+        this.realtimeEvent()
     }
 
     componentDidMount(){
@@ -19,21 +24,31 @@ class Listado extends React.Component {
     }
 
     getPresentaciones(){
-        FirebaseService.getDocById('jornadas', this.props.id)
-        .then(jornada => this.setState({
-            presentaciones:jornada.presentaciones, 
-            loading:false,
-            fechaInicio:jornada.fechaInicio, 
-            fechaFinaliza:jornada.fechaFinaliza
-        }))
+        findJornadaById(this.props.id)
+        .then(jornada => {
+            console.log("JORNADA -> ",jornada.data)
+            this.setState({
+                presentaciones:jornada.data.presentaciones, 
+                loading:false,
+                jornada:jornada.data
+            })
+        })
+    }
+    
+    realtimeEvent(){
+        generalEvent.on('reloadPresentation',() => {
+            this.getPresentaciones()
+        })
+        jornadaEvents.on('jornadaEvents',() => {
+            console.log("Se actualizo la jornada!")
+            this.getPresentaciones()
+        })
     }
 
     render(){
         return(<ListadoComponent listado={this.state.presentaciones}
              loading={this.state.loading}
-             id={this.props.id}
-             fechaInicio={this.state.fechaInicio}
-             fechaFinaliza={this.state.fechaFinaliza}
+             jornada={this.state.jornada}
              />)
     }
 }

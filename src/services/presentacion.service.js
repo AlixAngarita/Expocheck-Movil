@@ -26,3 +26,6 @@ export const preguntar = (idJornada, idPresentacion, pregunta) => {
 export const findById = (idJornada, idPresentacion) => {
     return axios.get(config.rest+'/api/presentacion/'+idJornada+'/'+idPresentacion, {headers})
 }
+export const  list = (idJornada) => {
+    return axios.get(config.rest+'/api/presentacion/'+idJornada, {headers})
+}
