@@ -1,7 +1,7 @@
 import React,  {useEffect, useState,} from "react";
 import { Dimensions } from "react-native";
 import { withNavigation } from "react-navigation";
-import { Avatar, Card, Divider  } from "react-native-elements";
+import { Avatar, Divider  } from "react-native-elements";
 import FlipCard from 'react-native-flip-card'
 import {useSelector} from 'react-redux'
 import {
