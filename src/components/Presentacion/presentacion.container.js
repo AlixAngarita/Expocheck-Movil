@@ -44,11 +44,14 @@ class Presentacion extends React.Component {
         this.realtimeEvent()
     }
 
-    // setLoading(){
-    //     this.timer = setTimeout(() => {
-    //         this.setState({loadingVideo:false})
-    //       }, 100);
-    // }
+    searchAgenda(){
+        this.agenda = setInterval(() => {
+            if(this.state.presentacion == ''){
+                console.log("Buscando agenda")
+                this.getPresentacionActual()
+            }
+          }, 60000);
+    }
 
     getPresentacionWithConecction(){
         findJornadaById(this.props.id)
@@ -77,9 +80,11 @@ class Presentacion extends React.Component {
                     this.setEvaluacion(presentacion, jornada)
                   }else{
                     this.setState({loading:false})
+                    this.searchAgenda()
                 }
                 }else{
                     this.setState({loading:false})
+                    this.searchAgenda()
                 }
             })
             
@@ -107,9 +112,11 @@ class Presentacion extends React.Component {
                             this.setEvaluacion(presentacion, jornada)
                         }else{
                             this.setState({loading:false})
+                            this.searchAgenda()
                         }
                         }else{
                             this.setState({loading:false})
+                            this.searchAgenda()
                         }
                     })
                 }
@@ -122,9 +129,9 @@ class Presentacion extends React.Component {
         this.getUser()
         
     }
-    // componentWillMount(){
-    //      clearTimeout(this.timer);
-    // }
+    componentWillMount(){
+         clearTimeout(this.agenda);
+    }
 
     async getPresentacionActual(){
         this.setState({presentacion:'', loading:true})
@@ -270,6 +277,7 @@ class Presentacion extends React.Component {
         }
         
     }
+
 
     render(){
         return(
