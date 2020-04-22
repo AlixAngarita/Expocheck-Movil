@@ -147,6 +147,11 @@ const CalfificarComponent = props => {
                           behavior="padding" >
                             <Text style={{fontSize:20, color:'grey', textAlign:'center', marginVertical:10}}>{props.comment ? 'Comentarios':'Preguntas'}</Text>
                             <Divider style={{marginBottom:5}}/>
+                            {
+                                    !props.comentariosPublicos && integrantes.includes(user.nombre.toUpperCase()) && (
+                                      <Text style={{color:'#95A5A6', fontSize:15, textAlign:'center', marginVertical:10}}>Comentarios ocultos para el auditorio</Text>
+                                    )
+                            }
                             <ScrollView showsVerticalScrollIndicator={false}>
                               {!props.comment && (
                                 <View style={{flex:1, borderRadius:20, flexDirection:'column', alignItems:'center',

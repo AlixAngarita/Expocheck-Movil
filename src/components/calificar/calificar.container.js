@@ -56,6 +56,17 @@ class Calificacion extends React.Component{
             this.setPresentacion()
             this.setComentariosPublicos(this.state.presentacion)
         })
+
+        generalEvent.on('updatePrivacidad', (data) => {
+            if(this.state.presentacion != ''){
+                const integrantes = this.state.presentacion.integrantes.map(i => i.nombre)
+                if(integrantes.includes(data.userid)){
+                    console.log("El integrante si era parte en sección de calificar")
+                    this.setPresentacion()
+                    
+                }
+            }
+        })
     }
 
     async componentWillMount(){
@@ -99,6 +110,7 @@ class Calificacion extends React.Component{
     }
 
     setComentariosPublicos(presentacion){
+        console.log("-------->", this.state.comentariosPublicos)
          let comentariosPublicos = 0
          presentacion.integrantes.map(int => {
          if(int.autor != undefined){
@@ -111,12 +123,19 @@ class Calificacion extends React.Component{
                   
          if (comentariosPublicos > (presentacion.integrantes.length/2) || comentariosPublicos == presentacion.integrantes.length){
             this.setState({comentariosPublicos:true})
+            console.log("-------->", true)
+        }else{
+            this.setState({comentariosPublicos:false})
+            console.log("-------->", false)
         }
     }
 
     setPresentacion(){
         findById(this.props.navigation.getParam('idJornada'), this.state.presentacion._id)
-        .then(res => this.setState({presentacion:res.data}))
+        .then(res => {
+            this.setState({presentacion:res.data})
+            this.setComentariosPublicos(res.data)
+        })
     }
 
     getUser(){
