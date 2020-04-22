@@ -224,6 +224,26 @@ class Presentacion extends React.Component {
             })
         })
 
+        generalEvent.on('updatePrivacidad', (data) => {
+            if(this.state.presentacion != ''){
+                const integrantes = this.state.presentacion.integrantes.map(i => i.nombre)
+                console.log(integrantes)
+                console.log(data.userid)
+                if(integrantes.includes(data.userid)){
+                    console.log("El integrante si era parte")
+                    findById(this.state.idJornada, this.state.presentacion._id)
+                    .then( res => {
+                        console.log('------La presentación cambio---')
+                        const presentacion = res.data
+                        const jornada= this.state.jornada
+                        this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
+                        this.setEvaluacion(presentacion, jornada)
+                        this.setState({loadingVideo:false})
+                    })
+                }
+            }
+        })
+
         generalEvent.on('reloadPresentation',() => {
             findById(this.state.idJornada, this.state.presentacion._id)
             .then(res => {

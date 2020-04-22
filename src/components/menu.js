@@ -8,7 +8,6 @@ import {connect} from 'react-redux'
 import { withNavigation } from 'react-navigation';
 import {logoutUser,updatePrivacyUser} from "../redux/actions/auth.action.js"
 import PropTypes from "prop-types";
-import {updatePrivacy} from "../services/user.service"
 
 const RCTNetworking = require('RCTNetworking')
 
@@ -50,10 +49,13 @@ class MenuComponent extends React.PureComponent {
     
     this.setState({evaluacionPublica:privacidad.evaluacionPublica},
       () => {this.props.updatePrivacyUser(this.props.auth.user,privacidad)})
+     
   }
+  
   setPrivacyComment = (privacidad) => {
     this.setState({comentariosPublicos:privacidad.comentariosPublicos},
       () => {this.props.updatePrivacyUser(this.props.auth.user,privacidad)})
+
   }
   
   

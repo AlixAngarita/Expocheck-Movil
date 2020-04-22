@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from '../../config/server';
 import {updatePrivacy} from '../../services/user.service'
+import Socket from '../../services/sockect'
 
 const headers = {"Content-Type": "application/json"}
 // Login - POST api/usuario/nuevo -> Registra un nuevo usuario
@@ -50,6 +51,7 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
     dispatch(setCurrentUser());
 };
+
 export const updatePrivacyUser = (user,privacidad) => dispatch => {
   updatePrivacy(user._id,privacidad).then(res => {
     const userData = res.data
@@ -58,6 +60,7 @@ export const updatePrivacyUser = (user,privacidad) => dispatch => {
     userData.comentariosPublicos = privacidad.comentariosPublicos
     console.log('to setCurrentUser(user)')
     dispatch(setCurrentUser(userData))
+    Socket.updatePrivacidad(user.nombre)
   })
   .catch(err => {
     console.log("update privacy error")

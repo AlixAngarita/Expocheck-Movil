@@ -151,6 +151,7 @@ const Presentacion = props => {
     props.hasCode().then(code => setcodeQR(code))
     // const timer =  setInterval(() =>  props.setPresentacion(), 60000)
     if(props.presentacion != ''){
+      console.log('!!!Privacidad actualizada!')
       setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }
@@ -319,9 +320,13 @@ const Presentacion = props => {
                               marginLeft:6}}>Metricas de evaluación
                             </Text>
                           </View>
-                          {!props.evaluacionPublica && 
+                          {!props.evaluacionPublica && !integrantes.includes(user.nombre.toUpperCase()) &&
                           (<Text style={{color:'grey',textAlign:'center', fontSize:12, marginBottom:5}}>
                             La evaluación es privada (solo puede ver su ponderado)
+                          </Text>)}
+                          {!props.evaluacionPublica && integrantes.includes(user.nombre.toUpperCase()) &&
+                          (<Text style={{color:'grey',textAlign:'center', fontSize:12, marginBottom:5}}>
+                            La evaluación esta oculta para el auditorio
                           </Text>)}
                         </View>
                         <Divider style={{marginBottom:5}}/>

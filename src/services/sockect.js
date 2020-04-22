@@ -91,6 +91,10 @@ class Socket {
     updateInRealtime(idJornada, presentacion){
         this.generalEvent.emit('onRealTimeEvent', {idJornada, titulo:presentacion.titulo})
     }
+
+    updatePrivacidad(userid){
+        this.generalEvent.emit('onUpdatePrivacidad',{userid})
+    }
     
 }
 
