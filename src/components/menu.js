@@ -6,26 +6,61 @@ import {TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import ToggleSwitch from 'toggle-switch-react-native'
 import {connect} from 'react-redux'
 import { withNavigation } from 'react-navigation';
-import {logoutUser} from "../redux/actions/auth.action.js"
+import {logoutUser,updatePrivacyUser} from "../redux/actions/auth.action.js"
 import PropTypes from "prop-types";
+import {updatePrivacy} from "../services/user.service"
+
 const RCTNetworking = require('RCTNetworking')
 
 class MenuComponent extends React.PureComponent {
 
+
+  
+ 
+  
   constructor(props) {
       super(props);
-
-      this.state = {
-          evaluacion_toggle: false,
-          comentarios_toggle: false
+      var evaluacionPublica = false ;
+      var comentariosPublicos = false ;
+      if(this.props.auth.user.evaluacionPublica){
+        evaluacionPublica = true;
       }
+      if(this.props.auth.user.comentariosPublicos){
+        comentariosPublicos = true
+      }
+      this.state = {
+        evaluacionPublica: evaluacionPublica,
+        comentariosPublicos: comentariosPublicos
+      }
+      
+      
   }
   _menu = null;
- 
+  /*async componentDidMount()
+    {
+      console.log('didmount')
+      this.setState({
+        evaluacionPublica: this.props.auth.user.evaluacionPublica,
+        comentariosPublicos: this.props.auth.user.comentariosPublicos
+      })
+      
+    }*/
+  
+  setPrivacy = (privacidad) => {
+    
+    this.setState({evaluacionPublica:privacidad.evaluacionPublica},
+      () => {this.props.updatePrivacyUser(this.props.auth.user,privacidad)})
+  }
+  setPrivacyComment = (privacidad) => {
+    this.setState({comentariosPublicos:privacidad.comentariosPublicos},
+      () => {this.props.updatePrivacyUser(this.props.auth.user,privacidad)})
+  }
+  
+  
   setMenuRef = ref => {
     this._menu = ref;
   };
- 
+  
   hideMenu = () => {
     this._menu.hide();
   };
@@ -33,7 +68,7 @@ class MenuComponent extends React.PureComponent {
   showMenu = () => {
     this._menu.show();
   };
-
+  
   logOut= () =>  {
     console.log('Cerrando sesion...')
     RCTNetworking.clearCookies((cleared) => {
@@ -45,9 +80,8 @@ class MenuComponent extends React.PureComponent {
   };
  
   render() {
-    //console.log(this.props.auth)
     var props = this.props;
-    //console.log(props);
+
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TouchableWithoutFeedback
@@ -62,26 +96,42 @@ class MenuComponent extends React.PureComponent {
             <View
             style={{marginVertical:5, marginRight:10}}>
               <ToggleSwitch
-              isOn={this.state.evaluacion_toggle}
+              isOn={this.state.evaluacionPublica}
               onColor="#44bd32"
               offColor="#ecf0f1"
               label="Evaluación pública"
               labelStyle={{ color: "black", fontSize:17, marginRight:35}}
               size="medium"
-              onToggle={() => this.setState({ evaluacion_toggle: !this.state.evaluacion_toggle })}
+              onToggle={() =>{
+                
+                
+                this.setPrivacy(
+                  {
+                    evaluacionPublica:!this.state.evaluacionPublica,
+                    comentariosPublicos:this.state.comentariosPublicos
+                  }
+                )
+              }}
             />
 
             </View>
             <View
             style={{marginVertical:5, marginRight:10}}>
               <ToggleSwitch
-              isOn={this.state.comentarios_toggle}
+              isOn={this.state.comentariosPublicos}
               onColor="#44bd32"
               offColor="#ecf0f1"
               label="Comentarios públicos"
               labelStyle={{ color: "black", fontSize:17}}
               size="medium"
-              onToggle={() => this.setState({ comentarios_toggle: !this.state.comentarios_toggle })}
+              onToggle={() => {
+                this.setPrivacyComment(
+                  {
+                    evaluacionPublica:this.state.evaluacionPublica,
+                    comentariosPublicos:!this.state.comentariosPublicos
+                  }
+                )
+              } }
             />
             </View>
             <MenuDivider style={{marginVertical:10}}/>
@@ -104,6 +154,7 @@ class MenuComponent extends React.PureComponent {
 }
 MenuComponent.propTypes = {
   logoutUser: PropTypes.func.isRequired,
+  updatePrivacyUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
@@ -114,5 +165,5 @@ const mapStateToProps = (state) => {
 }
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser ,updatePrivacyUser}
 )(withNavigation(MenuComponent));
