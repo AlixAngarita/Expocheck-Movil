@@ -1,5 +1,6 @@
 import axios from "axios";
-import config from '../../config/server'
+import config from '../../config/server';
+import {updatePrivacy} from '../../services/user.service'
 
 const headers = {"Content-Type": "application/json"}
 // Login - POST api/usuario/nuevo -> Registra un nuevo usuario
@@ -32,6 +33,7 @@ export const loginUser = (user, token) => dispatch => {
 }; // Set logged in user
  
 export const setCurrentUser = (user) => {
+  console.log(user)
     return {
       type: "SET_CURRENT_USER",
       payload: user
@@ -39,6 +41,7 @@ export const setCurrentUser = (user) => {
   }; // User loading
 
 export const setUserLoading = () => {
+  
     return {
       type: "USER_LOADING",
     };
@@ -47,3 +50,18 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
     dispatch(setCurrentUser());
 };
+export const updatePrivacyUser = (user,privacidad) => dispatch => {
+  updatePrivacy(user._id,privacidad).then(res => {
+    const userData = res.data
+    userData.nombres = user.nombres
+    userData.evaluacionPublica = privacidad.evaluacionPublica
+    userData.comentariosPublicos = privacidad.comentariosPublicos
+    console.log('to setCurrentUser(user)')
+    dispatch(setCurrentUser(userData))
+  })
+  .catch(err => {
+    console.log("update privacy error")
+    console.info(err)
+    
+  })
+}
