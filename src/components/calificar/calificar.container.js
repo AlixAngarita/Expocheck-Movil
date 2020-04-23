@@ -8,6 +8,7 @@ import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import config from '../../config/server'
 import  io from 'socket.io-client'
+import {qrstate} from '../../redux/actions/qr.action'
 const generalEvent = io(config.host+'/generalEvent')
 
 class Calificacion extends React.Component{
@@ -150,12 +151,15 @@ class Calificacion extends React.Component{
             if(this.state.presentacion.codigoQR!=code ){
                 this.setState({valid:false})
             }else{
+                console.log("------> Codigo valido!")
                 await AsyncStorage.removeItem('qrs')
                 const currentCodes = this.state.qrs
                 console.log(currentCodes)
                 currentCodes.push(code)
                 await AsyncStorage.setItem('qrs', JSON.stringify(currentCodes))
+                this.setState({valid:true})
                 if(this.props.navigation.getParam('back')){
+                    this.props.qrstate({titulo:this.state.presentacion.titulo})
                     this.props.navigation.goBack()
                 }
             }
@@ -219,4 +223,4 @@ function mapStateToProps(state) {
     return { user: auth.user }
 }
 
-export default  connect(mapStateToProps)(withNavigation(Calificacion))
+export default  connect(mapStateToProps,{qrstate})(withNavigation(Calificacion))

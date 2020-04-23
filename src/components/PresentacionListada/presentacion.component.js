@@ -139,6 +139,7 @@ const getPönderado = (jornada) =>{
 
 const Presentacion = props => {
 
+  const qr = useSelector(state => state.qr)
   const [playbackObject, setplaybackObject] = useState(null)
   const [codeQR, setcodeQR] = useState('')
   const [ponderado, setponderado] = useState('')
@@ -156,14 +157,17 @@ const Presentacion = props => {
       setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }
-    if(playbackObject != null ){
-      playbackObject.playAsync()
+    if(playbackObject !=null ){
+      if(props.presentacion.video !=''){
+        playbackObject.playAsync()
+      }
+      
     }
     return () => {
       // clearTimeout(timer);
     }
     
-  }, [props.presentacion, props.jornada, playbackObject])
+  }, [props.presentacion, props.jornada, playbackObject, qr])
 
 
   const calificada = (metrica) => {
@@ -370,7 +374,7 @@ const Presentacion = props => {
                           borderStyle:'solid',
                           borderWidth:1 }}>
                                 <View  style={{ alignItems:'center'}}>
-                                  {codeQR != '' ? (
+                                  {qr.titulo == props.presentacion.titulo && qr.valid  ? (
                                   <React.Fragment>
                                     <AirbnbRating
                                       style={{marginTop:5, fontSize:20}}

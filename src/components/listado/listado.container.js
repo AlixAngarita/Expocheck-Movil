@@ -3,6 +3,7 @@ import ListadoComponent from './listado.component'
 import {findJornadaById} from '../../services/jornadas.service'
 import config from '../../config/server'
 import  io from 'socket.io-client'
+const pr = io(config.host+'/presentation')
 const generalEvent = io(config.host+'/generalEvent')
 const jornadaEvents = io(config.host+'/jornadaEvents')
 
@@ -24,9 +25,9 @@ class Listado extends React.Component {
     }
 
     getPresentaciones(){
+        this.setState({loading:true, presentaciones:[]})
         findJornadaById(this.props.id)
         .then(jornada => {
-            console.log("JORNADA -> ",jornada.data)
             this.setState({
                 presentaciones:jornada.data.presentaciones, 
                 loading:false,
@@ -41,6 +42,10 @@ class Listado extends React.Component {
         })
         jornadaEvents.on('jornadaEvents',() => {
             console.log("Se actualizo la jornada!")
+            this.getPresentaciones()
+        })
+
+        pr.on('nextPresentation', (data) => {
             this.getPresentaciones()
         })
     }

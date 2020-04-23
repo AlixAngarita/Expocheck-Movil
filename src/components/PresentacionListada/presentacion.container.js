@@ -199,17 +199,7 @@ class Presentacion extends React.Component {
     }
 
     realtimeEvent(){
-        pr.on('nextPresentation', (data) => {
-            findById(this.state.idJornada, data.id)
-            .then( res => {
-                const presentacion = res.data
-                const jornada= this.state.jornada
-                this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
-                this.setEvaluacion(presentacion, jornada)
-                this.setState({loadingVideo:false})
-            })
-        })
-
+        
         generalEvent.on('updatePrivacidad', (data) => {
             if(this.state.presentacion != ''){
                 const integrantes = this.state.presentacion.integrantes.map(i => i.nombre)
