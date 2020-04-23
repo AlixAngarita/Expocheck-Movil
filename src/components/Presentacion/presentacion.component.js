@@ -199,7 +199,7 @@ const Presentacion = props => {
                 {props.presentacion.titulo.toUpperCase()}
               </Text>
               
-              {props.presentacion.video != '' && !props.loadingVideo ? (
+              {!props.loading && props.presentacion != '' &&  props.presentacion.video != '' && !props.loadingVideo ? (
                 <Video
                 source={{ uri: props.presentacion.video }}
                 rate={1.0}

@@ -46,7 +46,7 @@ class Presentacion extends React.Component {
 
     searchAgenda(){
         this.agenda = setInterval(() => {
-            if(this.state.presentacion == ''){
+            if(this.state.presentacion == '' && !this.state.loading){
                 console.log("Buscando agenda")
                 this.getPresentacionActual()
             }
@@ -255,21 +255,6 @@ class Presentacion extends React.Component {
         jornadaEvents.on('jornadaEvents',(data) => {
             console.log("Se actualizo la jornada en presentacion!")
             this.getPresentacionActual()
-        })
-
-        generalEvent.on('updateCurrentPresentationToAdminScreen',(data) => {
-            console.log("Event current presentation arrived")
-            if(this.state.presentacion.titulo != data.presentacion.titulo){
-                console.log("--> La presentación mostrada actualizada a la presentación puesta por el administrador")
-                const presentacion = data.presentacion
-                const jornada= this.state.jornada
-                this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
-                this.setEvaluacion(presentacion, jornada)
-                this.setState({loadingVideo:false})
-            }else{
-                console.log("--> La presentación mostrada es la puesta por el administrador")
-            }
-            
         })
     
     }

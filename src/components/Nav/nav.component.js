@@ -5,12 +5,24 @@ import Presentacion from '../Presentacion/presentacion.container'
 import Horario from '../horario/horario.container'
 import Listado from '../listado/listado.container'
 
+ 
+
 export default class TabViewExample extends React.Component {
 
   constructor(props){
     super(props)
   }
 
+  renderScene = ({route}) => {
+    switch (route.key) {
+      case 'Presentacion':
+        return <Presentacion id={this.props.id}/>;
+      case 'Listado':
+        return <Listado id={this.props.id}/>;
+      case 'Horario':
+        return <Horario id={this.props.id} />;
+      }
+    }
   
 
   state = {
@@ -22,6 +34,7 @@ export default class TabViewExample extends React.Component {
     ]
   };
 
+  
 
   render() {
     return (
@@ -35,17 +48,7 @@ export default class TabViewExample extends React.Component {
             style={{ backgroundColor: "#0abde3" }}
           />
         )}
-        renderScene={ ({route}) => {
-          switch (route.key) {
-            case 'Presentacion':
-              return <Presentacion id={this.props.id}/>;
-            case 'Listado':
-              return <Listado id={this.props.id}/>;
-            case 'Horario':
-              return <Horario id={this.props.id} />;
-            }
-          }
-        }
+        renderScene={ this.renderScene }
         onIndexChange={index => this.setState({ index })}
         initialLayout={{ width: Dimensions.get("window").width }}
       />
