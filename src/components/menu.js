@@ -139,7 +139,7 @@ class MenuComponent extends React.PureComponent {
             <MenuDivider style={{marginVertical:10}}/>
             <Text style={{color:'grey', fontSize:15, textAlign:'center', marginBottom:10, marginTop:20}}>Mi cuenta</Text>
             <MenuDivider style={{marginVertical:5}}/>
-            <Text style={{ color: "black", fontSize:17, marginVertical:10, marginLeft:10}}>{props.auth.user == undefined? 'Nombre de usuario': props.auth.user.nombres}</Text>
+            <Text style={{ color: "black", fontSize:17, marginVertical:10, textAlign:'center'}}>{props.auth.user == undefined? 'Nombre de usuario': props.auth.user.nombres}</Text>
             <View style={{marginHorizontal: 30, marginBottom:10, fontSize:17}}>
               <Button
                 onPress={this.logOut.bind(this)}
