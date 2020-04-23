@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, Text, Image, KeyboardAvoidingView, ImageBackground, Keyboard, Modal, StyleSheet, TouchableHighlight } from 'react-native'
+import { ScrollView, View, TextInput, TouchableOpacity, Text, Image, KeyboardAvoidingView, ImageBackground, Keyboard, Modal, StyleSheet, TouchableHighlight, Alert } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,6 +14,7 @@ class LoginComponent extends Component {
         super(props);
 
         this.state = {
+            checked: false,
             color: 'white',
             keyboard: false,
             modalVisible: false,
@@ -54,6 +55,40 @@ class LoginComponent extends Component {
         this.setState({iconInput: 'check-circle', inputColor: '#94d82d', correo: value}) : 
         this.setState({iconInput: 'times-circle', inputColor: 'red', correo: ''})
     }    
+
+    createAlert = () => {
+        if(this.state.checked && this.state.correo != '')
+        {
+            this.props.navigation.navigate('Authentication', {correo: this.state.correo})
+        }
+        else
+        {
+            console.log(this.state.checked, this.state.correo)
+            if(this.state.correo == '') //correo
+            {
+                Alert.alert(
+                    "Correo inválido",
+                    "Por favor revisa que el correo que ingresaste sea un correo institucional de la UPB.",
+                    [
+                      { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ],
+                    { cancelable: false }
+                  );
+            }
+            else
+            {
+                //this.setState({ color: 'red' })
+                Alert.alert(
+                    "Términos y condiciones",
+                    "Por favor lee y acepta los términos y condiciones para continuar.",
+                    [
+                      { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ],
+                    { cancelable: false }
+                  );
+            }
+        }
+    }
 
     render() {
         //console.log(this.props)
@@ -106,8 +141,7 @@ class LoginComponent extends Component {
                         <Icon style={{marginRight:0, padding:'auto'}} name={this.state.iconInput} size={20} color={this.state.inputColor}/>
 
                     </View> 
-                    <TouchableOpacity activeOpacity={0.8} onPress={() =>
-                        this.state.checked ? this.props.navigation.navigate('Authentication', {correo: this.state.correo}) : this.setState({ color: 'red' })}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={this.createAlert}>
                         <Image source={boton} style={{ width: 280, marginTop: 10, resizeMode: 'contain' }} />
                     </TouchableOpacity>
 
