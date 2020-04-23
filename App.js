@@ -14,6 +14,7 @@ import { store, persistor } from './src/redux/store'
 import { PersistGate } from 'redux-persist/integration/react';
 import {ActivityIndicator, View} from 'react-native'
 import FlashMessage from "react-native-flash-message";
+import PresentacionListada from './src/components/PresentacionListada/presentacion.container'
 
 const AppNavigator = createStackNavigator({
 
@@ -51,7 +52,7 @@ const AppNavigator = createStackNavigator({
     }
   },
   Presentación: {
-    screen:Presentacion,
+    screen:PresentacionListada,
     navigationOptions:{
       title:'Presentación'
     }

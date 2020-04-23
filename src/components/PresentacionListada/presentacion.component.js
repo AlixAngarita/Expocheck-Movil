@@ -143,7 +143,6 @@ const Presentacion = props => {
   const [codeQR, setcodeQR] = useState('')
   const [ponderado, setponderado] = useState('')
   const [integrantes, setintegrantes] = useState([])
-  const index = useSelector(state => state.indexNav)
   let user = useSelector(state => state.auth.user)
   if(user == undefined){
     user =  {nombre :'No asignado'}
@@ -157,17 +156,14 @@ const Presentacion = props => {
       setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }
-    if(playbackObject !=null ){
+    if(playbackObject != null ){
       playbackObject.playAsync()
-    }
-    if(index != 0){
-      playbackObject.pauseAsync()
     }
     return () => {
       // clearTimeout(timer);
     }
     
-  }, [props.presentacion, props.jornada, playbackObject, index])
+  }, [props.presentacion, props.jornada, playbackObject])
 
 
   const calificada = (metrica) => {

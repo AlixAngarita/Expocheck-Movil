@@ -44,14 +44,7 @@ class Presentacion extends React.Component {
         this.realtimeEvent()
     }
 
-    searchAgenda(){
-        this.agenda = setInterval(() => {
-            if(this.state.presentacion == '' && !this.state.loading){
-                console.log("Buscando agenda")
-                this.getPresentacionActual()
-            }
-          }, 60000);
-    }
+   
 
     getPresentacionWithConecction(){
         findJornadaById(this.props.id)
@@ -80,11 +73,9 @@ class Presentacion extends React.Component {
                     this.setEvaluacion(presentacion, jornada)
                   }else{
                     this.setState({loading:false})
-                    this.searchAgenda()
                 }
                 }else{
                     this.setState({loading:false})
-                    this.searchAgenda()
                 }
             })
             
@@ -112,11 +103,9 @@ class Presentacion extends React.Component {
                             this.setEvaluacion(presentacion, jornada)
                         }else{
                             this.setState({loading:false})
-                            this.searchAgenda()
                         }
                         }else{
                             this.setState({loading:false})
-                            this.searchAgenda()
                         }
                     })
                 }
@@ -128,9 +117,6 @@ class Presentacion extends React.Component {
         this.getPresentacionActual()
         this.getUser()
         
-    }
-    componentWillMount(){
-         clearInterval(this.agenda);
     }
 
     async getPresentacionActual(){
@@ -256,21 +242,7 @@ class Presentacion extends React.Component {
             console.log("Se actualizo la jornada en presentacion!")
             this.getPresentacionActual()
         })
-
-        generalEvent.on('updatePrInApp',(data) => {
-            if(this.state.presentacion != ''){
-                console.log("--------------------------------------------------------------------------")
-                console.log(this.state.presentacion.titulo, data.presentacion.titulo)
-                if(this.state.presentacion.titulo != data.presentacion.titulo){
-                    console.log(data.presentacion.titulo)
-                    const presentacion = data.presentacion
-                    const jornada = this.state.jornada
-                    this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
-                    this.setEvaluacion(presentacion, jornada)
-                    this.setState({loadingVideo:false})
-                }
-            }
-        })
+        
     
     }
 
@@ -335,7 +307,7 @@ class Presentacion extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, connect, idJornada} = state
+    const { auth, connect, idJornada } = state
     return { user: auth.user, connect, idJornada}
 }
 

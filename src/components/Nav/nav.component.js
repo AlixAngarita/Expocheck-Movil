@@ -4,10 +4,11 @@ import { TabView, TabBar } from "react-native-tab-view";
 import Presentacion from '../Presentacion/presentacion.container'
 import Horario from '../horario/horario.container'
 import Listado from '../listado/listado.container'
-
+import { connect } from "react-redux";
+import {setNav} from '../../redux/actions/nav.action'
  
 
-export default class TabViewExample extends React.Component {
+ class TabViewExample extends React.Component {
 
   constructor(props){
     super(props)
@@ -49,10 +50,15 @@ export default class TabViewExample extends React.Component {
           />
         )}
         renderScene={ this.renderScene }
-        onIndexChange={index => this.setState({ index })}
+        onIndexChange={index => {
+          this.setState({ index })
+          console.log("El index de la tab actual es -> ", index)
+          this.props.setNav(index)
+        }}
         initialLayout={{ width: Dimensions.get("window").width }}
       />
     );
   }
 }
 
+export default connect(null,{setNav})(TabViewExample)

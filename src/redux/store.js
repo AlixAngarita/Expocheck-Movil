@@ -7,7 +7,7 @@ import loadingJornada from './reducers/loading.reducers'
 import thunk from 'redux-thunk'
 import { persistStore, persistReducer } from 'redux-persist';
 import createSecureStore from "redux-persist-expo-securestore";
-
+import indexNav from './reducers/nav.reducer'
 const storage = createSecureStore();
 // Middleware: Redux Persist Config
 const persistConfig = {
@@ -30,6 +30,7 @@ const rootReducer = combineReducers({
     connect,
     loadingJornada,
     auth: authReducer,
+    indexNav
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
