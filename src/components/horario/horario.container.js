@@ -1,6 +1,7 @@
 import React from "react";
 import HorarioComponent from './horario.component'
-import FirebaseService from '../../services/firebaseService'
+import {findJornadaById} from '../../services/jornadas.service'
+
 
 class HorarioContainer extends React.Component {
 
@@ -10,10 +11,11 @@ class HorarioContainer extends React.Component {
         this.state = {
             loading:true,
             fechaInicio:null,
-            horario:[],
-            dias:['Lunes','Martes', 'Miercoles', 'Jueves', 'Viernes'],
+            presentaciones:[],
+            dias:['Lunes','Martes', 'Miércoles', 'Jueves', 'Viernes'],
             horarioFiltrado:[],
-            diaSeleccionado:''
+            diaSeleccionado:'',
+            jornada:{}
         }
         this.filtrar = this.filtrar.bind(this)
     }
@@ -23,10 +25,15 @@ class HorarioContainer extends React.Component {
     }
 
     getAgenda(){
-        FirebaseService.getDocById('jornadas', this.props.id)
+        this.setState({loading:true, presentaciones:[]})
+        findJornadaById(this.props.id)
         .then(jornada => {
-            let horario = jornada.agenda ? jornada.agenda:[]
-            this.setState({horario, loading:false, fechaInicio:jornada.fechaInicio})
+            this.setState({
+                presentaciones:jornada.data.presentaciones, 
+                loading:false,
+                jornada:jornada.data,
+                fechaInicio:jornada.fechaInicio
+            })
         })
     }
 
@@ -34,13 +41,13 @@ class HorarioContainer extends React.Component {
        if(dia_filtrado=='all'){
         this.setState({horarioFiltrado:[], diaSeleccionado:'Toda la semana'})
        }else{
-        this.setState({horarioFiltrado:this.state.horario.filter(horario => horario.nombreDia==dia_filtrado), diaSeleccionado:dia_filtrado})
+        this.setState({horarioFiltrado:this.state.presentaciones.filter(horario => horario.nombreDia==dia_filtrado), diaSeleccionado:dia_filtrado})
        }
     }
 
     render(){
         return(<HorarioComponent 
-            horario={this.state.horarioFiltrado.length > 0 ? this.state.horarioFiltrado: this.state.horario} 
+            horario={this.state.horarioFiltrado.length > 0 ? this.state.horarioFiltrado: this.state.presentaciones} 
             dias={this.state.dias}
             filtrar={this.filtrar}
             diaSeleccionado={this.state.diaSeleccionado}

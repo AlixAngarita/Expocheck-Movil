@@ -7,7 +7,7 @@ import {
   Picker,
   ActivityIndicator
 } from "react-native";
-import { Avatar} from "react-native-elements";
+import { Avatar, Icon} from "react-native-elements";
 import moment from "moment";
 
 const styles = StyleSheet.create({
@@ -37,23 +37,49 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center"
+  },
+  titulo: {
+    textAlign:'center', 
+    fontSize:20, 
+    marginTop:5,
+    marginBottom: 10
+  },
+  capsula:{
+    backgroundColor: "#44BD32",
+    color: "white",
+    borderRadius:20,
+    //opacity: 0.8,
+    paddingLeft: 10,
+    paddingRight: 10
   }
 });
 
 const keyExtractor = (item, index) => index.toString();
 
-const renderItem = ({ item }) => (
+const renderItem = ({ item }) => 
+(
   <View style={styles.containerAgenda}>
+    <Text style={styles.titulo}>{item.titulo}</Text>
     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-      <View>
-        <Text style={{ color: "grey", fontSize: 20 }}>{item.hora}<Text style={{fontSize:10}}>{' ('+item.tiempo+' min)'}</Text></Text>
+        <Avatar
+          rounded
+          icon={{name: 'info', type: 'font-awesome', color:'white'}}
+          overlayContainerStyle={{backgroundColor: '#00A8FF'}}
+          onPress={() => {}}
+          activeOpacity={0.7}
+          containerStyle={{ marginLeft: 10}}
+          />
+      <View style={styles.capsula}>
+        <Text style={{color: 'white', fontSize: 20 }}>{item.horaInicio}<Text style={{fontSize:10}}>{' ('+item.duracion+' min)'}</Text></Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={{ marginRight: 10, color: "grey" }}>{item.nombreDia}</Text>
-        <Avatar title={item.dia} rounded />
+        <Avatar title={(item.dia).toString()} 
+          overlayContainerStyle={{backgroundColor: '#48DBFB'}}
+          containerStyle={{ marginRight: 10}}
+          rounded />
       </View>
     </View>
-    <Text>{item.titulo}</Text>
   </View>
 );
 
@@ -62,10 +88,11 @@ const Horario = props => {
     <View style={{ flex: 1 }}>
       {props.horario.length > 0 && !props.loading ? (
         <React.Fragment>
-          <View style={{ flexDirection: "column", alignItems: "center" }}>
+          <View style={{ flexDirection: "column"}}>
             <Picker
               style={{
-                width: 200
+                width: 180,
+                marginLeft: 10
               }}
               onValueChange={(itemValue, itemIndex) => props.filtrar(itemValue)}
               selectedValue={props.diaSeleccionado}
