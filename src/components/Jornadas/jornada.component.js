@@ -32,22 +32,10 @@ import { Avatar } from 'react-native-elements';
 const now = moment().format('YYYY-MM-DD')
 
 const callDate = (item, props, dispatch) => {
-    /*moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]') ?
-        props.navigation.navigate('EasyCheck',{id:item._id}) &&  dispatch(getIdJornada(item._id))
-        :Alert.alert('Fuera de fecha', 'Solo podra ver la agenda y listar las presentaciones.',
-        [
-        {text: 'OK', onPress: () => {
-            dispatch(getIdJornada(item._id))
-            props.navigation.navigate('EasyCheck',{id:item._id})
-            }},
-        ])*/
         if(moment(now).isBetween( moment(item.fechaInicio), moment(item.fechaFinaliza),  null, '[]'))
         {
             props.navigation.navigate('EasyCheck',{id:item._id}) &&  dispatch(getIdJornada(item._id))
-            if(props.auth != undefined && props.auth.user.nuevo)
-            {
-                dispatch(updateAuthors(props.auth.user, item._id))
-            }        
+            dispatch(updateAuthors(props.auth.user, item._id))
         }
         else
         {

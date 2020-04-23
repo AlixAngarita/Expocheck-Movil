@@ -134,7 +134,7 @@ class Presentacion extends React.Component {
     }
 
     async getPresentacionActual(){
-        this.setState({presentacion:'', loading:true})
+        this.setState({presentacion:'', loading:true}) //da error: Can't perform a React state update on an unmounted component.
         const presentacion = this.props.navigation.getParam('presentacion')
         await this.setState({idJornada:this.props.idJornada})
         if(presentacion){
