@@ -12,12 +12,12 @@ class HorarioContainer extends React.Component {
             loading:true,
             fechaInicio:null,
             presentaciones:[],
-            dias:['Lunes','Martes', 'Miércoles', 'Jueves', 'Viernes'],
+            //dias:['Lunes','Martes', 'Miércoles', 'Jueves', 'Viernes'],
             horarioFiltrado:[],
             diaSeleccionado:'',
             jornada:{}
         }
-        this.filtrar = this.filtrar.bind(this)
+        //this.filtrar = this.filtrar.bind(this)
     }
 
     componentDidMount(){
@@ -31,30 +31,29 @@ class HorarioContainer extends React.Component {
             this.setState({
                 presentaciones:jornada.data.presentaciones, 
                 loading:false,
-                jornada:jornada.data,
-                fechaInicio:jornada.fechaInicio,
-                fechaFinaliza:jornada.fechaFinaliza
+                jornada:jornada.data
             })
         })
     }
 
-    filtrar(dia_filtrado){
+    /*filtrar(dia_filtrado){
        if(dia_filtrado=='all'){
         this.setState({horarioFiltrado:[], diaSeleccionado:'Toda la semana'})
        }else{
         this.setState({horarioFiltrado:this.state.presentaciones.filter(horario => horario.nombreDia==dia_filtrado), diaSeleccionado:dia_filtrado})
        }
-    }
+    }*/
 
     render(){
+        
         return(<HorarioComponent 
-            horario={this.state.horarioFiltrado.length > 0 ? this.state.horarioFiltrado: this.state.presentaciones} 
-            dias={this.state.dias}
-            filtrar={this.filtrar}
-            diaSeleccionado={this.state.diaSeleccionado}
+            horario={this.state.presentaciones} 
+            //dias={this.state.dias}
+            //filtrar={this.filtrar}
+            //diaSeleccionado={this.state.diaSeleccionado}
             loading={this.state.loading}
-            fechaInicio={this.state.fechaInicio}
-            fechaFinaliza={this.state.fechaFinaliza}
+            fechaInicio={this.state.jornada.fechaInicio}
+            fechaFinaliza={this.state.jornada.fechaFinaliza}
             />)
     }
 }
