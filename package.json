@@ -26,6 +26,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-azure-ad-2": "git+https://github.com/AlixAngarita/react-native-azure-ad-2.git",
     "react-native-bounceable": "^0.2.1",
+    "react-native-calendars": "^1.265.0",
     "react-native-card-flip": "^1.0.6",
     "react-native-elements": "^1.2.7",
     "react-native-flash-message": "^0.1.15",

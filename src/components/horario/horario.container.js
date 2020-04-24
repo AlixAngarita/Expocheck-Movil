@@ -32,7 +32,8 @@ class HorarioContainer extends React.Component {
                 presentaciones:jornada.data.presentaciones, 
                 loading:false,
                 jornada:jornada.data,
-                fechaInicio:jornada.fechaInicio
+                fechaInicio:jornada.fechaInicio,
+                fechaFinaliza:jornada.fechaFinaliza
             })
         })
     }
@@ -52,7 +53,9 @@ class HorarioContainer extends React.Component {
             filtrar={this.filtrar}
             diaSeleccionado={this.state.diaSeleccionado}
             loading={this.state.loading}
-            fechaInicio={this.state.fechaInicio}/>)
+            fechaInicio={this.state.fechaInicio}
+            fechaFinaliza={this.state.fechaFinaliza}
+            />)
     }
 }
 
