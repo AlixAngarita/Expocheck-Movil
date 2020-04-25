@@ -1,9 +1,7 @@
 import React from "react";
 import HorarioComponent from './horario.component'
 import {findJornadaById} from '../../services/jornadas.service'
-import config from '../../config/server'
-import  io from 'socket.io-client'
-const jornadaEvents = io(config.host+'/jornadaEvents')
+
 
 class HorarioContainer extends React.Component {
 
@@ -24,7 +22,6 @@ class HorarioContainer extends React.Component {
 
     componentDidMount(){
         this.getAgenda()
-        this.realtime()
     }
 
     getAgenda(){
@@ -39,12 +36,13 @@ class HorarioContainer extends React.Component {
         })
     }
 
-    realtime(){
-        jornadaEvents.on('jornadaEvents',(data) => {
-            console.log("Actualización desde agenda!")
-            this.getAgenda()
-        })
-    }
+    /*filtrar(dia_filtrado){
+       if(dia_filtrado=='all'){
+        this.setState({horarioFiltrado:[], diaSeleccionado:'Toda la semana'})
+       }else{
+        this.setState({horarioFiltrado:this.state.presentaciones.filter(horario => horario.nombreDia==dia_filtrado), diaSeleccionado:dia_filtrado})
+       }
+    }*/
 
     render(){
         

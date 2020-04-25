@@ -12,6 +12,10 @@ import PropTypes from "prop-types";
 const RCTNetworking = require('RCTNetworking')
 
 class MenuComponent extends React.PureComponent {
+
+
+  
+ 
   
   constructor(props) {
       super(props);
@@ -78,7 +82,7 @@ class MenuComponent extends React.PureComponent {
             button={<Icon style={{marginRight:25}}  name="ellipsis-v" size={40} color="white" size={20}/>}
             animationDuration={50}
           >
-            <Text style={{color:'grey', fontSize:15, textAlign:'center', marginVertical:10}}>Mi cuenta</Text>
+            <Text style={{color:'grey', fontSize:15, textAlign:'center', marginVertical:10}}>Privacidad</Text>
             <MenuDivider style={{marginVertical:5}}/>
             <View
             style={{marginVertical:5, marginRight:10}}>
@@ -122,6 +126,8 @@ class MenuComponent extends React.PureComponent {
             />
             </View>
             <MenuDivider style={{marginVertical:10}}/>
+            <Text style={{color:'grey', fontSize:15, textAlign:'center', marginBottom:10, marginTop:20}}>Mi cuenta</Text>
+            <MenuDivider style={{marginVertical:5}}/>
             <Text style={{ color: "black", fontSize:17, marginVertical:10, textAlign:'center'}}>{props.auth.user == undefined? 'Nombre de usuario': props.auth.user.nombres}</Text>
             <View style={{marginHorizontal: 30, marginBottom:10, fontSize:17}}>
               <Button

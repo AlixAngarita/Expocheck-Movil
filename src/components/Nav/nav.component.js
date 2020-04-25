@@ -42,9 +42,6 @@ tab(props){
             {...props}
             indicatorStyle={{ backgroundColor: "white"}}
             style={{ backgroundColor: "#0abde3" }}
-            onTabPress={({ route, preventDefault }) => {
-              preventDefault();
-            }}
           />
   )
 }

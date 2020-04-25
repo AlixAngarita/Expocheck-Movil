@@ -3,7 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
 import { Avatar } from "react-native-elements";
 import FlipCard from 'react-native-flip-card'
-
+import config from '../../config/server'
+import  io from 'socket.io-client'
+const jornadaEvents = io(config.host+'/jornadaEvents')
 
 LocaleConfig.locales['es'] = {
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -23,6 +25,9 @@ export default class AgendaScreen extends Component {
         };
     }
 
+    componentDidMount(){
+        this.realtime()
+    }
 
     _today(){
         var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
