@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
-import { Avatar, Icon } from "react-native-elements";
+import { Avatar } from "react-native-elements";
 import FlipCard from 'react-native-flip-card'
 import config from '../../config/server'
 import  io from 'socket.io-client'
@@ -9,7 +9,7 @@ const jornadaEvents = io(config.host+'/jornadaEvents')
 
 LocaleConfig.locales['es'] = {
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    monthNamesShort: ['Ene.', 'Feb.', 'Mar.', 'Abr.', 'May.', 'Jun.', 'Jul..', 'Agost.', 'Sept.', 'Oct.', 'Nov.', 'Dic.'],
+    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Agost', 'Sept', 'Oct', 'Nov', 'Dic'],
     dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
     dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab']
 };
@@ -30,7 +30,9 @@ export default class AgendaScreen extends Component {
     }
 
     _today(){
-        return new Date().toISOString().substring(0, 10);
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+        return localISOTime;
     }
 
     realtime(){
@@ -39,21 +41,16 @@ export default class AgendaScreen extends Component {
         })
     }
 
-    //2020-04-02 2020-08-15
     render() {
         return (
             <Agenda
-                //testID={testIDs.agenda.CONTAINER}
                 items={this.state.items}
                 loadItemsForMonth={this.loadItems.bind(this)}
                 renderItem={this.renderItem.bind(this)}
                 renderEmptyDate={this.renderEmptyDate.bind(this)}
                 rowHasChanged={this.rowHasChanged.bind(this)}
-                // Initially selected day
-                selected={this._today}
-                // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+                selected={this._today()}
                 minDate={this.props.fechaInicio}
-                // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
                 maxDate={this.props.fechaFinaliza}
                 hideKnob={false}
                 hideExtraDays={true}
@@ -64,7 +61,8 @@ export default class AgendaScreen extends Component {
                     calendarBackground: 'white',
                     backgroundColor: 'white',
                     dayTextColor: '#00A8FF',
-                    textSectionTitleColor: '#00A8FF'
+                    textSectionTitleColor: '#00A8FF',
+                    monthTextColor: 'gray'
                 }}
             />
         );
@@ -114,46 +112,40 @@ export default class AgendaScreen extends Component {
           <View>{itemIntegrante}</View>
         );
     }
-    //icon={{ name: 'map-marker', type: 'font-awesome', color: '#44BD32' }}
 
     renderItem(item) {
         const fecha = new Date(item.fecha)
-        const horaInicio = fecha.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })
+        const horaInicio = fecha.toLocaleTimeString().substring(0,5);
         fecha.setMinutes(fecha.getMinutes() + item.duracion);
-        const horaFinal = fecha.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', second: '0-digit' })
+        const horaFinal = fecha.toLocaleTimeString().substring(0,5);
 
         return (
             <View style={styles.item}>
                 <FlipCard>
                     {/* Face Side */}
                     <View>
-                    <Text style={{ color: 'white', fontSize: 15, marginLeft: 5, marginTop: 5 }}>{horaInicio} - {horaFinal}, {item.duracion} minutos</Text>
-                    <Text style={styles.titulo}>{item.titulo}</Text>
-                    <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 5 }}>
-                        <View style={styles.capsula}>
-                            <Avatar
-                                rounded
-                                icon={{ name: 'map-marker', type: 'font-awesome', color: '#44BD32' }}
-                                containerStyle={{ marginLeft: 0, marginRight: 10 }}
-                                overlayContainerStyle={{ backgroundColor: 'white' }}
-                                size={21}
-                            />
-                            <Text style={{ flexDirection: "column", color: 'white', fontSize: 15, marginRight: 5, textAlign: 'center', flexShrink: 1 }}>{item.ubicacion == undefined ? 'Por asignar' : item.ubicacion}</Text>
+                        <Text style={{ color: 'white', fontSize: 15, marginLeft: 5, marginTop: 5 }}>{horaInicio} - {horaFinal}, {item.duracion} minutos</Text>
+                        <Text style={styles.titulo}>{item.titulo}</Text>
+                        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 5 }}>
+                            <View style={styles.capsula}>
+                                <Avatar
+                                    rounded
+                                    icon={{ name: 'map-marker', type: 'font-awesome', color: '#44BD32' }}
+                                    containerStyle={{ marginLeft: 0, marginRight: 10 }}
+                                    overlayContainerStyle={{ backgroundColor: 'white' }}
+                                    size={21}
+                                />
+                                <Text style={{ flexDirection: "column", color: 'white', fontSize: 15, marginRight: 5, textAlign: 'center', flexShrink: 1 }}>{item.ubicacion == undefined ? 'Por asignar' : item.ubicacion}</Text>
+                            </View>
                         </View>
-                    </View>
                     </View>
                     {/* Back Side */}
                     <View>
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                        <Icon type='font-awesome' size={20}
-                                name='arrow-circle-left' color='#48DBFB' />
-                        <Text style={{ fontSize: 18, color: 'white',  fontWeight: 'bold', marginBottom: 10}}>Integrantes</Text>
-                        </View>
+                        <Text style={{ fontSize: 18, color: 'white',  fontWeight: 'bold', marginBottom: 10, marginLeft: 10}}>Integrantes</Text>
                         {this.mapIntegrantes(item.integrantes)}
                     </View>
                 </FlipCard>
             </View>
-
         );
     }
 
@@ -190,27 +182,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 30
         
-    },
-    containerAgenda: {
-        flex: 1,
-        margin: 10,
-        flexDirection: "column",
-        minHeight: 80,
-        height: "90%",
-        backgroundColor: "white",
-        paddingRight: 5,
-        borderRadius: 20,
-        paddingLeft: 10,
-        paddingTop: 5,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        elevation: 5
     },
     loading: {
         flex: 1,
