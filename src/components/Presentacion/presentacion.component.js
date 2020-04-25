@@ -212,7 +212,7 @@ const Presentacion = props => {
                 {props.presentacion.titulo.toUpperCase()}
               </Text>
               
-              {!props.loading && props.presentacion != '' &&  props.presentacion.video != '' && !props.loadingVideo  && playbackObject!=null ? (
+              {!props.loading && props.presentacion != '' &&  props.presentacion.video != '' && !props.loadingVideo   ? (
                 <Video
                 ref={ref => setplaybackObject(ref)}
                 source={{ uri: props.presentacion.video }}

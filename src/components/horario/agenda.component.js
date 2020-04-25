@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
 import { Avatar, Icon } from "react-native-elements";
 import FlipCard from 'react-native-flip-card'
+import config from '../../config/server'
+import  io from 'socket.io-client'
+const jornadaEvents = io(config.host+'/jornadaEvents')
 
 LocaleConfig.locales['es'] = {
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -22,8 +25,18 @@ export default class AgendaScreen extends Component {
         };
     }
 
+    componentDidMount(){
+        this.realtime()
+    }
+
     _today(){
         return new Date().toISOString().substring(0, 10);
+    }
+
+    realtime(){
+        jornadaEvents.on('jornadaEvents',(data) => {
+            console.log("Actualización desde agenda!")
+        })
     }
 
     //2020-04-02 2020-08-15
