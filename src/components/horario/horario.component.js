@@ -6,7 +6,6 @@ import {
   ActivityIndicator
 } from "react-native";
 import AgendaComponent from './agenda.component.js'
-
 const styles = StyleSheet.create({
   containerAgenda: {
     flex: 1,
@@ -36,6 +35,8 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+
 
 const Horario = props => {
   return (
