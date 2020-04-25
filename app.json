@@ -25,11 +25,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.upb.easyCheck"
+      "bundleIdentifier": "com.upb.expoCheck"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
-      "package": "com.upb.easycheck"
+      "package": "com.upb.expoCheck"
     },
     "notification": {
       "icon": "./assets/notificationIcon.png",
