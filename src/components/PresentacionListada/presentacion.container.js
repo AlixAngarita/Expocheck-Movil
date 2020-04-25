@@ -160,7 +160,7 @@ class Presentacion extends React.Component {
                      this.setState({comentariosPublicos:true})
                   }
 
-                  console.log("Para la presentación -> ", presentacion.titulo +" la evaluación es ", this.state.evaluacionPublica)
+                 
                   let evaluaciones = []
                   jornada.metricas.map(metrica => {
                     let valores_calificacion_metrica_actual = []
@@ -203,13 +203,9 @@ class Presentacion extends React.Component {
         generalEvent.on('updatePrivacidad', (data) => {
             if(this.state.presentacion != ''){
                 const integrantes = this.state.presentacion.integrantes.map(i => i.nombre)
-                console.log(integrantes)
-                console.log(data.userid)
                 if(integrantes.includes(data.userid)){
-                    console.log("El integrante si era parte")
                     findById(this.state.idJornada, this.state.presentacion._id)
                     .then( res => {
-                        console.log('------La presentación cambio---')
                         const presentacion = res.data
                         const jornada= this.state.jornada
                         this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
@@ -229,7 +225,6 @@ class Presentacion extends React.Component {
         })
         
         jornadaEvents.on('jornadaEvents',(data) => {
-            console.log("Se actualizo la jornada en presentacion!")
             this.getPresentacionActual()
         })
         
@@ -251,7 +246,6 @@ class Presentacion extends React.Component {
     }
     
     async calificar(metrica, valor){
-        console.log('Evaluacion -> ', metrica, valor)
         const evaluaciones = this.state.presentacion.evaluaciones
         const evaluacion = {nombre:metrica, valor, autor:this.state.user.correo}
 

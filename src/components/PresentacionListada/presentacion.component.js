@@ -91,7 +91,6 @@ const getCalificacionesPorMetricaPrivado = (presentacion, jornada) => {
   else{
     calificaciones.acumulado = -1
   }
-  console.log(calificaciones)
   return calificaciones
 }
 
@@ -153,7 +152,6 @@ const Presentacion = props => {
     props.hasCode().then(code => setcodeQR(code))
     // const timer =  setInterval(() =>  props.setPresentacion(), 60000)
     if(props.presentacion != ''){
-      console.log('!!!Privacidad actualizada!')
       setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }

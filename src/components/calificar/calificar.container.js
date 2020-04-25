@@ -62,7 +62,6 @@ class Calificacion extends React.Component{
             if(this.state.presentacion != ''){
                 const integrantes = this.state.presentacion.integrantes.map(i => i.nombre)
                 if(integrantes.includes(data.userid)){
-                    console.log("El integrante si era parte en sección de calificar")
                     this.setPresentacion()
                     
                 }
@@ -98,7 +97,7 @@ class Calificacion extends React.Component{
          })
             
         } catch (error) {
-            console.log(error)
+            console.error(error)
       }
     }
 
@@ -111,7 +110,6 @@ class Calificacion extends React.Component{
     }
 
     setComentariosPublicos(presentacion){
-        console.log("-------->", this.state.comentariosPublicos)
          let comentariosPublicos = 0
          presentacion.integrantes.map(int => {
          if(int.autor != undefined){
@@ -124,10 +122,8 @@ class Calificacion extends React.Component{
                   
          if (comentariosPublicos > (presentacion.integrantes.length/2) || comentariosPublicos == presentacion.integrantes.length){
             this.setState({comentariosPublicos:true})
-            console.log("-------->", true)
         }else{
             this.setState({comentariosPublicos:false})
-            console.log("-------->", false)
         }
     }
 
@@ -142,7 +138,6 @@ class Calificacion extends React.Component{
     getUser(){
         const user = this.props.user
         this.setState({user})
-        console.log("El user es ->", user)
     }
 
     async validCode(code){
@@ -151,10 +146,8 @@ class Calificacion extends React.Component{
             if(this.state.presentacion.codigoQR!=code ){
                 this.setState({valid:false})
             }else{
-                console.log("------> Codigo valido!")
                 await AsyncStorage.removeItem('qrs')
                 const currentCodes = this.state.qrs
-                console.log(currentCodes)
                 currentCodes.push(code)
                 await AsyncStorage.setItem('qrs', JSON.stringify(currentCodes))
                 this.setState({valid:true})
@@ -166,7 +159,7 @@ class Calificacion extends React.Component{
             
 
         } catch (error) {
-             console.log('Error al setear qrs ', error)
+             console.error('Error al setear qrs ', error)
         }
     }
 

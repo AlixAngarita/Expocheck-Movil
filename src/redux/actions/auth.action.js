@@ -24,7 +24,6 @@ export const loginUser = (user, token) => dispatch => {
         })
         .catch(err => {
           console.info(err.config);
-          console.log('no se guardo')
           /*dispatch({
             type: GET_ERRORS,
             payload: err.response.data,
@@ -34,7 +33,6 @@ export const loginUser = (user, token) => dispatch => {
 }; // Set logged in user
  
 export const setCurrentUser = (user) => {
-  console.log(user)
     return {
       type: "SET_CURRENT_USER",
       payload: user
@@ -58,13 +56,11 @@ export const updatePrivacyUser = (user,privacidad) => dispatch => {
     userData.nombres = user.nombres
     userData.evaluacionPublica = privacidad.evaluacionPublica
     userData.comentariosPublicos = privacidad.comentariosPublicos
-    console.log('to setCurrentUser(user)')
     dispatch(setCurrentUser(userData))
     Socket.updatePrivacidad(user.nombre)
   })
   .catch(err => {
-    console.log("update privacy error")
-    console.info(err)
+    console.error(err)
     
   })
 }

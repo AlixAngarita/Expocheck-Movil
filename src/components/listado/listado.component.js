@@ -77,7 +77,6 @@ const getCalificacionesPorMetricaPublico = (presentacion, jornada) => {
     else{
       calificaciones.acumulado = -1
     }
-    console.log(calificaciones)
     return calificaciones
   }
   

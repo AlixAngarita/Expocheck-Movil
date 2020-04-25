@@ -29,11 +29,9 @@ export const updateAuthors = (user, jornada) => dispatch =>
 
     axios
         .post(config.rest + "/api/jornada/"+jornada+"/integrantes", integrante, {headers})
-        .then(res => {
-            console.log('update integrante', res.status)        
+        .then(res => {   
         })
         .catch(err => {
-          console.info(err.config);
-          console.log('no se actualizo')
+          console.error(err.config);
         });
 }

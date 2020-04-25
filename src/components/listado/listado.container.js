@@ -41,7 +41,6 @@ class Listado extends React.Component {
             this.getPresentaciones()
         })
         jornadaEvents.on('jornadaEvents',() => {
-            console.log("Se actualizo la jornada!")
             this.getPresentaciones()
         })
 

@@ -91,7 +91,6 @@ const getCalificacionesPorMetricaPrivado = (presentacion, jornada) => {
   else{
     calificaciones.acumulado = -1
   }
-  console.log(calificaciones)
   return calificaciones
 }
 
@@ -154,7 +153,6 @@ const Presentacion = props => {
     props.hasCode().then(code => setcodeQR(code))
     // const timer =  setInterval(() =>  props.setPresentacion(), 60000)
     if(props.presentacion != ''){
-      console.log('!!!Privacidad actualizada!')
       setintegrantes(props.presentacion.integrantes.map(int => int.nombre.toUpperCase()))
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }
@@ -214,7 +212,7 @@ const Presentacion = props => {
                 {props.presentacion.titulo.toUpperCase()}
               </Text>
               
-              {!props.loading && props.presentacion != '' &&  props.presentacion.video != '' && !props.loadingVideo ? (
+              {!props.loading && props.presentacion != '' &&  props.presentacion.video != '' && !props.loadingVideo  && playbackObject!=null ? (
                 <Video
                 ref={ref => setplaybackObject(ref)}
                 source={{ uri: props.presentacion.video }}
@@ -229,6 +227,9 @@ const Presentacion = props => {
               />
               ):(
                 <View style={{ alignItems: "center", marginTop:10}}>
+                  <View style={{flexDirection:'row', marginBottom:8}}>
+                    <Text style={{color:'white', fontSize:20}}>Integrantes</Text>
+                  </View>
                 {props.presentacion.integrantes.map((integrante, i) => (
                   <View
                    key={i.toString()}
@@ -257,7 +258,7 @@ const Presentacion = props => {
                           />
                         </View>
                       </View>
-                      <View style={{ justifyContent: "center" }}>
+                      <View style={{ justifyContent: "center", flex:1, flexWrap:'nowrap'}}>
                         <Text style={{ color: "#95A5A6", fontSize: 18 }}>
                           {integrante.nombre}
                         </Text>

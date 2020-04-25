@@ -21,8 +21,6 @@ class EasyCheck extends Component {
         }
 
         _handleNotification = notification => {
-            // do whatever you want to do with the notification
-            console.log(JSON.stringify(notification.data))
             this.setState({ notification: notification });
         };
 
@@ -49,7 +47,6 @@ class EasyCheck extends Component {
             
               // Get the token that uniquely identifies this device
               let token = await Notifications.getExpoPushTokenAsync();
-              console.log("El token para el usuario es -> ",token)
               return {token};
         }
 
@@ -60,7 +57,6 @@ class EasyCheck extends Component {
                     const tokenList = res.data
                     tokens = await tokenList.map(t => t.token)
                     exist = await tokens.includes(token)
-                    console.log("El token para push existe -> ",exist)
                     resolve(exist)
                 }).catch(err => reject(err))
             })
@@ -71,7 +67,6 @@ class EasyCheck extends Component {
             this.existToken(token).then( async exist => {
                 if (!exist){
                     await addToken(this.props.user._id, token)
-                    console.log('se guardo el token')
                 }
             })
             

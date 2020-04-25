@@ -36,23 +36,26 @@ import {setNav} from '../../redux/actions/nav.action'
   };
 
   
-
-  render() {
-    return (
-      <TabView
-        tabBarPosition='top'
-        navigationState={this.state}
-        renderTabBar={props => (
-          <TabBar
+tab(props){
+  return (
+  <TabBar
             {...props}
             indicatorStyle={{ backgroundColor: "white"}}
             style={{ backgroundColor: "#0abde3" }}
           />
-        )}
+  )
+}
+
+  render() {
+    return (
+      <TabView
+        lazy={true}
+        tabBarPosition='top'
+        navigationState={this.state}
+        renderTabBar={this.tab}
         renderScene={ this.renderScene }
         onIndexChange={index => {
           this.setState({ index })
-          console.log("El index de la tab actual es -> ", index)
           this.props.setNav(index)
         }}
         initialLayout={{ width: Dimensions.get("window").width }}
