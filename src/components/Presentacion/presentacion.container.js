@@ -128,7 +128,7 @@ class Presentacion extends React.Component {
         this.getUser()
         
     }
-    componentWillMount(){
+    componentWillUnmount(){
          clearInterval(this.agenda);
     }
 

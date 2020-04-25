@@ -220,6 +220,9 @@ const Presentacion = props => {
               />
               ):(
                 <View style={{ alignItems: "center", marginTop:10}}>
+                  <View style={{flexDirection:'row', marginBottom:8}}>
+                    <Text style={{color:'white', fontSize:20}}>Integrantes</Text>
+                  </View>
                 {props.presentacion.integrantes.map((integrante, i) => (
                   <View
                    key={i.toString()}
@@ -238,13 +241,8 @@ const Presentacion = props => {
                           <Avatar
                             size="small"
                             rounded
-                            title={(i + 1).toString()}
+                            icon={{name: 'user', type: 'font-awesome', color:'#2e86de'}}
                             activeOpacity={0.7}
-                            containerStyle={{
-                              borderColor: "#95A5A6",
-                              borderStyle: "dashed",
-                              borderWidth: 1
-                            }}
                           />
                         </View>
                       </View>

@@ -69,7 +69,7 @@ class Calificacion extends React.Component{
         })
     }
 
-    async componentWillMount(){
+    async componentWillUnmount(){
         this.setState({ scanned: false});
     }
     
