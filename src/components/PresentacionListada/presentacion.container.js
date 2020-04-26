@@ -13,6 +13,7 @@ import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import Socket from '../../services/sockect'
 import {store} from '../../redux/store'
+import {qrstate} from '../../redux/actions/qr.action'
 
 class Presentacion extends React.Component {
 
@@ -313,4 +314,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps)(withNavigation(Presentacion))
+export default connect(mapStateToProps, {qrstate})(withNavigation(Presentacion))
