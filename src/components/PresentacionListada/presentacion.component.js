@@ -254,7 +254,7 @@ const Presentacion = props => {
                           />
                         </View>
                       </View>
-                      <View style={{ justifyContent: "center" }}>
+                      <View style={{ justifyContent: "center",flex:1, flexWrap:'nowrap' }}>
                         <Text style={{ color: "#95A5A6", fontSize: 18 }}>
                           {integrante.nombre}
                         </Text>
