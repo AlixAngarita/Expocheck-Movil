@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 });
 import { Video } from 'expo-av';
 import Calificar from '../btnCalifcar/btnCalificar.component'
-
+import {ScreenOrientation} from 'expo';
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -143,6 +143,7 @@ const Presentacion = props => {
   const [codeQR, setcodeQR] = useState('')
   const [ponderado, setponderado] = useState('')
   const [integrantes, setintegrantes] = useState([])
+  const [orientationIsLandscape, setOrientationIsLandscape] = useState(false);
   let user = useSelector(state => state.auth.user)
   if(user == undefined){
     user =  {nombre :'No asignado'}
@@ -208,6 +209,13 @@ const Presentacion = props => {
               {!props.loading && props.presentacion != '' &&  props.presentacion.video != '' && !props.loadingVideo ? (
                 <Video
                 ref={ref => setplaybackObject(ref)}
+                onFullscreenUpdate={async () => {
+                  await ScreenOrientation.lockAsync(
+                    orientationIsLandscape ? ScreenOrientation.OrientationLock.PORTRAIT : 
+                    ScreenOrientation.OrientationLock.LANDSCAPE_LEFT,
+                );
+                setOrientationIsLandscape(!orientationIsLandscape);
+              }}
                 source={{ uri: props.presentacion.video }}
                 rate={1.0}
                 volume={1.0}
