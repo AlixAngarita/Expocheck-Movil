@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Alert,ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, Alert,ScrollView, TouchableWithoutFeedback } from 'react-native'
 import { Icon, Divider} from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
@@ -138,11 +138,13 @@ const Jornada = props => {
                                                         {moment(item.fechaInicio).format('MMM D') + ' a ' + moment(item.fechaFinaliza).format('MMM D') + ' del ' + moment(item.fechaInicio).format('Y')}
                                                     </Text>
                                                 </View>
-                                                <View style={{marginHorizontal:10}}>
-                                                    <Icon  type='font-awesome' size={30}
-                                                        name='arrow-circle-right'color='#48DBFB' 
-                                                        onPress={() => callDate(item,props,dispatch)} />
-                                                </View>
+                                                <TouchableWithoutFeedback onPress={() => callDate(item,props,dispatch)}>
+                                                    <View style={{marginHorizontal:10}}>
+                                                        <Icon  type='font-awesome' size={30}
+                                                            name='arrow-circle-right'color='#48DBFB' 
+                                                             />
+                                                    </View>
+                                                </TouchableWithoutFeedback>
                                         </View>
                                         {/* Back Side */}
                                                 <View style={{borderRadius:20,
