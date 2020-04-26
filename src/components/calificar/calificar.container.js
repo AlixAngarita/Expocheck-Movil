@@ -53,9 +53,11 @@ class Calificacion extends React.Component{
     }
 
     realtimeEvent(){
-        generalEvent.on('reloadPresentation',() => {
-            this.setPresentacion()
-            this.setComentariosPublicos(this.state.presentacion)
+        generalEvent.on('reloadPresentation',(data) => {
+            if(this.state.presentacion.titulo == data.titulo){
+                this.setPresentacion()
+                this.setComentariosPublicos(this.state.presentacion)
+            }
         })
 
         generalEvent.on('updatePrivacidad', (data) => {
@@ -152,7 +154,7 @@ class Calificacion extends React.Component{
                 await AsyncStorage.setItem('qrs', JSON.stringify(currentCodes))
                 this.setState({valid:true})
                 if(this.props.navigation.getParam('back')){
-                    this.props.qrstate({titulo:this.state.presentacion.titulo})
+                    this.props.qrstate({titulo:this.state.presentacion.titulo, valid:true})
                     this.props.navigation.goBack()
                 }
             }
@@ -168,6 +170,10 @@ class Calificacion extends React.Component{
         hascode.then(code => {
             if(code!=''){
                 this.setState({hasQrCode:true, ok:true, valid:true, scaned:false, code})
+                if(this.props.navigation.getParam('back')){
+                    this.props.qrstate({titulo:this.state.presentacion.titulo,  valid:true})
+                    this.props.navigation.goBack()
+                }
             }else{
                 this.getCodesQr()
             }

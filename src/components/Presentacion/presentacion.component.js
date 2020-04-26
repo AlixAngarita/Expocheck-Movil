@@ -158,7 +158,7 @@ const Presentacion = props => {
       setponderado(getCalificacionesPorMetricaPrivado(props.presentacion, props.jornada))
     }
     if(playbackObject !=null ){
-      if(props.presentacion.video !=''){
+      if(props.presentacion.video !='' && index == 0){
         playbackObject.playAsync()
       }
       

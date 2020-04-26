@@ -13,6 +13,7 @@ import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import Socket from '../../services/sockect'
 import {store} from '../../redux/store'
+import {qrstate} from '../../redux/actions/qr.action'
 
 class Presentacion extends React.Component {
 
@@ -41,6 +42,7 @@ class Presentacion extends React.Component {
         this.getPresentacionWithConecction = this.getPresentacionWithConecction.bind(this)
         this.getPresentacionWithoutConecction = this.getPresentacionWithoutConecction.bind(this)
         this.realtimeEvent = this.realtimeEvent.bind(this)
+        this.hasCodeQr = this.hasCodeQr.bind(this)
         this.realtimeEvent()
     }
 
@@ -77,6 +79,7 @@ class Presentacion extends React.Component {
                     this.setState({fechaInicio:jornada.fechaInicio})
                     this.setState({fechaFinaliza:jornada.fechaFinaliza})
                     this.setEvaluacion(presentacion, jornada)
+                    this.hasCodeQr()
                   }else{
                     this.setState({loading:false})
                     this.searchAgenda()
@@ -109,6 +112,7 @@ class Presentacion extends React.Component {
                             this.setState({fechaInicio:jornada.fechaInicio})
                             this.setState({fechaFinaliza:jornada.fechaFinaliza})
                             this.setEvaluacion(presentacion, jornada)
+                            this.hasCodeQr()
                         }else{
                             this.setState({loading:false})
                             this.searchAgenda()
@@ -126,6 +130,7 @@ class Presentacion extends React.Component {
     componentDidMount(){
         this.getPresentacionActual()
         this.getUser()
+       
         
     }
     componentWillUnmount(){
@@ -143,6 +148,7 @@ class Presentacion extends React.Component {
             this.setState({fechaInicio:jornada.fechaInicio})
             this.setState({fechaFinaliza:jornada.fechaFinaliza})
             this.setEvaluacion(presentacion, this.state.jornada)
+            this.hasCodeQr()
         }else{
             if(this.props.connect)
                 this.getPresentacionWithConecction()
@@ -220,6 +226,7 @@ class Presentacion extends React.Component {
                 this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
                 this.setEvaluacion(presentacion, jornada)
                 this.setState({loadingVideo:false})
+                this.hasCodeQr()
             })
         })
 
@@ -239,12 +246,14 @@ class Presentacion extends React.Component {
             }
         })
 
-        generalEvent.on('reloadPresentation',() => {
-            findById(this.state.idJornada, this.state.presentacion._id)
-            .then(res => {
-                this.setState({presentacion:res.data})
-                this.setEvaluacion(res.data, this.state.jornada)
-            })
+        generalEvent.on('reloadPresentation',(data) => {
+            if(this.state.presentacion.titulo == data.titulo){
+                findById(this.state.idJornada, this.state.presentacion._id)
+                .then(res => {
+                    this.setState({presentacion:res.data})
+                    this.setEvaluacion(res.data, this.state.jornada)
+                })
+            }
         })
         
         jornadaEvents.on('jornadaEvents',(data) => {
@@ -270,6 +279,7 @@ class Presentacion extends React.Component {
         .then(res => {
             this.setState({presentacion:res.data})
             this.setEvaluacion(res.data, this.state.jornada)
+            this.hasCodeQr()
             
         })
     }
@@ -303,6 +313,15 @@ class Presentacion extends React.Component {
         
     }
 
+    hasCodeQr(){
+        this.hasCode()
+        .then(code => {
+            if(code!=''){
+                this.props.qrstate({titulo:this.state.presentacion.titulo,  valid:true})
+            }
+            
+        })
+    }
 
     render(){
         return(
@@ -330,4 +349,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps)(withNavigation(Presentacion))
+export default connect(mapStateToProps,{qrstate})(withNavigation(Presentacion))
