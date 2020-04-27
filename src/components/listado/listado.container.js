@@ -40,8 +40,11 @@ class Listado extends React.Component {
         generalEvent.on('reloadPresentation',() => {
             this.getPresentaciones()
         })
-        jornadaEvents.on('jornadaEvents',() => {
-            this.getPresentaciones()
+        jornadaEvents.on('jornadaEvents',(data) => {
+            if(this.state.jornada.titulo == data.titulo){
+                this.getPresentaciones()
+            }
+            
         })
 
         pr.on('nextPresentation', (data) => {

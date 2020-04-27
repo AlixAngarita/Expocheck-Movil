@@ -257,7 +257,10 @@ class Presentacion extends React.Component {
         })
         
         jornadaEvents.on('jornadaEvents',(data) => {
-            this.getPresentacionActual()
+            if(this.state.jornada.titulo == data.titulo){
+                this.getPresentacionActual()
+            }
+                
         })
 
         generalEvent.on('updatePrInApp',(data) => {

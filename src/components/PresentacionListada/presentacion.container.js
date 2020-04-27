@@ -3,16 +3,13 @@ import PresentacionComponent from './presentacion.component'
 import {findJornadaById} from '../../services/jornadas.service'
 import { withNavigation } from 'react-navigation';
 import { AsyncStorage } from "react-native";
-import moment from 'moment';
 import config from '../../config/server'
 import  io from 'socket.io-client'
-const pr = io(config.host+'/presentation')
 const generalEvent = io(config.host+'/generalEvent')
 const jornadaEvents = io(config.host+'/jornadaEvents')
 import {findById} from '../../services/presentacion.service'
 import {connect} from 'react-redux'
 import Socket from '../../services/sockect'
-import {store} from '../../redux/store'
 import {qrstate} from '../../redux/actions/qr.action'
 
 class Presentacion extends React.Component {
@@ -39,88 +36,35 @@ class Presentacion extends React.Component {
         this.calificar = this.calificar.bind(this)
         this.setPresentacion = this.setPresentacion.bind(this)
         this.getUser = this.getUser.bind(this)
-        this.getPresentacionWithConecction = this.getPresentacionWithConecction.bind(this)
-        this.getPresentacionWithoutConecction = this.getPresentacionWithoutConecction.bind(this)
         this.realtimeEvent = this.realtimeEvent.bind(this)
         this.hasCodeQr = this.hasCodeQr.bind(this)
+        this.reloadJornada = this.reloadJornada.bind(this)
         this.realtimeEvent()
     }
 
-   
 
-    getPresentacionWithConecction(){
-        findJornadaById(this.props.id)
-        .then(j => {
-            const jornada = j.data
-            this.setState({jornada})
-            this.setState({idJornada:jornada._id})
-            this.setState({fechaInicio:jornada.fechaInicio})
-            this.setState({fechaFinaliza:jornada.fechaFinaliza})
-
-            if(jornada.presentaciones.length == 0)
-                this.setState({loading:false})
-                jornada.presentaciones.map(async presentacion => { 
-                const format = 'hh:mm a'
-                // hay una presentacion disponible para hoy?
-                const now = moment().format('YYYY-MM-DD')
-                if(moment(now, 'YYYY-MM-DD hh:mm a').format('D')==presentacion.dia){
-                  const horaInicio = moment(presentacion.fecha,'MM-DD-YYYY hh:mm a').format(format)
-                  const horatermina = moment(presentacion.fecha, 'MM-DD-YYYY hh:mm a').add(presentacion.duracion,'m').format(format)
-                  // hay una presentacion para la hora actual ?
-                  if(moment(moment().format(format),format).isBetween(moment(horaInicio,format), moment(horatermina,format),  null, '[)')){
-                    this.setState({presentacion, loading:false})
-                    this.setState({idJornada:jornada._id})
-                    this.setState({fechaInicio:jornada.fechaInicio})
-                    this.setState({fechaFinaliza:jornada.fechaFinaliza})
-                    this.setEvaluacion(presentacion, jornada)
-                    this.hasCodeQr()
-                  }else{
-                    this.setState({loading:false})
-                }
-                }else{
-                    this.setState({loading:false})
-                }
-            })
-            
-        })
-    }
-
-    getPresentacionWithoutConecction(){
-        store.getState().jornadas.map(jornada => {
-            if(jornada._id == this.state.idJornada){
-                if(jornada.presentaciones.length > 0){
-                        this.setState({loading:false})
-                        jornada.presentaciones.map(async presentacion => { 
-                        const format = 'hh:mm a'
-                        // hay una presentacion disponible para hoy?
-                        const now = moment().format('YYYY-MM-DD')
-                        if(moment(now, 'YYYY-MM-DD hh:mm a').format('D')==presentacion.dia){
-                        const horaInicio = moment(presentacion.fecha,'MM-DD-YYYY hh:mm a').format(format)
-                        const horatermina = moment(presentacion.fecha, 'MM-DD-YYYY hh:mm a').add(presentacion.duracion,'m').format(format)
-                        // hay una presentacion para la hora actual ?
-                        if(moment(moment().format(format),format).isBetween(moment(horaInicio,format), moment(horatermina,format),  null, '[)')){
-                            this.setState({presentacion, loading:false})
-                            this.setState({idJornada:jornada._id})
-                            this.setState({fechaInicio:jornada.fechaInicio})
-                            this.setState({fechaFinaliza:jornada.fechaFinaliza})
-                            this.setEvaluacion(presentacion, jornada)
-                            this.hasCodeQr()
-                        }else{
-                            this.setState({loading:false})
-                        }
-                        }else{
-                            this.setState({loading:false})
-                        }
-                    })
-                }
-            }
-        })
-    }
 
     componentDidMount(){
         this.getPresentacionActual()
         this.getUser()
         
+    }
+
+    async reloadJornada(){
+        this.setState({presentacion:'', loading:true})
+        const presentacion = this.props.navigation.getParam('presentacion')
+        await this.setState({idJornada:this.props.idJornada})
+
+        findJornadaById(this.state.idJornada)
+        .then(res => {
+            const jornada = res.data
+            this.setState({jornada})
+            this.setState({presentacion, loading:false, presentacionSeleccionada:true})
+            this.setState({fechaInicio:jornada.fechaInicio})
+            this.setState({fechaFinaliza:jornada.fechaFinaliza})
+            this.setEvaluacion(presentacion, this.state.jornada)
+            this.hasCodeQr()
+        })
     }
 
     async getPresentacionActual(){
@@ -135,11 +79,6 @@ class Presentacion extends React.Component {
             this.setState({fechaFinaliza:jornada.fechaFinaliza})
             this.setEvaluacion(presentacion, this.state.jornada)
             this.hasCodeQr()
-        }else{
-            if(this.props.connect)
-                this.getPresentacionWithConecction()
-            else
-                this.getPresentacionWithoutConecction()
         }
         
     }
@@ -233,7 +172,9 @@ class Presentacion extends React.Component {
         })
         
         jornadaEvents.on('jornadaEvents',(data) => {
-            this.getPresentacionActual()
+            if(this.state.jornada.titulo == data.titulo){
+                this.reloadJornada()
+            }
         })
         
     
