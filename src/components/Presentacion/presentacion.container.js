@@ -240,6 +240,7 @@ class Presentacion extends React.Component {
                         const jornada= this.state.jornada
                         this.setState({presentacion, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
                         this.setEvaluacion(presentacion, jornada)
+                        this.hasCodeQr()
                         this.setState({loadingVideo:false})
                     })
                 }
@@ -250,9 +251,8 @@ class Presentacion extends React.Component {
             if(this.state.presentacion.titulo == data.titulo){
                 findById(this.state.idJornada, this.state.presentacion._id)
                 .then(res => {
-                    this.setState({presentacion:res.data, loadingVideo:true, evaluacionPublica:false, comentariosPublicos:false})
+                    this.setState({presentacion:res.data})
                     this.setEvaluacion(res.data, this.state.jornada)
-                    this.setState({loadingVideo:false})
                 })
             }
         })

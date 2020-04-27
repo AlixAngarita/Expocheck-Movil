@@ -166,7 +166,6 @@ class Presentacion extends React.Component {
                 .then(res => {
                     this.setState({presentacion:res.data})
                     this.setEvaluacion(res.data, this.state.jornada)
-                    this.hasCodeQr()
                 })
             }
         })

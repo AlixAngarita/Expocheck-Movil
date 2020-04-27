@@ -54,7 +54,7 @@ const CalfificarComponent = props => {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
       }
-    },[props.presentacion]);
+    },[props.presentacion, props.status]);
 
     
 

@@ -103,7 +103,6 @@ class Calificacion extends React.Component{
       }
     }
 
-    
 
     getPresentacion(){
         const presentacion = this.props.navigation.getParam('presentacion')
@@ -213,6 +212,7 @@ class Calificacion extends React.Component{
             comment={this.props.navigation.getParam('comment')}
             addQuestion={this.addQuestion}
             comentariosPublicos={this.state.comentariosPublicos}
+            status={this.state.hasCameraPermission}
             />)
     }
 }
