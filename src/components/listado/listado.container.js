@@ -25,7 +25,7 @@ class Listado extends React.Component {
     }
 
     getPresentaciones(){
-        this.setState({loading:true, presentaciones:[]})
+        // this.setState({loading:true, presentaciones:[]})
         findJornadaById(this.props.id)
         .then(jornada => {
             this.setState({
@@ -37,8 +37,11 @@ class Listado extends React.Component {
     }
     
     realtimeEvent(){
-        generalEvent.on('reloadPresentation',() => {
-            this.getPresentaciones()
+        generalEvent.on('reloadPresentation',(data) => {
+            if(this.state.jornada._id == data.idJornada){
+                this.getPresentaciones()
+            }
+            
         })
         jornadaEvents.on('jornadaEvents',(data) => {
             if(this.state.jornada.titulo == data.titulo){
@@ -47,9 +50,9 @@ class Listado extends React.Component {
             
         })
 
-        pr.on('nextPresentation', (data) => {
-            this.getPresentaciones()
-        })
+        // pr.on('nextPresentation', (data) => {
+        //     this.getPresentaciones()
+        // })
     }
 
     render(){
