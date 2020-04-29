@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, Text, Image, KeyboardAvoidingView, ImageBackground, Keyboard, Modal, StyleSheet, TouchableHighlight, Alert } from 'react-native'
+import { ScrollView, View, TextInput, TouchableOpacity, Text, Image, KeyboardAvoidingView, TouchableWithoutFeedback, ImageBackground, Keyboard, Modal, StyleSheet, TouchableHighlight, Alert } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import { withNavigation } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const background = require('../../../assets/login/static-background.png');
+const background = require('../../../assets/login/background.png');
 const logo = require('../../../assets/login/logo.png')
 const boton = require('../../../assets/login/boton.png')
-const {Terminos} = require('./termsandconditions')
+const { Terminos } = require('./termsandconditions')
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 class LoginComponent extends Component {
 
@@ -27,21 +29,6 @@ class LoginComponent extends Component {
 
     setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
-      }
-
-    //handleCheckBox = () => this.setState({ termsAccepted: !this.state.termsAccepted })
-
-    _keyboardDidShow = () => { this.setState({ keyboard: true })};
-    _keyboardDidHide = () => this.setState({ keyboard: false });
-    
-    componentDidMount () {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-    }
-
-    componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
     }
 
     validate = (email) => {
@@ -54,122 +41,127 @@ class LoginComponent extends Component {
         valido? 
         this.setState({iconInput: 'check-circle', inputColor: '#94d82d', correo: value}) : 
         this.setState({iconInput: 'times-circle', inputColor: 'red', correo: ''})
-    }    
+    }   
 
     createAlert = () => {
-        if(this.state.checked && this.state.correo != '')
-        {
-            this.props.navigation.navigate('Authentication', {correo: this.state.correo})
+        if (this.state.checked && this.state.correo != '') {
+            this.props.navigation.navigate('Authentication', { correo: this.state.correo })
         }
-        else
-        {
-            console.log(this.state.checked, this.state.correo)
-            if(this.state.correo == '') //correo
+        else {
+            if (this.state.correo == '') //correo
             {
                 Alert.alert(
                     "Correo inválido",
                     "Por favor revisa que el correo que ingresaste sea un correo institucional de la UPB.",
                     [
-                      { text: "OK", onPress: () => console.log("OK Pressed") }
+                        { text: "OK" }
                     ],
                     { cancelable: false }
-                  );
+                );
             }
-            else
-            {
-                //this.setState({ color: 'red' })
+            else {
                 Alert.alert(
                     "Términos y condiciones",
                     "Por favor lee y acepta los términos y condiciones para continuar.",
                     [
-                      { text: "OK", onPress: () => console.log("OK Pressed") }
+                        { text: "OK" }
                     ],
                     { cancelable: false }
-                  );
+                );
             }
         }
+
     }
 
-    render() {
-        //console.log(this.props)
-        const { modalVisible } = this.state;
+    TerminosCondiciones(modalVisible) {
         return (
-            <View style={{ flex: 1, overflow: 'hidden', alignItems: 'center' }}>
-                <ImageBackground source={background} resizeMode='cover' style={{ height: '100%', width: '100%' }}>
-                    {!this.state.keyboard ? 
-                    <ScrollView>
-                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-                        <Image source={logo} style={{ width: 120, height: 140, marginTop: '20%' }} />
-                    </View></ScrollView> : undefined}
-
-                    <View style={styles.centeredView}>
-                    <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                            this.setState({ checked: !this.state.checked, color: 'white' })
-                        }}
-                    >
-                        <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Terminos/>
-                            <TouchableHighlight
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    this.setState({ checked: !this.state.checked, color: 'white' })
+                }}
+                style={styles.centeredView}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Terminos />
+                        <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#0abde3" }}
                             onPress={() => {
                                 this.setModalVisible(!modalVisible);
-                            }}
-                            >
+                            }}>
                             <Text style={styles.textStyle}>Cerrar</Text>
-                            </TouchableHighlight>
-                        </View>
-                        </View>
-                    </Modal>
+                        </TouchableHighlight>
                     </View>
+                </View>
+            </Modal>
+        )
+    }
 
+    render() {
+        const { modalVisible } = this.state;
+        return (
+            <View >
+                <ImageBackground source={background} resizeMode='cover' style={{ height: '100%', width: '100%' }}>                    
+                        {this.TerminosCondiciones(modalVisible)}
+                        <KeyboardAwareScrollView  
+                            enableOnAndroid={true} 
+                            keyboardShouldPersistTaps='handled'
+                            getTextInputRefs={() => { return [this._textInputRef];}}>
+                            <View style={{alignItems: 'center', height: '100%'}}>
+
+                                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center',  margin: '5%'}}>
+                                    <Image source={logo} style={{ width: 128, height: 140,  marginTop: '20%', marginBottom: '10%'}} />
+                                    <Text style={styles.ingreso}>
+                                        Ingresa con tu correo institucional
+                                    </Text>
+                                </View>
+
+                                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', height: '50%'}}>
+                                    <View style={styles.inputView}>
+                                        <TextInput
+                                            placeholder="example@upb.edu.co"
+                                            keyboardType='email-address' 
+                                            onChangeText={this.handleChange}
+                                            ref={(r) => { this._textInputRef = r; }}/>
+                                        <Icon style={{ marginRight: 0, padding: 'auto' }} name={this.state.iconInput} size={20} color={this.state.inputColor} />
+                                    </View>
+
+                                    <TouchableOpacity activeOpacity={0.8} onPress={this.createAlert}
+                                        style={{margin: '10%'}}>
+                                        <Image source={boton} style={{ width: 280, height: 60, resizeMode: 'cover' }} />
+                                    </TouchableOpacity>
+
+
+                                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: "center", marginBottom: '20%' }}>
+                                        <CheckBox
+                                            center
+                                            checked={this.state.checked}
+                                            onPress={() => this.setState({ checked: !this.state.checked, color: 'white' })}
+                                            checkedIcon='check-square'
+                                            uncheckedColor={this.state.color}
+                                            checkedColor='white'
+                                            containerStyle={{ backgroundColor: 'transparent', borderWidth: 0, margin: 0 }}
+                                            style={{ flex: 1, padding: 0 }}
+                                        />
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                this.setModalVisible(!modalVisible);
+                                            }}>
+                                            <Text style={{ color: this.state.color, fontSize: 12 }}>
+                                                Acepto los{" "}
+                                                <Text style={{ textDecorationLine: 'underline' }}>
+                                                    términos y condiciones </Text>
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </KeyboardAwareScrollView >
                 </ImageBackground>
-                <KeyboardAvoidingView style={{ position: 'absolute', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', top: '50%' }}
-                    behavior="padding">
-                    <View style={styles.inputView}>
-                        <TextInput
-                            name="correo"
-                            placeholder="example@upb.edu.co"
-                            keyboardType='email-address'
-                            style={{flex: 1}}
-                            onChangeText={this.handleChange}
-                            />
-                        <Icon style={{marginRight:0, padding:'auto'}} name={this.state.iconInput} size={20} color={this.state.inputColor}/>
-
-                    </View> 
-                    <TouchableOpacity activeOpacity={0.8} onPress={this.createAlert}>
-                        <Image source={boton} style={{ width: 280, marginTop: 10, resizeMode: 'contain' }} />
-                    </TouchableOpacity>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '40%' }}>
-                        <CheckBox
-                            center
-                            checked={this.state.checked}
-                            onPress={() => this.setState({ checked: !this.state.checked, color: 'white' })}
-                            checkedIcon='check-square'
-                            uncheckedColor={this.state.color}
-                            checkedColor='white'
-                            containerStyle={{ backgroundColor: 'transparent', borderWidth: 0, margin: 0 }}
-                            style={{flex: 1, padding: 0}}
-                        />
-                        <TouchableOpacity
-                                onPress={() => {
-                                    this.setModalVisible(!modalVisible);
-                                }}
-                            >
-                        <Text style={{ color: this.state.color, fontSize: 12 }}>
-                            Acepto los{" "}
-                                <Text style={{ textDecorationLine: 'underline' }}>
-                                términos y condiciones </Text>
-                        </Text>
-                        </TouchableOpacity>
-                    </View>
-                </KeyboardAvoidingView>
-            </View>);
+            </View>
+        );
     }
 }
 
@@ -177,50 +169,57 @@ class LoginComponent extends Component {
 
 const styles = StyleSheet.create({
     centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
     },
     modalView: {
-      margin: 10,
-      backgroundColor: "white",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#F194FF",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-      flex: 1,
-      opacity: 0.9
+        margin: 10,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#F194FF",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        flex: 1,
+        opacity: 0.9
+    },
+    ingreso: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+        fontSize: 25
     },
     openButton: {
-      backgroundColor: "#F194FF",
-      borderRadius: 10,
-      padding: 10,
-      elevation: 2,
-      width: 100,
-      top: 15
+        backgroundColor: "#F194FF",
+        borderRadius: 10,
+        padding: 10,
+        elevation: 2,
+        width: 100,
+        top: 15
     },
     textStyle: {
-      color: "white",
-      fontWeight: "bold",
-      textAlign: "center",
-      fontSize: 16,
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+        fontSize: 16,
     },
     modalText: {
-      marginBottom: 15,
-      textAlign: "center"
+        marginBottom: 15,
+        textAlign: "center"
     },
     inputView: {
-        flexDirection: 'row',
+        flexDirection: 'row', justifyContent: 'space-between',
         borderRadius: 13, height: 40, padding: 10, backgroundColor: 'rgba(255,255,255,0.86)', width: 300, color: '#95A5A6'//input
-    }
-  });
+    },
+    teclado: { position: 'absolute', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', top: '50%' }
+});
 
 export default withNavigation(LoginComponent)
