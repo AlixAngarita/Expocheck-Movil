@@ -249,7 +249,8 @@ const Presentacion = props => {
                           <Avatar
                             size="small"
                             rounded
-                            icon={{name: 'user', type: 'font-awesome', color:'#2e86de'}}
+                            icon={{name: 'user', type: 'font-awesome', color:'white'}}
+                            overlayContainerStyle={{ backgroundColor: '#2e86de' }}
                             activeOpacity={0.7}
                           />
                         </View>
