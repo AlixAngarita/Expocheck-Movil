@@ -33,7 +33,7 @@ class Presentacion extends React.Component {
             evaluacionPublica:false,
             comentariosPublicos:false
         }
-
+        this._isMounted = false;
         this.hasCode = this.hasCode.bind(this)
         this.setEvaluacion = this.setEvaluacion.bind(this)
         this.calificar = this.calificar.bind(this)
@@ -128,34 +128,35 @@ class Presentacion extends React.Component {
     }
 
     componentDidMount(){
-        this.getPresentacionActual()
-        this.getUser()
-       
-        
+        this._isMounted = true;
+        this._isMounted && this.getPresentacionActual()
+        this.getUser()    
     }
     componentWillUnmount(){
          clearInterval(this.agenda);
+         this._isMounted = false;
     }
 
     async getPresentacionActual(){
-        this.setState({presentacion:'', loading:true}) //da error: Can't perform a React state update on an unmounted component.
-        const presentacion = this.props.navigation.getParam('presentacion')
-        await this.setState({idJornada:this.props.idJornada})
-        if(presentacion){
-            const jornada = this.props.navigation.getParam('jornada')
-            this.setState({jornada})
-            this.setState({presentacion, loading:false, presentacionSeleccionada:true})
-            this.setState({fechaInicio:jornada.fechaInicio})
-            this.setState({fechaFinaliza:jornada.fechaFinaliza})
-            this.setEvaluacion(presentacion, this.state.jornada)
-            this.hasCodeQr()
-        }else{
-            if(this.props.connect)
-                this.getPresentacionWithConecction()
-            else
-                this.getPresentacionWithoutConecction()
+        if(this._isMounted){
+            this.setState({presentacion:'', loading:true})
+            const presentacion = this.props.navigation.getParam('presentacion')
+            await this.setState({idJornada:this.props.idJornada})
+            if(presentacion){
+                const jornada = this.props.navigation.getParam('jornada')
+                this.setState({jornada})
+                this.setState({presentacion, loading:false, presentacionSeleccionada:true})
+                this.setState({fechaInicio:jornada.fechaInicio})
+                this.setState({fechaFinaliza:jornada.fechaFinaliza})
+                this.setEvaluacion(presentacion, this.state.jornada)
+                this.hasCodeQr()
+            }else{
+                if(this.props.connect)
+                    this.getPresentacionWithConecction()
+                else
+                    this.getPresentacionWithoutConecction()
+            }
         }
-        
     }
 
      setEvaluacion(presentacion, jornada) {

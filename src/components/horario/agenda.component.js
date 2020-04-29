@@ -20,8 +20,16 @@ export default class AgendaScreen extends Component {
         this.state = {
             items: {}
         };
+        this._isMounted = false;
     }
 
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+     }
 
     _today(){
         var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
@@ -59,7 +67,7 @@ export default class AgendaScreen extends Component {
     }
 
     loadItems(day) {
-        setTimeout(() => {
+        this._isMounted && setTimeout(() => {
             for (let i = -15; i < 85; i++) {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = this.timeToString(time);
@@ -67,9 +75,7 @@ export default class AgendaScreen extends Component {
                     this.state.items[strTime] = [];
                     (this.props.items).map(p => {
                         const f = new Date(p.fecha)
-                        const iso = f.getFullYear() + '-' +
-                            ('0' + (f.getMonth() + 1)).slice(-2) + '-' +
-                            ('0' + f.getDate()).slice(-2);
+                        const iso = f.toISOString().split('T')[0];
                         if (iso == strTime) {
                             this.state.items[strTime].push(p);
                         }
