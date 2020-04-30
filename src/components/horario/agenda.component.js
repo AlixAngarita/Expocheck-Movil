@@ -67,7 +67,7 @@ export default class AgendaScreen extends Component {
     }
 
     loadItems(day) {
-        this._isMounted && setTimeout(() => {
+        setTimeout(() => {
             for (let i = -15; i < 85; i++) {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = this.timeToString(time);
@@ -84,7 +84,7 @@ export default class AgendaScreen extends Component {
             }
             const newItems = {};
             Object.keys(this.state.items).forEach(key => { newItems[key] = this.state.items[key]; });
-            this.setState({
+            this._isMounted && this.setState({
                 items: newItems
             });
         }, 1000);
