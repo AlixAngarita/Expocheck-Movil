@@ -9,6 +9,8 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-
+*.env
+variables.js
+google-services.json
 # macOS
 .DS_Store

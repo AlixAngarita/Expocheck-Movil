@@ -8,14 +8,9 @@ import {connect} from 'react-redux'
 import { withNavigation } from 'react-navigation';
 import {logoutUser,updatePrivacyUser} from "../redux/actions/auth.action.js"
 import PropTypes from "prop-types";
-
 const RCTNetworking = require('RCTNetworking')
 
 class MenuComponent extends React.PureComponent {
-
-
-  
- 
   
   constructor(props) {
       super(props);
@@ -63,7 +58,7 @@ class MenuComponent extends React.PureComponent {
   };
   
   logOut= () =>  {
-    RCTNetworking.clearCookies((cleared) => {
+      RCTNetworking.clearCookies((cleared) => {
       this._menu.hide()
       this.props.logoutUser();
       this.props.navigation.navigate('Login');      
